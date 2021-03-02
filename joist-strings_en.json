@@ -110,6 +110,21 @@
   "updates.noThanks": {
     "value": "No Thanks"
   },
+  "toolbar.selfVoicing.title": {
+    "value": "Self-Voicing"
+  },
+  "toolbar.selfVoicing.speech": {
+    "value": "Speech"
+  },
+  "toolbar.selfVoicing.overview": {
+    "value": "Overview"
+  },
+  "toolbar.selfVoicing.details": {
+    "value": "Details"
+  },
+  "toolbar.selfVoicing.hint": {
+    "value": "Hint"
+  },
   "translation.credits.link": {
     "value": "Translation Credits"
   },

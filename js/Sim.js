@@ -52,6 +52,7 @@ import LookAndFeel from './LookAndFeel.js';
 import MemoryMonitor from './MemoryMonitor.js';
 import NavigationBar from './NavigationBar.js';
 import packageJSON from './packageJSON.js';
+import PreferencesProperties from './preferences/PreferencesProperties.js';
 import Profiler from './Profiler.js';
 import QueryParametersWarningDialog from './QueryParametersWarningDialog.js';
 import Screen from './Screen.js';
@@ -60,6 +61,7 @@ import ScreenshotGenerator from './ScreenshotGenerator.js';
 import selectScreens from './selectScreens.js';
 import SimInfo from './SimInfo.js';
 import LegendsOfLearningSupport from './thirdPartySupport/LegendsOfLearningSupport.js';
+import Toolbar from './toolbar/Toolbar.js';
 import updateCheck from './updateCheck.js';
 
 // constants
@@ -125,6 +127,10 @@ class Sim {
       // become a dependency for all sims yet. If this gets more use, this will likely change.
       vibrationManager: null,
 
+      // {null|PreferencesConfiguration} - If a PreferencesConfiguration is provided the sim will include
+      // the PreferencesDialog and a button in the NavigationBar to open it.
+      preferencesConfiguration: null,
+
       // Sims that do not use WebGL trigger a ~ 0.5 second pause shortly after the sim starts up, so sims must opt in to
       // webgl support, see https://github.com/phetsims/scenery/issues/621
       webgl: false,
@@ -187,7 +193,12 @@ class Sim {
       this.display.setSize( new Dimension2( width, height ) );
       const screenHeight = height - this.navigationBar.height;
 
-      const availableScreenBounds = new Bounds2( 0, 0, width, screenHeight );
+      if ( this.toolbar ) {
+        this.toolbar.layout( scale, screenHeight );
+      }
+
+      const screenMinX = this.toolbar ? this.toolbar.getDisplayedWidth() : 0;
+      const availableScreenBounds = new Bounds2( screenMinX, 0, width, screenHeight );
 
       // Layout each of the screens
       _.each( this.screens, m => m.view.layout( availableScreenBounds ) );
@@ -703,12 +714,37 @@ class Sim {
     // @public (joist-internal)
     this.navigationBar = new NavigationBar( this, Tandem.GENERAL_VIEW.createTandem( 'navigationBar' ) );
 
+    // @private (Toolbar|null) - The Toolbar will not be created unless the self-voicing feature is enabled, since
+    // the only contents of the Toolbar are for the self-voicing feature at the moment.
+    this.toolbar = null;
+
     // magnification support - always initialized for consistent PhET-iO API, but only conditionally added to Display
     animatedPanZoomSingleton.initialize( this.simulationRoot, {
       tandem: Tandem.GENERAL_VIEW.createTandem( 'panZoomListener' )
     } );
     if ( this.supportsPanAndZoom ) {
       this.display.addInputListener( animatedPanZoomSingleton.listener );
+    }
+
+    if ( options.preferencesConfiguration ) {
+      this.preferencesProperties = new PreferencesProperties();
+
+      const audioConfiguration = options.preferencesConfiguration.audioConfiguration;
+      if ( audioConfiguration.supportsSelfVoicing ) {
+        webSpeaker.initialize();
+      }
+      if ( audioConfiguration.selfVoicingToolbarAlertManager ) {
+
+        // create the alert manager and toolbar, which for right now only contains content related to the
+        // self-voicing feature
+        // eslint-disable-next-line new-cap
+        const selfVoicingAlertManager = new audioConfiguration.selfVoicingToolbarAlertManager( this.screenProperty );
+        this.toolbar = new Toolbar( selfVoicingAlertManager, this.preferencesProperties.toolbarEnabledProperty, this.lookAndFeel );
+
+        this.toolbar.rightPositionProperty.lazyLink( () => {
+          this.resize( this.boundsProperty.value.width, this.boundsProperty.value.height );
+        } );
+      }
     }
 
     // @public (joist-internal)
@@ -763,6 +799,10 @@ class Sim {
       this.simulationRoot.addChild( screen.view );
     } );
     this.simulationRoot.addChild( this.navigationBar );
+
+    if ( this.toolbar ) {
+      this.simulationRoot.addChild( this.toolbar );
+    }
 
     this.screenProperty.link( currentScreen => {
       screens.forEach( screen => {
