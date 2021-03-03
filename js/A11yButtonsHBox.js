@@ -13,6 +13,7 @@ import soundManager from '../../tambo/js/soundManager.js';
 import joist from './joist.js';
 import KeyboardHelpButton from './KeyboardHelpButton.js';
 import NavigationBarSoundToggleButton from './NavigationBarSoundToggleButton.js';
+import NavigationBarPreferencesButton from './preferences/NavigationBarPreferencesButton.js';
 
 class A11yButtonsHBox extends HBox {
 
@@ -31,6 +32,18 @@ class A11yButtonsHBox extends HBox {
 
     // list of optional buttons added for a11y
     const a11yButtons = [];
+
+    // a configuration for PreferencesDialog has been provided so include it
+    if ( sim.preferencesConfiguration ) {
+      const preferencesButton = new NavigationBarPreferencesButton(
+        sim.preferencesConfiguration,
+        sim.preferencesProperties,
+        sim.lookAndFeel,
+        sim.soundEnabledProperty,
+        tandem.createTandem( 'preferencesButton' )
+      );
+      a11yButtons.push( preferencesButton );
+    }
 
     // If the sim has sound support in its API, then create the button. This is support consistent API for PhET-iO
     if ( sim.soundPartOfTheAPI ) {

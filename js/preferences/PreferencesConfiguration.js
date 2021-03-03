@@ -16,14 +16,14 @@ class PreferencesConfiguration {
     options = merge( {
 
       // configuration for controls in the "General" tab of the PreferencesDialog
-      generalConfiguration: {
+      generalOptions: {
 
         // {Node|null} - any Node you would like to put under the "General" tab with sim-specific controls
         simControls: null
       },
 
       // configuration for controls in the "Visual" tab of the PreferencesDialog
-      visualConfiguration: {
+      visualOptions: {
 
         // {boolean} whether or not the sim supports the "interactive highlights" feature, and checkbox to enable
         // in the PreferencesDialog
@@ -31,7 +31,7 @@ class PreferencesConfiguration {
       },
 
       // configuration for controls in the "Audio" tab of the PreferencesDialog
-      audioConfiguration: {
+      audioOptions: {
 
         // The entry point for self-voicing, if true the PreferencesDialog will include all self-voicing options
         supportsSelfVoicing: false,
@@ -47,27 +47,27 @@ class PreferencesConfiguration {
       },
 
       // configuration for controls in the "Input" tab of the PreferencesDialog
-      inputConfiguration: {
+      inputOptions: {
 
         // {boolean} - Whether or not to include "gesture" controls
-        supportsGestureControl: false
+        supportsGestureControls: false
       }
     }, options );
 
-    assert && assert( options.generalConfiguration, 'generalConfiguration must be defined' );
-    assert && assert( options.visualConfiguration, 'visualConfiguration must be defined' );
-    assert && assert( options.audioConfiguration, 'audioConfiguration must be defined' );
-    assert && assert( options.inputConfiguration, 'inputConfiguration must be defined' );
+    assert && assert( options.generalOptions, 'generalOptions must be defined' );
+    assert && assert( options.visualOptions, 'visualOptions must be defined' );
+    assert && assert( options.audioOptions, 'audioOptions must be defined' );
+    assert && assert( options.inputOptions, 'inputOptions must be defined' );
 
-    if ( options.audioConfiguration.supportsEnhancedSound ) {
-      assert && assert( options.audioConfiguration.supportsSound, 'supportsSound must be true to also support enhancedSound' );
+    if ( options.audioOptions.supportsEnhancedSound ) {
+      assert && assert( options.audioOptions.supportsSound, 'supportsSound must be true to also support enhancedSound' );
     }
 
     // @public (read-only)
-    this.generalConfiguration = options.generalConfiguration;
-    this.visualConfiguration = options.visualConfiguration;
-    this.audioConfiguration = options.audioConfiguration;
-    this.inputConfiguration = options.inputConfiguration;
+    this.generalOptions = options.generalOptions;
+    this.visualOptions = options.visualOptions;
+    this.audioOptions = options.audioOptions;
+    this.inputOptions = options.inputOptions;
   }
 }
 

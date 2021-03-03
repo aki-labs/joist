@@ -468,6 +468,9 @@ class Sim {
     // @public (joist-internal, read-only)
     this.hasKeyboardHelpContent = options.hasKeyboardHelpContent;
 
+    // @public (read-only) {PreferencesConfiguration|null}
+    this.preferencesConfiguration = options.preferencesConfiguration;
+
     assert && assert( !window.phet.joist.sim, 'Only supports one sim at a time' );
     window.phet.joist.sim = this;
 
@@ -502,6 +505,10 @@ class Sim {
     this.supportsEnhancedSound = this.supportsSound &&
                                  ( packageJSON.phet.supportsEnhancedSound ||
                                    phet.chipper.queryParameters.supportsEnhancedSound );
+
+    // @public {BooleanProperty} - Whether or not all features involving sound are enabled in the simulation (sound,
+    // enhanced sound, self-voicing). When false the sim should be totally silent.
+    this.soundEnabledProperty = new BooleanProperty( true );
 
     // Initialize the sound library if enabled, then hook up sound generation for screen changes.
     if ( this.supportsSound ) {
@@ -711,12 +718,33 @@ class Sim {
     this.display.setCanvasNodeBoundsVisible( phet.chipper.queryParameters.showCanvasNodeBounds );
     this.display.setFittedBlockBoundsVisible( phet.chipper.queryParameters.showFittedBlockBounds );
 
-    // @public (joist-internal)
-    this.navigationBar = new NavigationBar( this, Tandem.GENERAL_VIEW.createTandem( 'navigationBar' ) );
-
     // @private (Toolbar|null) - The Toolbar will not be created unless the self-voicing feature is enabled, since
     // the only contents of the Toolbar are for the self-voicing feature at the moment.
     this.toolbar = null;
+
+    if ( options.preferencesConfiguration ) {
+      this.preferencesProperties = new PreferencesProperties();
+
+      const audioOptions = options.preferencesConfiguration.audioOptions;
+      if ( audioOptions.supportsSelfVoicing ) {
+        webSpeaker.initialize();
+      }
+      if ( audioOptions.selfVoicingToolbarAlertManager ) {
+
+        // create the alert manager and toolbar, which for right now only contains content related to the
+        // self-voicing feature
+        // eslint-disable-next-line new-cap
+        const selfVoicingAlertManager = new audioOptions.selfVoicingToolbarAlertManager( this.screenProperty );
+        this.toolbar = new Toolbar( selfVoicingAlertManager, this.preferencesProperties.toolbarEnabledProperty, this.lookAndFeel );
+
+        this.toolbar.rightPositionProperty.lazyLink( () => {
+          this.resize( this.boundsProperty.value.width, this.boundsProperty.value.height );
+        } );
+      }
+    }
+
+    // @public (joist-internal)
+    this.navigationBar = new NavigationBar( this, Tandem.GENERAL_VIEW.createTandem( 'navigationBar' ) );
 
     // magnification support - always initialized for consistent PhET-iO API, but only conditionally added to Display
     animatedPanZoomSingleton.initialize( this.simulationRoot, {
@@ -724,27 +752,6 @@ class Sim {
     } );
     if ( this.supportsPanAndZoom ) {
       this.display.addInputListener( animatedPanZoomSingleton.listener );
-    }
-
-    if ( options.preferencesConfiguration ) {
-      this.preferencesProperties = new PreferencesProperties();
-
-      const audioConfiguration = options.preferencesConfiguration.audioConfiguration;
-      if ( audioConfiguration.supportsSelfVoicing ) {
-        webSpeaker.initialize();
-      }
-      if ( audioConfiguration.selfVoicingToolbarAlertManager ) {
-
-        // create the alert manager and toolbar, which for right now only contains content related to the
-        // self-voicing feature
-        // eslint-disable-next-line new-cap
-        const selfVoicingAlertManager = new audioConfiguration.selfVoicingToolbarAlertManager( this.screenProperty );
-        this.toolbar = new Toolbar( selfVoicingAlertManager, this.preferencesProperties.toolbarEnabledProperty, this.lookAndFeel );
-
-        this.toolbar.rightPositionProperty.lazyLink( () => {
-          this.resize( this.boundsProperty.value.width, this.boundsProperty.value.height );
-        } );
-      }
     }
 
     // @public (joist-internal)

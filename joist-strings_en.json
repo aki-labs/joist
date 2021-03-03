@@ -110,6 +110,48 @@
   "updates.noThanks": {
     "value": "No Thanks"
   },
+  "preferences.title": {
+    "value": "Preferences"
+  },
+  "preferences.tabs.general.title": {
+    "value": "General"
+  },
+  "preferences.tabs.general.accessibilityIntroPattern": {
+    "value": "We are working to make our simulations inclusive. If you don't find settings that meet your needs, check out our {{link}}."
+  },
+  "preferences.tabs.general.accessibilityIntroWithoutLinksPattern": {
+    "value": "We are working to make our simulations inclusive. If you don't find settings that meet your needs, check out our accessible simulations: {{link}}"
+  },
+  "preferences.tabs.general.accessibilityIntroLink": {
+    "value": "accessible simulations"
+  },
+  "preferences.tabs.general.simulationSpecificSettings": {
+    "value": "Simulation-specific Settings"
+  },
+  "preferences.tabs.visual.title": {
+    "value": "Visual"
+  },
+  "preferences.tabs.visual.interactiveHighlights": {
+    "value": "Interactive Highlights"
+  },
+  "preferences.tabs.audio.title": {
+    "value": "Audio"
+  },
+  "preferences.tabs.audio.soundAndSonification": {
+    "value": "Sound and Sonification"
+  },
+  "preferences.tabs.audio.enhancedSound": {
+    "value": "Enhanced Sound"
+  },
+  "preferences.tabs.audio.allAudio": {
+    "value": "All Audio"
+  },
+  "preferences.tabs.input.title": {
+    "value": "Input"
+  },
+  "preferences.tabs.input.gestureControls": {
+    "value": "Gesture Controls"
+  },
   "toolbar.selfVoicing.title": {
     "value": "Self-Voicing"
   },
