@@ -27,6 +27,7 @@ import DotUtils from '../../dot/js/Utils.js';
 import merge from '../../phet-core/js/merge.js';
 import platform from '../../phet-core/js/platform.js';
 import StringUtils from '../../phetcommon/js/util/StringUtils.js';
+import speakerHighlighter from '../../scenery-phet/js/accessibility/speaker/speakerHighlighter.js';
 import BarrierRectangle from '../../scenery-phet/js/BarrierRectangle.js';
 import globalKeyStateTracker from '../../scenery/js/accessibility/globalKeyStateTracker.js';
 import KeyboardFuzzer from '../../scenery/js/accessibility/KeyboardFuzzer.js';
@@ -61,6 +62,7 @@ import ScreenshotGenerator from './ScreenshotGenerator.js';
 import selectScreens from './selectScreens.js';
 import SimInfo from './SimInfo.js';
 import LegendsOfLearningSupport from './thirdPartySupport/LegendsOfLearningSupport.js';
+import SelfVoicingToolbarAlertManager from './toolbar/SelfVoicingToolbarAlertManager.js';
 import Toolbar from './toolbar/Toolbar.js';
 import updateCheck from './updateCheck.js';
 
@@ -649,7 +651,7 @@ class Sim {
 
           // in the self-voicing prototype we want the focus highlight to remain visible with
           // mouse/touch presses
-          if ( !phet.chipper.queryParameters.supportsSelfVoicing ) {
+          if ( !this.preferencesProperties.interactiveHighlightsEnabledProperty.value && !this.preferencesProperties.gestureControlsEnabledProperty.value ) {
 
             // An AT might have sent a down event outside of the display, if this happened we will not do anything
             // to change focus
@@ -693,13 +695,6 @@ class Sim {
       } );
     }
 
-    if ( phet.chipper.queryParameters.supportsSelfVoicing ) {
-
-      // @public - the UtteranceQueue that is specifically used for the self-voicing feature, where
-      // Utterances are spoken with speech synthesis
-      this.selfVoicingUtteranceQueue = new UtteranceQueue( webSpeaker, false );
-    }
-
     Heartbeat.start( this );
 
     if ( phet.chipper.queryParameters.sceneryLog ) {
@@ -733,19 +728,36 @@ class Sim {
       const audioOptions = options.preferencesConfiguration.audioOptions;
       if ( audioOptions.supportsSelfVoicing ) {
         webSpeaker.initialize();
+
+        // @public - the UtteranceQueue that is specifically used for the self-voicing feature, where
+        // Utterances are spoken with speech synthesis
+        this.selfVoicingUtteranceQueue = new UtteranceQueue( webSpeaker, false );
       }
-      if ( audioOptions.selfVoicingToolbarAlertManager ) {
+      if ( audioOptions.supportsSelfVoicingToolbar ) {
 
         // create the alert manager and toolbar, which for right now only contains content related to the
         // self-voicing feature
         // eslint-disable-next-line new-cap
-        const selfVoicingAlertManager = new audioOptions.selfVoicingToolbarAlertManager( this.screenProperty );
+        const selfVoicingAlertManager = new SelfVoicingToolbarAlertManager( this.screenProperty );
         this.toolbar = new Toolbar( selfVoicingAlertManager, this.preferencesProperties.toolbarEnabledProperty, this.lookAndFeel );
 
         this.toolbar.rightPositionProperty.lazyLink( () => {
           this.resize( this.boundsProperty.value.width, this.boundsProperty.value.height );
         } );
       }
+
+      const visualOptions = options.preferencesConfiguration.visualOptions;
+      if ( visualOptions.supportsInteractiveHighlights ) {
+        speakerHighlighter.initialize( this.preferencesProperties.interactiveHighlightsEnabledProperty );
+      }
+
+      // display focus highlights when "interactive highlights" or "gesture controls" become enabled
+      Property.multilink( [
+        this.preferencesProperties.interactiveHighlightsEnabledProperty,
+        this.preferencesProperties.gestureControlsEnabledProperty
+      ], ( highlightsEnabled, gesturesEnabled ) => {
+        this.display.focusHighlightsVisibleProperty.value = highlightsEnabled || gesturesEnabled;
+      } );
     }
 
     // @public (joist-internal)

@@ -110,6 +110,9 @@ class Toolbar extends Node {
 
       this.updateDestinationPosition();
     } );
+
+    // when shown or hidden update destination positions so it animates open or close
+    this.isShowingProperty.link( showing => this.updateDestinationPosition() );
   }
 
   /**

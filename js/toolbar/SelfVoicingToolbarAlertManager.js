@@ -22,29 +22,35 @@ class SelfVoicingToolbarAlertManager {
   /**
    * Create the alert content for the simulation overview for the "Overview" button.
    * @public
-   * @abstract
    */
   createOverviewContent() {
-    throw new Error( 'Please implement createOverviewContent' );
+    const screenView = this.screenProperty.value.view;
+    assert && assert( screenView, 'view needs to be inititalized for self-voicing toolbar content' );
+    assert && assert( screenView.getSelfVoicingOverviewContent, 'self-voicing toolbar is enabled, implement getSelfVoicingOverviewContent on ScreenView' );
+    return screenView.getSelfVoicingOverviewContent();
   }
 
   /**
    * Creates the alert content for the simulation details when the "Current Details"
    * button is pressed.
    * @public
-   * @abstract
    */
   createDetailsContent() {
-    throw new Error( 'Please implement createDetailsContent' );
+    const screenView = this.screenProperty.value.view;
+    assert && assert( screenView, 'view needs to be inititalized for self-voicing toolbar content' );
+    assert && assert( screenView.getSelfVoicingDetailsContent, 'self-voicing toolbar is enabled, implement getSelfVoicingDetailsContent on ScreenView' );
+    return screenView.getSelfVoicingDetailsContent();
   }
 
   /**
    * Creates the alert content for an interaction hint when the "Hint" button is pressed.
    * @public
-   * @abstract
    */
   createHintContent() {
-    throw new Error( 'Please implement createHintContent' );
+    const screenView = this.screenProperty.value.view;
+    assert && assert( screenView, 'view needs to be inititalized for self-voicing toolbar content' );
+    assert && assert( screenView.getSelfVoicingHintContent, 'self-voicing toolbar is enabled, implement getSelfVoicingDetailsContent on ScreenView' );
+    return this.screenProperty.value.view.getSelfVoicingHintContent();
   }
 }
 

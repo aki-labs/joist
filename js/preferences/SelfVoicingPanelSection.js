@@ -25,8 +25,8 @@ const selfVoicingLabelString = 'Self-Voicing';
 const toolbarLabelString = 'Toolbar';
 const rateString = 'Rate';
 const pitchString = 'Pitch';
-const newVoiceRateString = 'New Voice Rate';
-const newVoicePitchString = 'New Voice Pitch';
+const selfVoicingEnabledString = 'Self-Voicing on.';
+const voiceVariablesPatternString = '{{value}}x';
 
 class SelfVoicingPanelSection extends PreferencesPanelSection {
 
@@ -74,8 +74,8 @@ class SelfVoicingPanelSection extends PreferencesPanelSection {
       listPosition: 'above'
     } );
 
-    const rateSlider = createLabelledSlider( rateString, webSpeaker.voiceRateProperty, newVoiceRateString );
-    const pitchSlider = createLabelledSlider( pitchString, webSpeaker.voicePitchProperty, newVoicePitchString );
+    const rateSlider = createLabelledSlider( rateString, webSpeaker.voiceRateProperty );
+    const pitchSlider = createLabelledSlider( pitchString, webSpeaker.voicePitchProperty );
     const voiceOptionsContent = new VBox( {
       spacing: 5,
       align: 'left',
@@ -101,23 +101,47 @@ class SelfVoicingPanelSection extends PreferencesPanelSection {
     } );
 
     webSpeaker.enabledProperty.link( enabled => SunConstants.componentEnabledListener( enabled, content ) );
-  }
 
+    // Speak when self-voicing becomes initially enabled. First speech is done synchronously (not using utterance-queue)
+    // in response to user input, otherwise all speech will be blocked on many platforms
+    webSpeaker.enabledProperty.lazyLink( enabled => {
+      if ( enabled ) {
+        webSpeaker.initialSpeech( selfVoicingEnabledString );
+      }
+    } );
+  }
 }
 
+/**
+ * Create a checkbox for the features of self-voicing content with a label.
+ * @param {string} labelString
+ * @param {BooleanProperty} property
+ * @returns {Checkbox}
+ */
 const createCheckbox = ( labelString, property ) => {
   const labelNode = new Text( labelString, { font: PreferencesDialog.CONTENT_FONT } );
   return new Checkbox( labelNode, property );
 };
 
-const createLabelledSlider = ( labelString, numberProperty, changeSuccessDescription ) => {
+/**
+ * Create a NumberControl for one of the voice parameters of self-voicing (pitch/rate).
+ * @param {string} labelString - label for the NumberControl
+ * @param {NumberProperty} numberProperty
+ * @returns {NumberControl}
+ */
+const createLabelledSlider = ( labelString, numberProperty ) => {
   return new NumberControl( labelString, numberProperty, numberProperty.range, {
     includeArrowButtons: false,
     layoutFunction: NumberControl.createLayoutFunction4(),
+    delta: 0.1,
+    numberDisplayOptions: {
+      decimalPlaces: 1,
+      valuePattern: voiceVariablesPatternString
+    },
     sliderOptions: {
       thumbSize: new Dimension2( 13, 26 ),
       trackSize: new Dimension2( 100, 5 ),
-      keyboardStep: 1
+      keyboardStep: 0.1
     }
   } );
 };

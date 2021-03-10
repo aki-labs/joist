@@ -17,18 +17,18 @@ import HBox from '../../../scenery/js/nodes/HBox.js';
 import Text from '../../../scenery/js/nodes/Text.js';
 import VBox from '../../../scenery/js/nodes/VBox.js';
 import ToggleSwitch from '../../../sun/js/ToggleSwitch.js';
+import Utterance from '../../../utterance-queue/js/Utterance.js';
 import joist from '../joist.js';
-import joistStrings from '../joistStrings.js';
 
 // constants
 const CONTENT_SPACING = 10;
 
 // strings
-const titleString = joistStrings.toolbar.selfVoicing.title;
-const speechString = joistStrings.toolbar.selfVoicing.speech;
-const overviewString = joistStrings.toolbar.selfVoicing.overview;
-const detailsString = joistStrings.toolbar.selfVoicing.details;
-const hintString = joistStrings.toolbar.selfVoicing.hint;
+const titleString = 'Self-Voicing';
+const speechString = 'Speech';
+const overviewString = 'Overview';
+const detailsString = 'Details';
+const hintString = 'Hint';
 
 class SelfVoicingToolbarItem extends VBox {
 
@@ -72,18 +72,65 @@ class SelfVoicingToolbarItem extends VBox {
     const playingOverviewProperty = new BooleanProperty( false );
     const overviewButton = new PlayStopButton( playingOverviewProperty, playPauseButtonOptions );
     const overviewRow = createLabelledInput( overviewString, overviewButton );
+    const overviewUtterance = new Utterance();
 
     const playingDetailsProperty = new BooleanProperty( false );
     const detailsButton = new PlayStopButton( playingDetailsProperty, playPauseButtonOptions );
     const detailsRow = createLabelledInput( detailsString, detailsButton );
+    const detailsUtterance = new Utterance();
 
     const playingHintProperty = new BooleanProperty( false );
     const hintButton = new PlayStopButton( playingHintProperty, playPauseButtonOptions );
     const hintRow = createLabelledInput( hintString, hintButton );
+    const hintUtterance = new Utterance();
 
     super( {
       children: [ titleText, speechRow, overviewRow, detailsRow, hintRow ],
       spacing: CONTENT_SPACING
+    } );
+
+    const playingProperties = [ playingOverviewProperty, playingDetailsProperty, playingHintProperty ];
+
+    /**
+     * Play the content for a particular button/associated Property.
+     * @param {BooleanProperty} playingProperty
+     * @param {Utterance} utterance
+     * @param {string} alertContent
+     */
+    const playContent = ( playingProperty, utterance, alertContent ) => {
+
+      if ( playingProperty.value ) {
+
+        // when one button is pressed, immediately stop any other buttons, only one should be playing at a time
+        const otherProperties = _.without( playingProperties, playingProperty );
+        otherProperties.forEach( property => {
+          property.value = false;
+        } );
+
+        utterance.alert = alertContent;
+        phet.joist.sim.selfVoicingUtteranceQueue.addToBack( utterance );
+      }
+      else {
+        webSpeaker.cancel();
+      }
+    };
+
+    playingOverviewProperty.lazyLink( playingOverview => { playContent( playingOverviewProperty, overviewUtterance, alertManager.createOverviewContent() ); } );
+    playingDetailsProperty.lazyLink( playingDetails => { playContent( playingDetailsProperty, detailsUtterance, alertManager.createDetailsContent() ); } );
+    playingHintProperty.lazyLink( playingHint => { playContent( playingHintProperty, hintUtterance, alertManager.createHintContent() ); } );
+
+    // if the webSpeaker starts speaking any Utterance that is not one of the Utterances for this content,
+    // stop speech for each button
+    webSpeaker.endSpeakingEmitter.addListener( endedUtterance => {
+      if ( endedUtterance === overviewUtterance ) {
+        playingOverviewProperty.set( false );
+      }
+      if ( endedUtterance === hintUtterance ) {
+        playingHintProperty.set( false );
+      }
+      if ( endedUtterance === detailsUtterance ) {
+        playingDetailsProperty.set( false );
+      }
     } );
   }
 }
