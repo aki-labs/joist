@@ -649,9 +649,9 @@ class Sim {
       this.display.addInputListener( {
         down: event => {
 
-          // in the self-voicing prototype we want the focus highlight to remain visible with
-          // mouse/touch presses
-          if ( !this.preferencesProperties.interactiveHighlightsEnabledProperty.value && !this.preferencesProperties.gestureControlsEnabledProperty.value ) {
+          // in the self-voicing Prototypes focus highlights should remain with gesture controls or interactive highlights
+          // enabled
+          if ( this.preferencesProperties && !this.preferencesProperties.interactiveHighlightsEnabledProperty.value && !this.preferencesProperties.gestureControlsEnabledProperty.value ) {
 
             // An AT might have sent a down event outside of the display, if this happened we will not do anything
             // to change focus
