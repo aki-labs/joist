@@ -158,7 +158,7 @@ class NavigationBar extends Node {
       const maxTitleWidth = Math.min( this.titleText.width, 0.20 * HomeScreenView.LAYOUT_BOUNDS.width );
 
       // pdom - container for the homeButton and all the screen buttons.
-      var buttons = new Node( {
+      var buttons = new Node( { // eslint-disable-line no-var
         tagName: 'ol',
         containerTagName: 'nav',
         labelTagName: 'h2',
@@ -220,7 +220,7 @@ class NavigationBar extends Node {
           this.simScreens.indexOf( screen ),
           NAVIGATION_BAR_SIZE.height, {
             maxButtonWidth: screenButtonWidth,
-            tandem: tandem.createTandem( screen.tandem.name + 'Button' )
+            tandem: tandem.createTandem( `${screen.tandem.name}Button` )
           } );
       } );
 

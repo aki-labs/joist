@@ -104,7 +104,7 @@ class Screen extends PhetioObject {
     assert && assert( !options.navigationBarIcon || options.navigationBarIcon instanceof ScreenIcon, 'invalid navigationBarIcon' );
 
     assert && assert( _.includes( [ 'black', 'white', null ], options.showScreenIconFrameForNavigationBarFill ),
-      'invalid showScreenIconFrameForNavigationBarFill: ' + options.showScreenIconFrameForNavigationBarFill );
+      `invalid showScreenIconFrameForNavigationBarFill: ${options.showScreenIconFrameForNavigationBarFill}` );
 
     super( options );
 
@@ -125,7 +125,7 @@ class Screen extends PhetioObject {
     validateIconSize( options.homeScreenIcon, MINIMUM_HOME_SCREEN_ICON_SIZE, HOME_SCREEN_ICON_ASPECT_RATIO, 'homeScreenIcon' );
     validateIconSize( options.navigationBarIcon, MINIMUM_NAVBAR_ICON_SIZE, NAVBAR_ICON_ASPECT_RATIO, 'navigationBarIcon' );
 
-    if ( assert && Tandem.VALIDATION && this.isPhetioInstrumented() ) {
+    if ( assert && this.isPhetioInstrumented() ) {
       assert && assert( _.endsWith( options.tandem.phetioID, 'Screen' ), 'Screen tandems should end with Screen suffix' );
     }
 
@@ -312,7 +312,7 @@ function validateIconSize( icon, minimumSize, aspectRatio, name ) {
   const actualAspectRatio = icon.width / icon.height;
   assert && assert(
     Math.abs( aspectRatio - actualAspectRatio ) < ICON_ASPECT_RATIO_TOLERANCE,
-    name + ' has invalid aspect ratio: ' + actualAspectRatio
+    `${name} has invalid aspect ratio: ${actualAspectRatio}`
   );
 }
 

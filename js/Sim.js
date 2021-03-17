@@ -159,7 +159,7 @@ class Sim {
 
     // playbackModeEnabledProperty cannot be changed after Sim construction has begun, hence this listener is added before
     // anything else is done, see https://github.com/phetsims/phet-io/issues/1146
-    phet.joist.playbackModeEnabledProperty.lazyLink( function( playbackModeEnabled ) {
+    phet.joist.playbackModeEnabledProperty.lazyLink( playbackModeEnabled => {
       throw new Error( 'playbackModeEnabledProperty cannot be changed after Sim construction has begun' );
     } );
 
@@ -625,6 +625,7 @@ class Sim {
     // When the sim is inactive, make it non-interactive, see https://github.com/phetsims/scenery/issues/414
     this.activeProperty.link( active => {
       this.display.interactive = active;
+      globalKeyStateTracker.enabled = active;
 
       // The sim must remain inactive while playbackModeEnabledProperty is true
       if ( active ) {
@@ -788,7 +789,7 @@ class Sim {
 
     // If the page is loaded from the back-forward cache, then reload the page to avoid bugginess,
     // see https://github.com/phetsims/joist/issues/448
-    window.addEventListener( 'pageshow', function( event ) {
+    window.addEventListener( 'pageshow', event => {
       if ( event.persisted ) {
         window.location.reload();
       }
@@ -1000,7 +1001,7 @@ class Sim {
           if ( document.getElementById( 'progressBarForeground' ) ) {
 
             // Grow the progress bar foreground to the right based on the progress so far.
-            document.getElementById( 'progressBarForeground' ).setAttribute( 'width', ( progress * PROGRESS_BAR_WIDTH ) + '' );
+            document.getElementById( 'progressBarForeground' ).setAttribute( 'width', `${progress * PROGRESS_BAR_WIDTH}` );
           }
           if ( i + 1 < workItems.length ) {
             runItem( i + 1 );
