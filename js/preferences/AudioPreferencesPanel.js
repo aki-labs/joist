@@ -9,10 +9,10 @@
 import HBox from '../../../scenery/js/nodes/HBox.js';
 import Text from '../../../scenery/js/nodes/Text.js';
 import VBox from '../../../scenery/js/nodes/VBox.js';
-import Checkbox from '../../../sun/js/Checkbox.js';
 import joist from '../joist.js';
 import joistStrings from '../joistStrings.js';
 import PreferencesDialog from './PreferencesDialog.js';
+import PreferencesToggleSwitch from './PreferencesToggleSwitch.js';
 import SelfVoicingPanelSection from './SelfVoicingPanelSection.js';
 import SoundPanelSection from './SoundPanelSection.js';
 
@@ -47,14 +47,16 @@ class AudioPreferencesTabPanel extends VBox {
     } );
 
     const allAudioLabel = new Text( allAudioString, { font: PreferencesDialog.PANEL_SECTION_LABEL_FONT } );
-    const allAudioCheckbox = new Checkbox( allAudioLabel, simSoundProperty );
+    const allAudioSwitch = new PreferencesToggleSwitch( simSoundProperty, false, true, {
+      labelNode: allAudioLabel
+    } );
 
     simSoundProperty.link( ( enabled, previousValue ) => { sections.enabled = enabled; } );
 
     super( {
       align: 'center',
       spacing: 25,
-      children: [ allAudioCheckbox, sections ]
+      children: [ allAudioSwitch, sections ]
     } );
   }
 }

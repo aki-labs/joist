@@ -24,7 +24,7 @@ import joist from '../joist.js';
 const CONTENT_SPACING = 10;
 
 // strings
-const titleString = 'Self-Voicing';
+const titleString = 'Voicing';
 const speechString = 'Speech';
 const overviewString = 'Overview';
 const detailsString = 'Details';
@@ -108,7 +108,7 @@ class SelfVoicingToolbarItem extends VBox {
         } );
 
         utterance.alert = alertContent;
-        phet.joist.sim.selfVoicingUtteranceQueue.addToBack( utterance );
+        phet.joist.sim.voicingUtteranceQueue.addToBack( utterance );
       }
       else {
         webSpeaker.cancel();

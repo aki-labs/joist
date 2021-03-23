@@ -13,10 +13,12 @@ import joist from '../joist.js';
 import joistStrings from '../joistStrings.js';
 import PreferencesDialog from './PreferencesDialog.js';
 import PreferencesPanelSection from './PreferencesPanelSection.js';
+import PreferencesToggleSwitch from './PreferencesToggleSwitch.js';
 
 // constants
 const soundLabelString = joistStrings.preferences.tabs.audio.soundAndSonification;
 const enhancedSoundLabelString = joistStrings.preferences.tabs.audio.enhancedSound;
+const soundDescriptionString = 'Non-Speech sound will play when enabled.';
 
 class SoundPanelSection extends PreferencesPanelSection {
 
@@ -26,7 +28,12 @@ class SoundPanelSection extends PreferencesPanelSection {
   constructor( audioOptions ) {
 
     const soundLabel = new Text( soundLabelString, { font: PreferencesDialog.PANEL_SECTION_LABEL_FONT } );
-    const titleNode = new Checkbox( soundLabel, soundManager.enabledProperty );
+    const titleNode = new PreferencesToggleSwitch( soundManager.enabledProperty, false, true, {
+      labelNode: soundLabel,
+      descriptionNode: new Text( soundDescriptionString, {
+        font: PreferencesDialog.CONTENT_FONT
+      } )
+    } );
 
     let enhancedSoundCheckbox = null;
     if ( audioOptions.supportsEnhancedSound ) {
