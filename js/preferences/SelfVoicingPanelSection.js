@@ -7,18 +7,18 @@
  */
 
 import BooleanProperty from '../../../axon/js/BooleanProperty.js';
-import PhetFont from '../../../scenery-phet/js/PhetFont.js';
-import selfVoicingManager from '../../../scenery/js/accessibility/speaker/selfVoicingManager.js';
 import Dimension2 from '../../../dot/js/Dimension2.js';
 import NumberControl from '../../../scenery-phet/js/NumberControl.js';
+import PhetFont from '../../../scenery-phet/js/PhetFont.js';
+import voicingManager from '../../../scenery/js/accessibility/speaker/voicingManager.js';
 import webSpeaker from '../../../scenery/js/accessibility/speaker/webSpeaker.js';
+import Node from '../../../scenery/js/nodes/Node.js';
 import Text from '../../../scenery/js/nodes/Text.js';
 import VBox from '../../../scenery/js/nodes/VBox.js';
-import AccordionBox from '../../../sun/js/AccordionBox.js';
 import Checkbox from '../../../sun/js/Checkbox.js';
 import ComboBox from '../../../sun/js/ComboBox.js';
 import ComboBoxItem from '../../../sun/js/ComboBoxItem.js';
-import Node from '../../../scenery/js/nodes/Node.js';
+import ExpandCollapseButton from '../../../sun/js/ExpandCollapseButton.js';
 import HSlider from '../../../sun/js/HSlider.js';
 import joist from '../joist.js';
 import PreferencesDialog from './PreferencesDialog.js';
@@ -62,9 +62,9 @@ class SelfVoicingPanelSection extends PreferencesPanelSection {
       align: 'left',
       spacing: 5,
       children: [
-        createCheckbox( 'Object Changes and Screen Text', selfVoicingManager.objectChangesProperty ),
-        createCheckbox( 'Context Changes', selfVoicingManager.contextChangesProperty ),
-        createCheckbox( 'Helpful Hints', selfVoicingManager.hintsProperty )
+        createCheckbox( 'Object Changes and Screen Text', voicingManager.objectChangesProperty ),
+        createCheckbox( 'Context Changes', voicingManager.contextChangesProperty ),
+        createCheckbox( 'Helpful Hints', voicingManager.hintsProperty )
       ]
     } );
 
@@ -103,25 +103,21 @@ class SelfVoicingPanelSection extends PreferencesPanelSection {
       ]
     } );
 
-    const voiceOptionsAccordionBox = new AccordionBox( voiceOptionsContent, {
-      titleNode: voiceOptionsLabel,
-      fill: 'white',
-      stroke: null,
-      titleAlignX: 'left',
+    // controls visibility of voice options
+    const voiceOptionsOpenProperty = new BooleanProperty( false );
+    const expandCollapseButton = new ExpandCollapseButton( voiceOptionsOpenProperty, { sideLength: 16 } );
 
-      // initially closed
-      expandedProperty: new BooleanProperty( false )
+    const content = new Node( {
+      children: [ speechOutputContent, toolbarSwitch, voiceOptionsLabel, expandCollapseButton, voiceOptionsContent ]
     } );
 
-    const content = new VBox( {
-      align: 'left',
-      spacing: 20,
-      children: [
-        speechOutputContent,
-        toolbarSwitch,
-        voiceOptionsAccordionBox
-      ]
-    } );
+    // layout for section content, custom rather than using a LayoutBox because the voice options label needs
+    // to be left aligned with other labels, while the ExpandCollapseButton extends to the left
+    toolbarSwitch.leftTop = speechOutputContent.leftBottom.plusXY( 0, 20 );
+    voiceOptionsLabel.leftTop = toolbarSwitch.leftBottom.plusXY( 0, 20 );
+    expandCollapseButton.leftCenter = voiceOptionsLabel.rightCenter.plusXY( 10, 0 );
+    voiceOptionsContent.leftTop = voiceOptionsLabel.leftBottom.plusXY( 0, 10 );
+    voiceOptionsOpenProperty.link( open => { voiceOptionsContent.visible = open; } );
 
     super( {
       titleNode: voicingSwitch,
