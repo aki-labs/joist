@@ -607,9 +607,12 @@ class Sim {
       // Indicate whether webgl is allowed to facilitate testing on non-webgl platforms, see https://github.com/phetsims/scenery/issues/289
       allowWebGL: phet.chipper.queryParameters.webgl,
       accessibility: this.supportsInteractiveDescription,
-      voicing: options.preferencesConfiguration.audioOptions.supportsSelfVoicing,
+      voicing: phet.chipper.queryParameters.supportsVoicing,
       assumeFullWindow: true, // a bit faster if we can assume no coordinate translations are needed for the display.
-      allowBackingScaleAntialiasing: options.allowBackingScaleAntialiasing
+      allowBackingScaleAntialiasing: options.allowBackingScaleAntialiasing,
+
+      // phet-io
+      tandem: Tandem.GENERAL_VIEW.createTandem( 'display' )
     } );
 
     // Seeding by default a random value for reproducable fuzzes if desired
@@ -800,15 +803,21 @@ class Sim {
   /**
    * Get the single utteranceQueue instance to be used by the PhET sim to make aria-live alerts.
    * @public
+   * @returns {UtteranceQueue}
    */
   get utteranceQueue() {
     return this.display.utteranceQueue;
   }
 
   /**
+<<<<<<< HEAD
    * Get the single UtteranceQueue instance to be used by the sim to speak with SpeechSynthesis.
    * @public
    *
+=======
+   * Get the single UtteranceQueue instance used for alerts spoken with SpeechSynthesis.
+   * @public
+>>>>>>> master
    * @returns {UtteranceQueue}
    */
   get voicingUtteranceQueue() {
