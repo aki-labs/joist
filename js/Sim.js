@@ -27,7 +27,6 @@ import DotUtils from '../../dot/js/Utils.js';
 import merge from '../../phet-core/js/merge.js';
 import platform from '../../phet-core/js/platform.js';
 import StringUtils from '../../phetcommon/js/util/StringUtils.js';
-import speakerHighlighter from '../../scenery-phet/js/accessibility/speaker/speakerHighlighter.js';
 import BarrierRectangle from '../../scenery-phet/js/BarrierRectangle.js';
 import globalKeyStateTracker from '../../scenery/js/accessibility/globalKeyStateTracker.js';
 import KeyboardFuzzer from '../../scenery/js/accessibility/KeyboardFuzzer.js';
@@ -742,17 +741,12 @@ class Sim {
         } );
       }
 
-      const visualOptions = options.preferencesConfiguration.visualOptions;
-      if ( visualOptions.supportsInteractiveHighlights ) {
-        speakerHighlighter.initialize( this.preferencesProperties.interactiveHighlightsEnabledProperty );
-      }
-
       // display focus highlights when "interactive highlights" or "gesture controls" become enabled
       Property.multilink( [
         this.preferencesProperties.interactiveHighlightsEnabledProperty,
         this.preferencesProperties.gestureControlsEnabledProperty
       ], ( highlightsEnabled, gesturesEnabled ) => {
-        this.display.focusHighlightsVisibleProperty.value = highlightsEnabled || gesturesEnabled;
+        this.display.interactiveHighlightsVisibleProperty.value = highlightsEnabled || gesturesEnabled;
       } );
     }
 
