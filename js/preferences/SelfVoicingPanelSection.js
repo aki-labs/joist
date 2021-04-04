@@ -160,7 +160,7 @@ const createCheckbox = ( labelString, property ) => {
  */
 class VoiceRateNumberControl extends NumberControl {
   constructor( labelString, voiceRateProperty ) {
-    return new NumberControl( labelString, voiceRateProperty, voiceRateProperty.range, {
+    super( labelString, voiceRateProperty, voiceRateProperty.range, {
       includeArrowButtons: false,
       layoutFunction: NumberControl.createLayoutFunction4(),
       delta: 0.25,

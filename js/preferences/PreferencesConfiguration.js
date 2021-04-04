@@ -33,16 +33,8 @@ class PreferencesConfiguration {
       // configuration for controls in the "Audio" tab of the PreferencesDialog
       audioOptions: {
 
-        // The entry point for self-voicing, if true the PreferencesDialog will include all self-voicing options
-        supportsSelfVoicing: false,
-
-        // {SelfVoicingToolbarAlertManager} - A Constructor for the alertManager, gets constructed with the Toolbar
-        // to take the simulation ScreenProperty, as self-voicing alerts in the Toolbar are dependent on active screen.
-        selfVoicingToolbarAlertManager: null,
-
-        // {boolean} - If true, the sim will include the Toolbar with controls that let you play speech content
-        // that describes the active screen
-        supportsSelfVoicingToolbar: false,
+        // The entry point for voicing, if true the PreferencesDialog will include all voicing options
+        supportsVoicing: false,
 
         // {boolean} - Whether or not to include checkboxes related to sound and enhanced sound. supportsEnhancedSound
         // can only be included if supportsSound is also true.

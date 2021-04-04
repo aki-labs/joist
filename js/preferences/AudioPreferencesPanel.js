@@ -33,7 +33,7 @@ class AudioPreferencesTabPanel extends VBox {
     // The self-voicing feature is not supported with i18n at this time, it should only be enabled and configurable
     // if running in english locale
     // NOTE: This should be for the whole feature, not just the dialog
-    if ( phet.chipper.locale === 'en' && audioOptions.supportsSelfVoicing ) {
+    if ( phet.chipper.locale === 'en' && audioOptions.supportsVoicing ) {
       panelChildren.push( new SelfVoicingPanelSection( enableToolbarProperty ) );
     }
 

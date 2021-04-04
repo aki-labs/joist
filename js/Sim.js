@@ -728,11 +728,8 @@ class Sim {
       this.preferencesProperties = new PreferencesProperties();
 
       const audioOptions = options.preferencesConfiguration.audioOptions;
-      if ( audioOptions.supportsSelfVoicingToolbar ) {
+      if ( audioOptions.supportsVoicing ) {
 
-        // create the alert manager and toolbar, which for right now only contains content related to the
-        // self-voicing feature
-        // eslint-disable-next-line new-cap
         const selfVoicingAlertManager = new SelfVoicingToolbarAlertManager( this.screenProperty );
         this.toolbar = new Toolbar( selfVoicingAlertManager, this.preferencesProperties.toolbarEnabledProperty, this.lookAndFeel );
 
