@@ -13,7 +13,7 @@ import joist from '../joist.js';
 import joistStrings from '../joistStrings.js';
 import PreferencesDialog from './PreferencesDialog.js';
 import PreferencesToggleSwitch from './PreferencesToggleSwitch.js';
-import SelfVoicingPanelSection from './SelfVoicingPanelSection.js';
+import VoicingPanelSection from './VoicingPanelSection.js';
 import SoundPanelSection from './SoundPanelSection.js';
 
 // constants
@@ -34,7 +34,7 @@ class AudioPreferencesTabPanel extends VBox {
     // if running in english locale
     // NOTE: This should be for the whole feature, not just the dialog
     if ( phet.chipper.locale === 'en' && audioOptions.supportsVoicing ) {
-      panelChildren.push( new SelfVoicingPanelSection( enableToolbarProperty ) );
+      panelChildren.push( new VoicingPanelSection( enableToolbarProperty ) );
     }
 
     if ( audioOptions.supportsSound ) {

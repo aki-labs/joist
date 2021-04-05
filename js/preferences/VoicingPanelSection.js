@@ -34,7 +34,7 @@ const voicingEnabledString = 'Voicing on.';
 const voiceVariablesPatternString = '{{value}}x';
 const voicingDescriptionString = 'Info will be voiced when enabled.';
 
-class SelfVoicingPanelSection extends PreferencesPanelSection {
+class VoicingPanelSection extends PreferencesPanelSection {
 
   /**
    * @param {BooleanProperty} toolbarEnabledProperty - whether or not the Toolbar is enabled for use
@@ -217,5 +217,5 @@ class VoicingPitchSlider {
   }
 }
 
-joist.register( 'SelfVoicingPanelSection', SelfVoicingPanelSection );
-export default SelfVoicingPanelSection;
+joist.register( 'VoicingPanelSection', VoicingPanelSection );
+export default VoicingPanelSection;
