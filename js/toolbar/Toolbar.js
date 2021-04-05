@@ -25,7 +25,7 @@ import Rectangle from '../../../scenery/js/nodes/Rectangle.js';
 import ButtonNode from '../../../sun/js/buttons/ButtonNode.js';
 import RoundPushButton from '../../../sun/js/buttons/RoundPushButton.js';
 import joist from '../joist.js';
-import SelfVoicingToolbarItem from './SelfVoicingToolbarItem.js';
+import VoicingToolbarItem from './VoicingToolbarItem.js';
 
 // constants
 const MAX_ANIMATION_SPEED = 5; // in view coordinates, maximum speed at which Toolbar will open/close
@@ -70,9 +70,9 @@ class Toolbar extends Node {
     // @private {number} - Scale applied to the Toolbar and its contents in response to layout and window resizing.
     this.layoutScale = 1;
 
-    // @private {SelfVoicingToolbarItem} - Contents for the Toolbar, currently only controls related to the self-voicing
+    // @private {VoicingToolbarItem} - Contents for the Toolbar, currently only controls related to the self-voicing
     // feature.
-    this.menuContent = new SelfVoicingToolbarItem( selfVoicingAlertManager, lookAndFeel );
+    this.menuContent = new VoicingToolbarItem( selfVoicingAlertManager, lookAndFeel );
 
     // icon for the openButton
     const chevronIcon = new DoubleChevron();

@@ -1,7 +1,7 @@
 // Copyright 2021, University of Colorado Boulder
 
 /**
- * Abstract class that creates alert content for the SelfVoicingToolbarItem. Buttons in that item will call these
+ * Abstract class that creates alert content for the VoicingToolbarItem. Buttons in that item will call these
  * functions to create content that is spoken using speech synthesis. Extend this class and implement these
  * functions. Then pass this as an entry to the PreferencesConfiguration when creating a Sim.
  *

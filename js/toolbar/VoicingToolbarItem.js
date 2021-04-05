@@ -30,7 +30,7 @@ const overviewString = 'Overview';
 const detailsString = 'Details';
 const hintString = 'Hint';
 
-class SelfVoicingToolbarItem extends VBox {
+class VoicingToolbarItem extends VBox {
 
   /**
    * @param {VoicingToolbarAlertManager} alertManager - generates the alert content when buttons are pressed
@@ -135,5 +135,5 @@ class SelfVoicingToolbarItem extends VBox {
   }
 }
 
-joist.register( 'SelfVoicingToolbarItem', SelfVoicingToolbarItem );
-export default SelfVoicingToolbarItem;
+joist.register( 'VoicingToolbarItem', VoicingToolbarItem );
+export default VoicingToolbarItem;
