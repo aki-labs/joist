@@ -59,7 +59,7 @@ import ScreenshotGenerator from './ScreenshotGenerator.js';
 import selectScreens from './selectScreens.js';
 import SimInfo from './SimInfo.js';
 import LegendsOfLearningSupport from './thirdPartySupport/LegendsOfLearningSupport.js';
-import SelfVoicingToolbarAlertManager from './toolbar/SelfVoicingToolbarAlertManager.js';
+import VoicingToolbarAlertManager from './toolbar/VoicingToolbarAlertManager.js';
 import Toolbar from './toolbar/Toolbar.js';
 import updateCheck from './updateCheck.js';
 
@@ -730,7 +730,7 @@ class Sim {
       const audioOptions = options.preferencesConfiguration.audioOptions;
       if ( audioOptions.supportsVoicing ) {
 
-        const selfVoicingAlertManager = new SelfVoicingToolbarAlertManager( this.screenProperty );
+        const selfVoicingAlertManager = new VoicingToolbarAlertManager( this.screenProperty );
         this.toolbar = new Toolbar( selfVoicingAlertManager, this.preferencesProperties.toolbarEnabledProperty, this.lookAndFeel );
 
         this.toolbar.rightPositionProperty.lazyLink( () => {

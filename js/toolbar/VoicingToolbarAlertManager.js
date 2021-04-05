@@ -10,7 +10,7 @@
 
 import joist from '../joist.js';
 
-class SelfVoicingToolbarAlertManager {
+class VoicingToolbarAlertManager {
 
   /**
    * @param {Property.<Screen>} screenProperty - indicates the active screen
@@ -54,5 +54,5 @@ class SelfVoicingToolbarAlertManager {
   }
 }
 
-joist.register( 'SelfVoicingToolbarAlertManager', SelfVoicingToolbarAlertManager );
-export default SelfVoicingToolbarAlertManager;
+joist.register( 'VoicingToolbarAlertManager', VoicingToolbarAlertManager );
+export default VoicingToolbarAlertManager;

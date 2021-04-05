@@ -34,7 +34,7 @@ const CONTENT_TOP_MARGIN = 15; // margin between top of Toolbar and contents
 class Toolbar extends Node {
 
   /**
-   * @param {SelfVoicingToolbarAlertManager} selfVoicingAlertManager - generates self-voicing alerts
+   * @param {VoicingToolbarAlertManager} selfVoicingAlertManager - generates self-voicing alerts
    * @param {BooleanProperty} enabledProperty - whether or not the Toolbar is enabled and visible to the user
    * @param {LookAndFeel} lookAndFeel
    */

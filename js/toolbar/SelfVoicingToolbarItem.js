@@ -33,7 +33,7 @@ const hintString = 'Hint';
 class SelfVoicingToolbarItem extends VBox {
 
   /**
-   * @param {SelfVoicingToolbarAlertManager} alertManager - generates the alert content when buttons are pressed
+   * @param {VoicingToolbarAlertManager} alertManager - generates the alert content when buttons are pressed
    * @param {LookAndFeel} lookAndFeel
    */
   constructor( alertManager, lookAndFeel ) {
