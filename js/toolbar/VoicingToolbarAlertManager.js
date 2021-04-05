@@ -26,8 +26,8 @@ class VoicingToolbarAlertManager {
   createOverviewContent() {
     const screenView = this.screenProperty.value.view;
     assert && assert( screenView, 'view needs to be inititalized for self-voicing toolbar content' );
-    assert && assert( screenView.getSelfVoicingOverviewContent, 'self-voicing toolbar is enabled, implement getSelfVoicingOverviewContent on ScreenView' );
-    return screenView.getSelfVoicingOverviewContent();
+    assert && assert( screenView.getVoicingOverviewContent, 'self-voicing toolbar is enabled, implement getVoicingOverviewContent on ScreenView' );
+    return screenView.getVoicingOverviewContent();
   }
 
   /**
@@ -38,8 +38,8 @@ class VoicingToolbarAlertManager {
   createDetailsContent() {
     const screenView = this.screenProperty.value.view;
     assert && assert( screenView, 'view needs to be inititalized for self-voicing toolbar content' );
-    assert && assert( screenView.getSelfVoicingDetailsContent, 'self-voicing toolbar is enabled, implement getSelfVoicingDetailsContent on ScreenView' );
-    return screenView.getSelfVoicingDetailsContent();
+    assert && assert( screenView.getVoicingDetailsContent, 'self-voicing toolbar is enabled, implement getVoicingDetailsContent on ScreenView' );
+    return screenView.getVoicingDetailsContent();
   }
 
   /**
@@ -49,8 +49,8 @@ class VoicingToolbarAlertManager {
   createHintContent() {
     const screenView = this.screenProperty.value.view;
     assert && assert( screenView, 'view needs to be inititalized for self-voicing toolbar content' );
-    assert && assert( screenView.getSelfVoicingHintContent, 'self-voicing toolbar is enabled, implement getSelfVoicingDetailsContent on ScreenView' );
-    return this.screenProperty.value.view.getSelfVoicingHintContent();
+    assert && assert( screenView.getVoicingHintContent, 'self-voicing toolbar is enabled, implement getVoicingDetailsContent on ScreenView' );
+    return this.screenProperty.value.view.getVoicingHintContent();
   }
 }
 

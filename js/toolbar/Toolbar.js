@@ -34,11 +34,11 @@ const CONTENT_TOP_MARGIN = 15; // margin between top of Toolbar and contents
 class Toolbar extends Node {
 
   /**
-   * @param {VoicingToolbarAlertManager} selfVoicingAlertManager - generates self-voicing alerts
+   * @param {VoicingToolbarAlertManager} voicingAlertManager - generates self-voicing alerts
    * @param {BooleanProperty} enabledProperty - whether or not the Toolbar is enabled and visible to the user
    * @param {LookAndFeel} lookAndFeel
    */
-  constructor( selfVoicingAlertManager, enabledProperty, lookAndFeel ) {
+  constructor( voicingAlertManager, enabledProperty, lookAndFeel ) {
     super();
 
     // @private {BooleanProperty} - Whether or not the Toolbar is enabled (visible to the user)
@@ -72,7 +72,7 @@ class Toolbar extends Node {
 
     // @private {VoicingToolbarItem} - Contents for the Toolbar, currently only controls related to the self-voicing
     // feature.
-    this.menuContent = new VoicingToolbarItem( selfVoicingAlertManager, lookAndFeel );
+    this.menuContent = new VoicingToolbarItem( voicingAlertManager, lookAndFeel );
 
     // icon for the openButton
     const chevronIcon = new DoubleChevron();

@@ -606,7 +606,7 @@ class Sim {
       // Indicate whether webgl is allowed to facilitate testing on non-webgl platforms, see https://github.com/phetsims/scenery/issues/289
       allowWebGL: phet.chipper.queryParameters.webgl,
       accessibility: this.supportsInteractiveDescription,
-      voicing: phet.chipper.queryParameters.supportsVoicing,
+      voicing: phet.chipper.queryParameters.supportsVoicing || ( this.preferencesConfiguration && this.preferencesConfiguration.audioOptions.supportsVoicing ),
       assumeFullWindow: true, // a bit faster if we can assume no coordinate translations are needed for the display.
       allowBackingScaleAntialiasing: options.allowBackingScaleAntialiasing,
 
