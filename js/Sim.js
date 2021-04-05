@@ -506,7 +506,7 @@ class Sim {
                                    phet.chipper.queryParameters.supportsEnhancedSound );
 
     // @public {BooleanProperty} - Whether or not all features involving sound are enabled in the simulation (sound,
-    // enhanced sound, self-voicing). When false the sim should be totally silent.
+    // enhanced sound, voicing). When false the sim should be totally silent.
     this.soundEnabledProperty = new BooleanProperty( true );
 
     // Initialize the sound library if enabled, then hook up sound generation for screen changes.
@@ -730,8 +730,8 @@ class Sim {
       const audioOptions = options.preferencesConfiguration.audioOptions;
       if ( audioOptions.supportsVoicing ) {
 
-        const selfVoicingAlertManager = new VoicingToolbarAlertManager( this.screenProperty );
-        this.toolbar = new Toolbar( selfVoicingAlertManager, this.preferencesProperties.toolbarEnabledProperty, this.lookAndFeel );
+        const voicingAlertManager = new VoicingToolbarAlertManager( this.screenProperty );
+        this.toolbar = new Toolbar( voicingAlertManager, this.preferencesProperties.toolbarEnabledProperty, this.lookAndFeel );
 
         this.toolbar.rightPositionProperty.lazyLink( () => {
           this.resize( this.boundsProperty.value.width, this.boundsProperty.value.height );

@@ -26,11 +26,11 @@ import PreferencesPanelSection from './PreferencesPanelSection.js';
 import PreferencesToggleSwitch from './PreferencesToggleSwitch.js';
 
 // constants
-const selfVoicingLabelString = 'Voicing';
+const voicingLabelString = 'Voicing';
 const toolbarLabelString = 'Toolbar';
 const rateString = 'Rate';
 const pitchString = 'Pitch';
-const selfVoicingEnabledString = 'Voicing on.';
+const voicingEnabledString = 'Voicing on.';
 const voiceVariablesPatternString = '{{value}}x';
 const voicingDescriptionString = 'Info will be voiced when enabled.';
 
@@ -42,9 +42,9 @@ class SelfVoicingPanelSection extends PreferencesPanelSection {
   constructor( toolbarEnabledProperty ) {
 
     // the checkbox is the title for the section and totally enables/disables the feature
-    const selfVoicingLabel = new Text( selfVoicingLabelString, { font: PreferencesDialog.PANEL_SECTION_LABEL_FONT } );
+    const voicingLabel = new Text( voicingLabelString, { font: PreferencesDialog.PANEL_SECTION_LABEL_FONT } );
     const voicingSwitch = new PreferencesToggleSwitch( webSpeaker.enabledProperty, false, true, {
-      labelNode: selfVoicingLabel,
+      labelNode: voicingLabel,
       descriptionNode: new Text( voicingDescriptionString, {
         font: PreferencesDialog.CONTENT_FONT
       } )
@@ -134,7 +134,7 @@ class SelfVoicingPanelSection extends PreferencesPanelSection {
     // in response to user input, otherwise all speech will be blocked on many platforms
     webSpeaker.enabledProperty.lazyLink( enabled => {
       if ( enabled ) {
-        webSpeaker.initialSpeech( selfVoicingEnabledString );
+        webSpeaker.initialSpeech( voicingEnabledString );
       }
     } );
   }
