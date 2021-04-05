@@ -8,10 +8,14 @@
  * @author Jesse Greenberg (PhET Interactive Simulations)
  */
 
-import joist from '../joist.js';
 import merge from '../../../phet-core/js/merge.js';
+import joist from '../joist.js';
 
 class PreferencesConfiguration {
+
+  /**
+   * @param {Object} [options]
+   */
   constructor( options ) {
     options = merge( {
 
