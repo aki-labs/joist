@@ -25,8 +25,8 @@ class VoicingToolbarAlertManager {
    */
   createOverviewContent() {
     const screenView = this.screenProperty.value.view;
-    assert && assert( screenView, 'view needs to be inititalized for self-voicing toolbar content' );
-    assert && assert( screenView.getVoicingOverviewContent, 'self-voicing toolbar is enabled, implement getVoicingOverviewContent on ScreenView' );
+    assert && assert( screenView, 'view needs to be inititalized for voicing toolbar content' );
+    assert && assert( screenView.getVoicingOverviewContent, 'voicing toolbar is enabled, implement getVoicingOverviewContent on ScreenView' );
     return screenView.getVoicingOverviewContent();
   }
 
@@ -37,8 +37,8 @@ class VoicingToolbarAlertManager {
    */
   createDetailsContent() {
     const screenView = this.screenProperty.value.view;
-    assert && assert( screenView, 'view needs to be inititalized for self-voicing toolbar content' );
-    assert && assert( screenView.getVoicingDetailsContent, 'self-voicing toolbar is enabled, implement getVoicingDetailsContent on ScreenView' );
+    assert && assert( screenView, 'view needs to be inititalized for voicing toolbar content' );
+    assert && assert( screenView.getVoicingDetailsContent, 'voicing toolbar is enabled, implement getVoicingDetailsContent on ScreenView' );
     return screenView.getVoicingDetailsContent();
   }
 
@@ -48,8 +48,8 @@ class VoicingToolbarAlertManager {
    */
   createHintContent() {
     const screenView = this.screenProperty.value.view;
-    assert && assert( screenView, 'view needs to be inititalized for self-voicing toolbar content' );
-    assert && assert( screenView.getVoicingHintContent, 'self-voicing toolbar is enabled, implement getVoicingDetailsContent on ScreenView' );
+    assert && assert( screenView, 'view needs to be inititalized for voicing toolbar content' );
+    assert && assert( screenView.getVoicingHintContent, 'voicing toolbar is enabled, implement getVoicingDetailsContent on ScreenView' );
     return this.screenProperty.value.view.getVoicingHintContent();
   }
 }

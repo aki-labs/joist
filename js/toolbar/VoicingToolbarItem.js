@@ -1,7 +1,7 @@
 // Copyright 2021, University of Colorado Boulder
 
 /**
- * An item for the Toolbar that includes components related to the self-voicing feature. Includes a switch to
+ * An item for the Toolbar that includes components related to the voicing feature. Includes a switch to
  * enable/disable all speech, and buttons to hear overview information about the active sim Screen.
  *
  * @author Jesse Greenberg (PhET Interactive Simulations)

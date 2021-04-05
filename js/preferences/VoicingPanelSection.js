@@ -1,7 +1,7 @@
 // Copyright 2021, University of Colorado Boulder
 
 /**
- * The section of PreferencesDialog content in the "Audio" panel related to self-voicing.
+ * The section of PreferencesDialog content in the "Audio" panel related to voicing.
  *
  * @author Jesse Greenberg
  */
@@ -130,7 +130,7 @@ class VoicingPanelSection extends PreferencesPanelSection {
 
     // webSpeaker.enabledProperty.link( enabled => SunConstants.componentEnabledListener( enabled, content ) );
 
-    // Speak when self-voicing becomes initially enabled. First speech is done synchronously (not using utterance-queue)
+    // Speak when voicing becomes initially enabled. First speech is done synchronously (not using utterance-queue)
     // in response to user input, otherwise all speech will be blocked on many platforms
     webSpeaker.enabledProperty.lazyLink( enabled => {
       if ( enabled ) {
@@ -141,7 +141,7 @@ class VoicingPanelSection extends PreferencesPanelSection {
 }
 
 /**
- * Create a checkbox for the features of self-voicing content with a label.
+ * Create a checkbox for the features of voicing content with a label.
  * @param {string} labelString
  * @param {BooleanProperty} property
  * @returns {Checkbox}
@@ -152,7 +152,7 @@ const createCheckbox = ( labelString, property ) => {
 };
 
 /**
- * Create a NumberControl for one of the voice parameters of self-voicing (pitch/rate).
+ * Create a NumberControl for one of the voice parameters of voicing (pitch/rate).
  *
  * @param {string} labelString - label for the NumberControl
  * @param {NumberProperty} voiceRateProperty

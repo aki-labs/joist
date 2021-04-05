@@ -651,7 +651,7 @@ class Sim {
       this.display.addInputListener( {
         down: event => {
 
-          // in the self-voicing Prototypes focus highlights should remain with gesture controls or interactive highlights
+          // in the voicing Prototypes focus highlights should remain with gesture controls or interactive highlights
           // enabled
           if ( this.preferencesProperties && !this.preferencesProperties.interactiveHighlightsEnabledProperty.value && !this.preferencesProperties.gestureControlsEnabledProperty.value ) {
 
@@ -720,8 +720,8 @@ class Sim {
     this.display.setCanvasNodeBoundsVisible( phet.chipper.queryParameters.showCanvasNodeBounds );
     this.display.setFittedBlockBoundsVisible( phet.chipper.queryParameters.showFittedBlockBounds );
 
-    // @private (Toolbar|null) - The Toolbar will not be created unless the self-voicing feature is enabled, since
-    // the only contents of the Toolbar are for the self-voicing feature at the moment.
+    // @private (Toolbar|null) - The Toolbar will not be created unless the voicing feature is enabled, since
+    // the only contents of the Toolbar are for the voicing feature at the moment.
     this.toolbar = null;
 
     if ( options.preferencesConfiguration ) {

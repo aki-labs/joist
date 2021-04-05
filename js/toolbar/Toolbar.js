@@ -2,9 +2,9 @@
 
 /**
  * The Toolbar along the left edge of the screen with controls related to the sim or active screen. Currently, it
- * only contains controls related to the self-voicing feature. It isn't always displayed and the user must request it
- * from the PreferencesDialog. In order to be used, both self-voicing AND the Toolbar must be requested by the user,
- * self-voicing can be used without this component.
+ * only contains controls related to the voicing feature. It isn't always displayed and the user must request it
+ * from the PreferencesDialog. In order to be used, both voicing AND the Toolbar must be requested by the user,
+ * voicing can be used without this component.
  *
  * When open, the sim will resize and shift to the right to create space. Screen bounds are adjusted so that
  * simulation components will never overlap with the Toolbar.
@@ -34,7 +34,7 @@ const CONTENT_TOP_MARGIN = 15; // margin between top of Toolbar and contents
 class Toolbar extends Node {
 
   /**
-   * @param {VoicingToolbarAlertManager} voicingAlertManager - generates self-voicing alerts
+   * @param {VoicingToolbarAlertManager} voicingAlertManager - generates voicing alerts
    * @param {BooleanProperty} enabledProperty - whether or not the Toolbar is enabled and visible to the user
    * @param {LookAndFeel} lookAndFeel
    */
@@ -63,14 +63,14 @@ class Toolbar extends Node {
     this.openProperty = new BooleanProperty( true );
 
     // @public (read-only) {DerivedProperty.<boolean>} - Whether the Toolbar is shown to the user. At this time,
-    // that is true if self-voicing and the Toolbar are explicitly enabled. Note that isShowingProperty can be true
+    // that is true if voicing and the Toolbar are explicitly enabled. Note that isShowingProperty can be true
     // while openProperty is false, they are unrelated.
     this.isShowingProperty = DerivedProperty.and( [ this.isEnabledProperty, webSpeaker.enabledProperty ] );
 
     // @private {number} - Scale applied to the Toolbar and its contents in response to layout and window resizing.
     this.layoutScale = 1;
 
-    // @private {VoicingToolbarItem} - Contents for the Toolbar, currently only controls related to the self-voicing
+    // @private {VoicingToolbarItem} - Contents for the Toolbar, currently only controls related to the voicing
     // feature.
     this.menuContent = new VoicingToolbarItem( voicingAlertManager, lookAndFeel );
 
