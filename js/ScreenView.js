@@ -37,6 +37,9 @@ import joist from './joist.js';
  */
 const DEFAULT_LAYOUT_BOUNDS = new Bounds2( 0, 0, 1024, 618 );
 
+const Y_ALIGN_VALUES = [ 'top', 'center', 'bottom' ];
+const X_ALIGN_VALUES = [ 'left', 'center', 'right' ];
+
 class ScreenView extends Node {
 
   /**
@@ -232,9 +235,19 @@ class ScreenView extends Node {
    *
    * @param {Bounds2} layoutBounds
    * @param {Bounds2} viewBounds
+   * @param {Object} [options]
    * @returns {Matrix3}
    */
-  static getLayoutMatrix( layoutBounds, viewBounds ) {
+  static getLayoutMatrix( layoutBounds, viewBounds, options ) {
+
+    options = merge( {
+      yAlign: 'center',
+      xAlign: 'center'
+    }, options );
+
+    assert && assert( Y_ALIGN_VALUES.includes( options.yAlign ), 'unsupported yAlign value' );
+    assert && assert( X_ALIGN_VALUES.includes( options.xAlign ), 'unsupported xAlign value' );
+
     const width = viewBounds.width;
     const height = viewBounds.height;
 
@@ -245,13 +258,29 @@ class ScreenView extends Node {
 
     if ( scale === width / layoutBounds.width ) {
 
-      // center vertically
-      dy = ( height / scale - layoutBounds.height ) / 2;
+      const initialDY = height / scale - layoutBounds.height;
+      if ( options.yAlign === 'bottom' ) {
+        dy = initialDY;
+      }
+      else if ( options.yAlign === 'center' ) {
+        dy = initialDY / 2;
+      }
+      else if ( options.yAlign === 'top' ) {
+        dy = 0;
+      }
     }
     else if ( scale === height / layoutBounds.height ) {
-
+      const initialDX = width / scale - layoutBounds.width;
       // center horizontally
-      dx = ( width / scale - layoutBounds.width ) / 2;
+      if ( options.xAlign === 'right' ) {
+        dx = initialDX;
+      }
+      else if ( options.xAlign === 'center' ) {
+        dx = initialDX / 2;
+      }
+      else if ( options.xAlign === 'left' ) {
+        dx = 0;
+      }
     }
 
     return Matrix3.rowMajor(
