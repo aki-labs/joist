@@ -11,6 +11,7 @@ import UserCog from '../../../sherpa/js/fontawesome-5/solid/UserCog.js';
 import PhetioCapsule from '../../../tandem/js/PhetioCapsule.js';
 import Dialog from '../../../sun/js/Dialog.js';
 import joist from '../joist.js';
+import joistStrings from '../joistStrings.js';
 import JoistButton from '../JoistButton.js';
 import PreferencesDialog from './PreferencesDialog.js';
 
@@ -46,7 +47,9 @@ class NavigationBarPreferencesButton extends JoistButton {
       },
       highlightExtensionWidth: 5,
       highlightExtensionHeight: 10,
-      tagName: 'button'
+
+      // pdom
+      innerContent: joistStrings.preferences.title
     } );
   }
 }
