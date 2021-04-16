@@ -8,7 +8,6 @@
  */
 
 import BooleanProperty from '../../../axon/js/BooleanProperty.js';
-import Dimension2 from '../../../dot/js/Dimension2.js';
 import PlayStopButton from '../../../scenery-phet/js/buttons/PlayStopButton.js';
 import PhetFont from '../../../scenery-phet/js/PhetFont.js';
 import webSpeaker from '../../../scenery/js/accessibility/speaker/webSpeaker.js';
@@ -16,9 +15,9 @@ import AlignGroup from '../../../scenery/js/nodes/AlignGroup.js';
 import HBox from '../../../scenery/js/nodes/HBox.js';
 import Text from '../../../scenery/js/nodes/Text.js';
 import VBox from '../../../scenery/js/nodes/VBox.js';
-import ToggleSwitch from '../../../sun/js/ToggleSwitch.js';
 import Utterance from '../../../utterance-queue/js/Utterance.js';
 import joist from '../joist.js';
+import PreferencesToggleSwitch from '../preferences/PreferencesToggleSwitch.js';
 
 // constants
 const CONTENT_SPACING = 10;
@@ -62,10 +61,7 @@ class VoicingToolbarItem extends VBox {
       return new HBox( { children: [ labelBox, inputBox ], spacing: CONTENT_SPACING } );
     };
 
-    const muteSpeechSwitch = new ToggleSwitch( simSpeechEnabledProperty, false, true, {
-      size: new Dimension2( 30, 15 ),
-      trackFillRight: '#64bd5a'
-    } );
+    const muteSpeechSwitch = new PreferencesToggleSwitch( simSpeechEnabledProperty, false, true );
     const speechRow = createLabelledInput( speechString, muteSpeechSwitch );
 
     const playPauseButtonOptions = { radius: 12 };
