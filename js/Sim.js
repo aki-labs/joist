@@ -31,6 +31,7 @@ import BarrierRectangle from '../../scenery-phet/js/BarrierRectangle.js';
 import globalKeyStateTracker from '../../scenery/js/accessibility/globalKeyStateTracker.js';
 import KeyboardFuzzer from '../../scenery/js/accessibility/KeyboardFuzzer.js';
 import KeyboardUtils from '../../scenery/js/accessibility/KeyboardUtils.js';
+import webSpeaker from '../../scenery/js/accessibility/speaker/webSpeaker.js';
 import Display from '../../scenery/js/display/Display.js';
 import InputFuzzer from '../../scenery/js/input/InputFuzzer.js';
 import animatedPanZoomSingleton from '../../scenery/js/listeners/animatedPanZoomSingleton.js';
@@ -41,6 +42,7 @@ import '../../sherpa/lib/game-up-camera-1.0.0.js';
 import soundManager from '../../tambo/js/soundManager.js';
 import Tandem from '../../tandem/js/Tandem.js';
 import NumberIO from '../../tandem/js/types/NumberIO.js';
+import UtteranceQueue from '../../utterance-queue/js/UtteranceQueue.js';
 import Heartbeat from './Heartbeat.js';
 import HomeScreen from './HomeScreen.js';
 import HomeScreenView from './HomeScreenView.js';
@@ -715,6 +717,12 @@ class Sim {
     // the only contents of the Toolbar are for the voicing feature at the moment.
     this.toolbar = null;
 
+    // @public {VoicingUtteranceQueue} - An utteranceQueue for voicing that will manage utterances related to joist
+    // components that surround the simulation screen. Voicing in its entirety can be enabled/disabled, but voicing
+    // from contents within simulation screens can be enabled/disabled separately. When sim voicing is disabled,
+    // voicing from settings and joist controls can still come through this utteranceQueue.
+    this.joistVoicingUtteranceQueue = new UtteranceQueue( webSpeaker );
+
     if ( options.preferencesConfiguration ) {
       this.preferencesProperties = new PreferencesProperties();
 
@@ -722,7 +730,13 @@ class Sim {
       if ( audioOptions.supportsVoicing ) {
 
         const voicingAlertManager = new VoicingToolbarAlertManager( this.screenProperty );
-        this.toolbar = new Toolbar( voicingAlertManager, this.preferencesProperties.toolbarEnabledProperty, this.lookAndFeel );
+        this.toolbar = new Toolbar( voicingAlertManager, this.preferencesProperties, this.lookAndFeel );
+
+        // the default utteranceQueue will control voicing for the simulation components, and is disabled
+        // when the user has selected to disable sim speech
+        Property.multilink( [ webSpeaker.enabledProperty, this.preferencesProperties.simSpeechEnabledProperty ], ( enabled, simSpeechEnabled ) => {
+          this.voicingUtteranceQueue.enabled = enabled && simSpeechEnabled;
+        } );
 
         this.toolbar.rightPositionProperty.lazyLink( () => {
           this.resize( this.boundsProperty.value.width, this.boundsProperty.value.height );
@@ -792,14 +806,9 @@ class Sim {
   }
 
   /**
-<<<<<<< HEAD
    * Get the single UtteranceQueue instance to be used by the sim to speak with SpeechSynthesis.
    * @public
    *
-=======
-   * Get the single UtteranceQueue instance used for alerts spoken with SpeechSynthesis.
-   * @public
->>>>>>> master
    * @returns {UtteranceQueue}
    */
   get voicingUtteranceQueue() {

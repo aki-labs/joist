@@ -35,14 +35,14 @@ class Toolbar extends Node {
 
   /**
    * @param {VoicingToolbarAlertManager} voicingAlertManager - generates voicing alerts
-   * @param {BooleanProperty} enabledProperty - whether or not the Toolbar is enabled and visible to the user
+   * @param {PreferencesProperties} preferencesProperties - collection of Properties that control features in the Sim
    * @param {LookAndFeel} lookAndFeel
    */
-  constructor( voicingAlertManager, enabledProperty, lookAndFeel ) {
+  constructor( voicingAlertManager, preferencesProperties, lookAndFeel ) {
     super();
 
     // @private {BooleanProperty} - Whether or not the Toolbar is enabled (visible to the user)
-    this.isEnabledProperty = enabledProperty;
+    this.isEnabledProperty = preferencesProperties.toolbarEnabledProperty;
 
     // @private {Rectangle} - the Rectangle for the Toolbar that surrounds all content, bounds set once
     // content is created and in layout to fill height of screen
@@ -72,7 +72,7 @@ class Toolbar extends Node {
 
     // @private {VoicingToolbarItem} - Contents for the Toolbar, currently only controls related to the voicing
     // feature.
-    this.menuContent = new VoicingToolbarItem( voicingAlertManager, lookAndFeel );
+    this.menuContent = new VoicingToolbarItem( voicingAlertManager, preferencesProperties.simSpeechEnabledProperty, lookAndFeel );
 
     // icon for the openButton
     const chevronIcon = new DoubleChevron();

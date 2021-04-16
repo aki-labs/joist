@@ -34,9 +34,10 @@ class VoicingToolbarItem extends VBox {
 
   /**
    * @param {VoicingToolbarAlertManager} alertManager - generates the alert content when buttons are pressed
+   * @param {BooleanProperty} simSpeechEnabledProperty - whether speech from things within sim screens will be heard
    * @param {LookAndFeel} lookAndFeel
    */
-  constructor( alertManager, lookAndFeel ) {
+  constructor( alertManager, simSpeechEnabledProperty, lookAndFeel ) {
 
     const titleText = new Text( titleString, {
       font: new PhetFont( 14 ),
@@ -61,7 +62,7 @@ class VoicingToolbarItem extends VBox {
       return new HBox( { children: [ labelBox, inputBox ], spacing: CONTENT_SPACING } );
     };
 
-    const muteSpeechSwitch = new ToggleSwitch( webSpeaker.speechEnabledProperty, false, true, {
+    const muteSpeechSwitch = new ToggleSwitch( simSpeechEnabledProperty, false, true, {
       size: new Dimension2( 30, 15 ),
       trackFillRight: '#64bd5a'
     } );
@@ -108,7 +109,7 @@ class VoicingToolbarItem extends VBox {
         } );
 
         utterance.alert = alertContent;
-        phet.joist.sim.voicingUtteranceQueue.addToBack( utterance );
+        phet.joist.sim.joistVoicingUtteranceQueue.addToBack( utterance );
       }
       else {
         webSpeaker.cancel();
