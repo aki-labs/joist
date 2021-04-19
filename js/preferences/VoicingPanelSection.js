@@ -33,7 +33,7 @@ const pitchString = 'Pitch';
 const voicingEnabledString = 'Voicing on.';
 const voicingDisabledString = 'Voicing off.';
 const voiceVariablesPatternString = '{{value}}x';
-const voicingDescriptionString = 'Info will be voiced when enabled.';
+const voicingDescriptionString = 'Voices and highlights content as you interact.';
 
 class VoicingPanelSection extends PreferencesPanelSection {
 
