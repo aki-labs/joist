@@ -134,6 +134,9 @@
   "preferences.tabs.visual.interactiveHighlights": {
     "value": "Interactive Highlights"
   },
+  "preferences.tabs.visual.interactiveHighlightsDescription": {
+    "value": "Adds visual highlight for mouse and touch as you interact."
+  },
   "preferences.tabs.audio.title": {
     "value": "Audio"
   },

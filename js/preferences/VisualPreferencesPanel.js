@@ -15,6 +15,7 @@ import PreferencesToggleSwitch from './PreferencesToggleSwitch.js';
 
 // constants
 const interactiveHighlightsString = joistStrings.preferences.tabs.visual.interactiveHighlights;
+const interactiveHighlightsDescriptionString = joistStrings.preferences.tabs.visual.interactiveHighlightsDescription;
 
 class VisualPreferencesPanel extends Node {
 
@@ -24,9 +25,12 @@ class VisualPreferencesPanel extends Node {
   constructor( interactiveHighlightsEnabledProperty ) {
     super();
 
-    const label = new Text( interactiveHighlightsString, { font: PreferencesDialog.CONTENT_FONT } );
+    const label = new Text( interactiveHighlightsString, { font: PreferencesDialog.PANEL_SECTION_LABEL_FONT } );
     const toggleSwitch = new PreferencesToggleSwitch( interactiveHighlightsEnabledProperty, false, true, {
-      labelNode: label
+      labelNode: label,
+      descriptionNode: new Text( interactiveHighlightsDescriptionString, {
+        font: PreferencesDialog.CONTENT_FONT
+      } )
     } );
 
     const panelSection = new PreferencesPanelSection( {
