@@ -146,8 +146,11 @@
   "preferences.tabs.audio.enhancedSound": {
     "value": "Enhanced Sound"
   },
-  "preferences.tabs.audio.allAudio": {
+  "preferences.tabs.audio.allAudio.title": {
     "value": "All Audio"
+  },
+  "preferences.tabs.audio.allAudio.description": {
+    "value": "Voices content and plays sounds."
   },
   "preferences.tabs.input.title": {
     "value": "Input"

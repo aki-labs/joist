@@ -17,7 +17,8 @@ import VoicingPanelSection from './VoicingPanelSection.js';
 import SoundPanelSection from './SoundPanelSection.js';
 
 // constants
-const allAudioString = joistStrings.preferences.tabs.audio.allAudio;
+const allAudioString = joistStrings.preferences.tabs.audio.allAudio.title;
+const allAudioDescriptionString = joistStrings.preferences.tabs.audio.allAudio.description;
 
 class AudioPreferencesTabPanel extends VBox {
 
@@ -46,9 +47,9 @@ class AudioPreferencesTabPanel extends VBox {
       children: panelChildren
     } );
 
-    const allAudioLabel = new Text( allAudioString, { font: PreferencesDialog.PANEL_SECTION_LABEL_FONT } );
     const allAudioSwitch = new PreferencesToggleSwitch( simSoundProperty, false, true, {
-      labelNode: allAudioLabel
+      labelNode: new Text( allAudioString, { font: PreferencesDialog.PANEL_SECTION_LABEL_FONT } ),
+      descriptionNode: new Text( allAudioDescriptionString, { font: PreferencesDialog.CONTENT_FONT } )
     } );
 
     simSoundProperty.link( ( enabled, previousValue ) => { sections.enabled = enabled; } );
