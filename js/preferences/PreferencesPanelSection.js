@@ -18,7 +18,7 @@ class PreferencesPanelSection extends VBox {
     options = merge( {
 
       // VBox options
-      spacing: 10,
+      spacing: 20,
 
       // section options
       // {null|Node} - if provided, will be the title for the section and content will be nested under the titleNode

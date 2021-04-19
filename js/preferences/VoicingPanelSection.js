@@ -35,6 +35,10 @@ const voicingDisabledString = 'Voicing off.';
 const voiceVariablesPatternString = '{{value}}x';
 const voicingDescriptionString = 'Voices and highlights content as you interact.';
 
+// thumb is larger
+const THUMB_SIZE = new Dimension2( 13, 26 );
+const TRACK_SIZE = new Dimension2( 100, 5 );
+
 class VoicingPanelSection extends PreferencesPanelSection {
 
   /**
@@ -58,24 +62,26 @@ class VoicingPanelSection extends PreferencesPanelSection {
     } );
 
     // Speech output levels
-    const speechOutputLabel = new Text( 'Speech Output Levels', { font: PreferencesDialog.PANEL_SECTION_LABEL_FONT } );
+    const speechOutputLabel = new Text( 'Sim Voicing Options', { font: PreferencesDialog.PANEL_SECTION_LABEL_FONT } );
+    const speechOutputDescription = new Text( 'Choose details you want voiced as you interact', { font: PreferencesDialog.CONTENT_FONT } );
     const speechOutputCheckboxes = new VBox( {
       align: 'left',
       spacing: 5,
       children: [
-        createCheckbox( 'Object Changes and Screen Text', voicingManager.objectChangesProperty ),
-        createCheckbox( 'Context Changes', voicingManager.contextChangesProperty ),
-        createCheckbox( 'Helpful Hints', voicingManager.hintsProperty )
+        createCheckbox( 'Voice direct object changes', voicingManager.objectChangesProperty ),
+        createCheckbox( 'Voice other sim changes as objects change', voicingManager.contextChangesProperty ),
+        createCheckbox( 'Voice helpful hints on sim interactions', voicingManager.hintsProperty )
       ]
     } );
 
     const speechOutputContent = new Node( {
-      children: [ speechOutputLabel, speechOutputCheckboxes ]
+      children: [ speechOutputLabel, speechOutputDescription, speechOutputCheckboxes ]
     } );
-    speechOutputCheckboxes.leftTop = speechOutputLabel.leftBottom.plusXY( 15, 5 );
+    speechOutputDescription.leftTop = speechOutputLabel.leftBottom.plusXY( 0, 5 );
+    speechOutputCheckboxes.leftTop = speechOutputDescription.leftBottom.plusXY( 15, 5 );
 
     // voice options
-    const voiceOptionsLabel = new Text( 'Voice Options', {
+    const voiceOptionsLabel = new Text( 'Customize Voice', {
       font: PreferencesDialog.PANEL_SECTION_LABEL_FONT
     } );
 
@@ -174,8 +180,8 @@ class VoiceRateNumberControl extends NumberControl {
         }
       },
       sliderOptions: {
-        thumbSize: new Dimension2( 13, 26 ),
-        trackSize: new Dimension2( 100, 5 ),
+        thumbSize: THUMB_SIZE,
+        trackSize: TRACK_SIZE,
         keyboardStep: 0.25
       }
     } );
@@ -199,7 +205,11 @@ class VoicingPitchSlider {
   constructor( labelString, voicePitchProperty ) {
     const label = new Text( labelString, { font: PreferencesDialog.CONTENT_FONT } );
     const slider = new HSlider( voicePitchProperty, voicePitchProperty.range, {
-      majorTickLength: 10
+      majorTickLength: 10,
+      thumbSize: THUMB_SIZE,
+      trackSize: TRACK_SIZE,
+      keyboardStep: 0.25,
+      shiftKeyboardStep: 0.1
     } );
 
     const lowLabel = new Text( 'Low', { font: new PhetFont( 14 ) } );
