@@ -7,7 +7,6 @@
  * @author Jesse Greenberg (PhET Interactive Simulations)
  */
 
-import StringUtils from '../../../phetcommon/js/util/StringUtils.js';
 import RichText from '../../../scenery/js/nodes/RichText.js';
 import VBox from '../../../scenery/js/nodes/VBox.js';
 import joist from '../joist.js';
@@ -16,9 +15,8 @@ import PreferencesDialog from './PreferencesDialog.js';
 import SimControlsTabPanelSection from './SimControlsPanelSection.js';
 
 // constants
-const accessibilityIntroPatternString = joistStrings.preferences.tabs.general.accessibilityIntroPattern;
-const accessibilityIntroWithoutLinksPattern = joistStrings.preferences.tabs.general.accessibilityIntroWithoutLinksPattern;
-const accessibilityIntroLinkString = joistStrings.preferences.tabs.general.accessibilityIntroLink;
+const accessibilityIntroString = joistStrings.preferences.tabs.general.accessibilityIntro;
+const moreAccessibilityString = joistStrings.preferences.tabs.general.moreAccessibility;
 
 class GeneralPreferencesPanel extends VBox {
 
@@ -35,47 +33,16 @@ class GeneralPreferencesPanel extends VBox {
     if ( generalConfiguration.simControls ) {
       panelChildren.push( new SimControlsTabPanelSection( generalConfiguration.simControls ) );
     }
-    panelChildren.push( new RichText( this.getLinkText(), {
-      font: PreferencesDialog.CONTENT_FONT,
-      links: {
-        url: this.getAccessibilityPageLink()
-      },
-      lineWrap: 600
-    } ) );
+
+    const introParagraphs = new VBox( { spacing: 10, align: 'left' } );
+    const introTextOptions = { font: PreferencesDialog.CONTENT_FONT, lineWrap: 600 };
+    introParagraphs.children = [
+      new RichText( accessibilityIntroString, introTextOptions ),
+      new RichText( moreAccessibilityString, introTextOptions )
+    ];
+    panelChildren.push( introParagraphs );
 
     this.children = panelChildren;
-  }
-
-  /**
-   * Returns the URL for the accessible simulations page.
-   * @private
-   *
-   * @returns {string}
-   */
-  getAccessibilityPageLink() {
-    const locale = phet.joist.sim.locale;
-    return `https://phet.colorado.edu/${locale}/simulations/filter?a11yFeatures=accessibility&sort=alpha&view=grid`;
-  }
-
-  /**
-   * Get the text to display for the link to the accessibility search page.
-   * @private
-   *
-   * @returns {string}
-   */
-  getLinkText() {
-    let linkContent;
-    if ( phet.chipper.queryParameters.allowLinks ) {
-      linkContent = StringUtils.fillIn( accessibilityIntroPatternString, {
-        link: `<a href={{url}}>${accessibilityIntroLinkString}</a>`
-      } );
-    }
-    else {
-      linkContent = StringUtils.fillIn( accessibilityIntroWithoutLinksPattern, {
-        link: this.getAccessibilityPageLink()
-      } );
-    }
-    return linkContent;
   }
 }
 

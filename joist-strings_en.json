@@ -116,11 +116,11 @@
   "preferences.tabs.general.title": {
     "value": "General"
   },
-  "preferences.tabs.general.accessibilityIntroPattern": {
-    "value": "We are working to make our simulations inclusive. If you don't find settings that meet your needs, check out our {{link}}."
+  "preferences.tabs.general.accessibilityIntro": {
+    "value": "We are working to make our simulations more inclusive. This sim has preferences that allow you to adjust the default presentation. Use the available tabs in this Preferences Menu to review and adjust the available preferences."
   },
-  "preferences.tabs.general.accessibilityIntroWithoutLinksPattern": {
-    "value": "We are working to make our simulations inclusive. If you don't find settings that meet your needs, check out our accessible simulations: {{link}}"
+  "preferences.tabs.general.moreAccessibility": {
+    "value": "To find other sims with a range of accessibility features, please use the Accessibility filter on our simulations page."
   },
   "preferences.tabs.general.accessibilityIntroLink": {
     "value": "accessible simulations"
