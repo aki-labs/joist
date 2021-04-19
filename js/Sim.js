@@ -730,7 +730,7 @@ class Sim {
       if ( audioOptions.supportsVoicing ) {
 
         const voicingAlertManager = new VoicingToolbarAlertManager( this.screenProperty );
-        this.toolbar = new Toolbar( voicingAlertManager, this.preferencesProperties, this.lookAndFeel );
+        this.toolbar = new Toolbar( voicingAlertManager, this.preferencesProperties, this.soundEnabledProperty, this.lookAndFeel );
 
         // hook up Properties that should control all speech
         webSpeaker.setCanSpeakProperty( [

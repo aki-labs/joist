@@ -36,9 +36,10 @@ class Toolbar extends Node {
   /**
    * @param {VoicingToolbarAlertManager} voicingAlertManager - generates voicing alerts
    * @param {PreferencesProperties} preferencesProperties - collection of Properties that control features in the Sim
+   * @param {BooleanProperty} soundEnabledProperty - Whether all audio in the sim is enabled
    * @param {LookAndFeel} lookAndFeel
    */
-  constructor( voicingAlertManager, preferencesProperties, lookAndFeel ) {
+  constructor( voicingAlertManager, preferencesProperties, soundEnabledProperty, lookAndFeel ) {
     super( {
 
         // pdom
@@ -68,9 +69,9 @@ class Toolbar extends Node {
     this.openProperty = new BooleanProperty( true );
 
     // @public (read-only) {DerivedProperty.<boolean>} - Whether the Toolbar is shown to the user. At this time,
-    // that is true if voicing and the Toolbar are explicitly enabled. Note that isShowingProperty can be true
-    // while openProperty is false, they are unrelated.
-    this.isShowingProperty = DerivedProperty.and( [ this.isEnabledProperty, webSpeaker.enabledProperty ] );
+    // that is true if the toolbar is enabled, voicing is enabled, and if all audio is enabled. The Toolbar only
+    // includes controls related to audio (voicing) so when audio is disabled there is no need to show it.
+    this.isShowingProperty = DerivedProperty.and( [ this.isEnabledProperty, webSpeaker.enabledProperty, soundEnabledProperty ] );
 
     // @private {number} - Scale applied to the Toolbar and its contents in response to layout and window resizing.
     this.layoutScale = 1;
