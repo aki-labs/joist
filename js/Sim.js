@@ -1173,6 +1173,9 @@ class Sim {
 
     this.navigationBar.pdomVisible = visible;
     this.homeScreen && this.homeScreen.view.setPDOMVisible( visible );
+    if ( this.toolbar ) {
+      this.toolbar.pdomVisible = visible && this.toolbar.isShowingProperty.value;
+    }
   }
 }
 

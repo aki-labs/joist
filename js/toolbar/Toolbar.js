@@ -39,7 +39,12 @@ class Toolbar extends Node {
    * @param {LookAndFeel} lookAndFeel
    */
   constructor( voicingAlertManager, preferencesProperties, lookAndFeel ) {
-    super();
+    super( {
+
+        // pdom
+        tagName: 'div'
+      }
+    );
 
     // @private {BooleanProperty} - Whether or not the Toolbar is enabled (visible to the user)
     this.isEnabledProperty = preferencesProperties.toolbarEnabledProperty;
