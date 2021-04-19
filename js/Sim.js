@@ -738,6 +738,11 @@ class Sim {
           this.voicingUtteranceQueue.enabled = enabled && simSpeechEnabled;
         } );
 
+        // the utteranceQueue for surrounding user controls is enabled as long as voicing is enabled
+        webSpeaker.enabledProperty.link( enabled => {
+          this.joistVoicingUtteranceQueue.enabled = enabled;
+        } );
+
         this.toolbar.rightPositionProperty.lazyLink( () => {
           this.resize( this.boundsProperty.value.width, this.boundsProperty.value.height );
         } );

@@ -16,6 +16,8 @@ import PreferencesToggleSwitch from './PreferencesToggleSwitch.js';
 // constants
 const interactiveHighlightsString = joistStrings.preferences.tabs.visual.interactiveHighlights;
 const interactiveHighlightsDescriptionString = joistStrings.preferences.tabs.visual.interactiveHighlightsDescription;
+const interactiveHighlightsEnabledAlertString = joistStrings.a11y.preferences.tabs.visual.interactiveHighlights.enabledAlert;
+const interactiveHighlightsDisabledAlertString = joistStrings.a11y.preferences.tabs.visual.interactiveHighlights.disabledAlert;
 
 class VisualPreferencesPanel extends Node {
 
@@ -37,6 +39,30 @@ class VisualPreferencesPanel extends Node {
       titleNode: toggleSwitch
     } );
     this.addChild( panelSection );
+
+    // @private
+    this.disposeVisualPreferencesPanel = () => {
+      interactiveHighlightsEnabledProperty.unlink( alertEnabledChange );
+    };
+
+    const alertEnabledChange = enabled => {
+
+      // voicing
+      const alertString = enabled ? interactiveHighlightsEnabledAlertString : interactiveHighlightsDisabledAlertString;
+      phet.joist.sim.joistVoicingUtteranceQueue.addToBack( alertString );
+
+      // pdom
+      phet.joist.sim.utteranceQueue.addToBack( alertString );
+    };
+    interactiveHighlightsEnabledProperty.lazyLink( alertEnabledChange );
+  }
+
+  /**
+   * @public
+   */
+  dispose() {
+    this.disposeVisualPreferencesPanel();
+    super.dispose();
   }
 }
 

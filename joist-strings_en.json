@@ -248,6 +248,20 @@
     },
     "phetMenu": {
       "value": "PhET Menu"
+    },
+    "preferences": {
+      "tabs": {
+        "visual": {
+          "interactiveHighlights": {
+            "enabledAlert": {
+              "value": "Highlights on for all input."
+            },
+            "disabledAlert": {
+              "value": "Highlights off for mouse and touch."
+            }
+          }
+        }
+      }
     }
   }
 }
