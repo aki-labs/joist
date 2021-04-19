@@ -233,6 +233,14 @@
     "simResources": {
       "value": "Sim Resources"
     },
+    "allAudio": {
+      "enabledAlert": {
+        "value": "All Audio on."
+      },
+      "disabledAlert": {
+        "value": "All Audio off."
+      }
+    },
     "soundToggle": {
       "alert": {
         "simSoundOn": {

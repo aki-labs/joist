@@ -6,6 +6,7 @@
  * @author Jesse Greenberg (PhET Interactive Simulations)
  */
 
+import webSpeaker from '../../../scenery/js/accessibility/speaker/webSpeaker.js';
 import HBox from '../../../scenery/js/nodes/HBox.js';
 import Text from '../../../scenery/js/nodes/Text.js';
 import VBox from '../../../scenery/js/nodes/VBox.js';
@@ -13,12 +14,14 @@ import joist from '../joist.js';
 import joistStrings from '../joistStrings.js';
 import PreferencesDialog from './PreferencesDialog.js';
 import PreferencesToggleSwitch from './PreferencesToggleSwitch.js';
-import VoicingPanelSection from './VoicingPanelSection.js';
 import SoundPanelSection from './SoundPanelSection.js';
+import VoicingPanelSection from './VoicingPanelSection.js';
 
 // constants
 const allAudioString = joistStrings.preferences.tabs.audio.allAudio.title;
 const allAudioDescriptionString = joistStrings.preferences.tabs.audio.allAudio.description;
+const allAudioEnabledAlert = joistStrings.a11y.allAudio.enabledAlert;
+const allAudioDisabledAlert = joistStrings.a11y.allAudio.disabledAlert;
 
 class AudioPreferencesTabPanel extends VBox {
 
@@ -52,13 +55,38 @@ class AudioPreferencesTabPanel extends VBox {
       descriptionNode: new Text( allAudioDescriptionString, { font: PreferencesDialog.CONTENT_FONT } )
     } );
 
-    simSoundProperty.link( ( enabled, previousValue ) => { sections.enabled = enabled; } );
+    const soundEnabledListener = ( enabled, previousValue ) => {
+      sections.enabled = enabled;
+
+      // alerts should occur lazily, not on construction
+      if ( previousValue !== null ) {
+        const alertString = enabled ? allAudioEnabledAlert : allAudioDisabledAlert;
+
+        phet.joist.sim.utteranceQueue.addToBack( alertString );
+        webSpeaker.enabled && webSpeaker.speakImmediately( alertString );
+      }
+    };
+
+    simSoundProperty.link( soundEnabledListener );
 
     super( {
       align: 'center',
       spacing: 25,
       children: [ allAudioSwitch, sections ]
     } );
+
+    // @private - for disposal
+    this.disposeAudioPreferencesPanel = () => {
+      simSoundProperty.unlink( soundEnabledListener );
+    };
+  }
+
+  /**
+   * @public
+   */
+  dispose() {
+    this.disposeAudioPreferencesPanel();
+    super.dispose();
   }
 }
 

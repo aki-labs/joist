@@ -31,6 +31,7 @@ const toolbarLabelString = 'Toolbar';
 const rateString = 'Rate';
 const pitchString = 'Pitch';
 const voicingEnabledString = 'Voicing on.';
+const voicingDisabledString = 'Voicing off.';
 const voiceVariablesPatternString = '{{value}}x';
 const voicingDescriptionString = 'Info will be voiced when enabled.';
 
@@ -133,9 +134,7 @@ class VoicingPanelSection extends PreferencesPanelSection {
     // Speak when voicing becomes initially enabled. First speech is done synchronously (not using utterance-queue)
     // in response to user input, otherwise all speech will be blocked on many platforms
     webSpeaker.enabledProperty.lazyLink( enabled => {
-      if ( enabled ) {
-        webSpeaker.initialSpeech( voicingEnabledString );
-      }
+      webSpeaker.speakImmediately( enabled ? voicingEnabledString : voicingDisabledString );
     } );
   }
 }

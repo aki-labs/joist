@@ -732,6 +732,17 @@ class Sim {
         const voicingAlertManager = new VoicingToolbarAlertManager( this.screenProperty );
         this.toolbar = new Toolbar( voicingAlertManager, this.preferencesProperties, this.lookAndFeel );
 
+        // hook up Properties that should control all speech
+        webSpeaker.setCanSpeakProperty( [
+          this.isConstructionCompleteProperty,
+          this.browserTabVisibleProperty,
+          this.activeProperty,
+          this.isSettingPhetioStateProperty,
+          this.soundEnabledProperty
+        ], ( simConstructionComplete, simVisible, simActive, simSettingPhetioState, simSoundEnabled ) => {
+          return simConstructionComplete && simVisible && simActive && !simSettingPhetioState && simSoundEnabled;
+        } );
+
         // the default utteranceQueue will control voicing for the simulation components, and is disabled
         // when the user has selected to disable sim speech
         Property.multilink( [ webSpeaker.enabledProperty, this.preferencesProperties.simSpeechEnabledProperty ], ( enabled, simSpeechEnabled ) => {
