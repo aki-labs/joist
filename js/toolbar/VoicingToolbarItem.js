@@ -14,22 +14,23 @@ import webSpeaker from '../../../scenery/js/accessibility/speaker/webSpeaker.js'
 import AlignGroup from '../../../scenery/js/nodes/AlignGroup.js';
 import HBox from '../../../scenery/js/nodes/HBox.js';
 import Text from '../../../scenery/js/nodes/Text.js';
-import VBox from '../../../scenery/js/nodes/VBox.js';
+import Node from '../../../scenery/js/nodes/Node.js';
 import Utterance from '../../../utterance-queue/js/Utterance.js';
 import joist from '../joist.js';
 import PreferencesToggleSwitch from '../preferences/PreferencesToggleSwitch.js';
 
 // constants
-const CONTENT_SPACING = 10;
+const CONTENT_VERTICAL_SPACING = 10;
+const QUICK_INFO = 20;
 
 // strings
-const titleString = 'Voicing';
-const speechString = 'Speech';
+const titleString = 'Sim Voicing';
+const quickInfoString = 'Quick Info';
 const overviewString = 'Overview';
 const detailsString = 'Details';
 const hintString = 'Hint';
 
-class VoicingToolbarItem extends VBox {
+class VoicingToolbarItem extends Node {
 
   /**
    * @param {VoicingToolbarAlertManager} alertManager - generates the alert content when buttons are pressed
@@ -38,15 +39,18 @@ class VoicingToolbarItem extends VBox {
    */
   constructor( alertManager, simSpeechEnabledProperty, lookAndFeel ) {
 
-    const titleText = new Text( titleString, {
+    const titleTextOptions = {
       font: new PhetFont( 14 ),
       fill: lookAndFeel.navigationBarTextFillProperty
-    } );
+    };
 
     const contentFontOptions = {
       font: new PhetFont( 12 ),
       fill: lookAndFeel.navigationBarTextFillProperty
     };
+
+    const titleText = new Text( titleString, titleTextOptions );
+    const quickInfoText = new Text( quickInfoString, titleTextOptions );
 
     // layout
     const labelAlignGroup = new AlignGroup();
@@ -58,11 +62,12 @@ class VoicingToolbarItem extends VBox {
       const textLabel = new Text( labelString, contentFontOptions );
       const labelBox = labelAlignGroup.createBox( textLabel, { xAlign: 'left' } );
       const inputBox = inputAlignGroup.createBox( inputElement, { align: 'right' } );
-      return new HBox( { children: [ labelBox, inputBox ], spacing: CONTENT_SPACING } );
+      return new HBox( { children: [ labelBox, inputBox ], spacing: CONTENT_VERTICAL_SPACING } );
     };
 
-    const muteSpeechSwitch = new PreferencesToggleSwitch( simSpeechEnabledProperty, false, true );
-    const speechRow = createLabelledInput( speechString, muteSpeechSwitch );
+    const muteSpeechSwitch = new PreferencesToggleSwitch( simSpeechEnabledProperty, false, true, {
+      labelNode: titleText
+    } );
 
     const playPauseButtonOptions = { radius: 12 };
 
@@ -82,9 +87,16 @@ class VoicingToolbarItem extends VBox {
     const hintUtterance = new Utterance();
 
     super( {
-      children: [ titleText, speechRow, overviewRow, detailsRow, hintRow ],
-      spacing: CONTENT_SPACING
+      children: [ muteSpeechSwitch, quickInfoText, overviewRow, detailsRow, hintRow ],
+      spacing: CONTENT_VERTICAL_SPACING,
+      align: 'left'
     } );
+
+    // layout
+    quickInfoText.leftTop = muteSpeechSwitch.leftBottom.plusXY( 0, CONTENT_VERTICAL_SPACING );
+    overviewRow.leftTop = quickInfoText.leftBottom.plusXY( QUICK_INFO, CONTENT_VERTICAL_SPACING );
+    detailsRow.leftTop = overviewRow.leftBottom.plusXY( 0, CONTENT_VERTICAL_SPACING );
+    hintRow.leftTop = detailsRow.leftBottom.plusXY( 0, CONTENT_VERTICAL_SPACING );
 
     const playingProperties = [ playingOverviewProperty, playingDetailsProperty, playingHintProperty ];
 

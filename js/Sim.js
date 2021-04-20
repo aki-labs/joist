@@ -729,8 +729,10 @@ class Sim {
       const audioOptions = options.preferencesConfiguration.audioOptions;
       if ( audioOptions.supportsVoicing ) {
 
+        // create the toolbar and make it first in the focus order
         const voicingAlertManager = new VoicingToolbarAlertManager( this.screenProperty );
         this.toolbar = new Toolbar( voicingAlertManager, this.preferencesProperties, this.soundEnabledProperty, this.lookAndFeel );
+        this.simulationRoot.pdomOrder = [ this.toolbar ];
 
         // hook up Properties that should control all speech
         webSpeaker.setCanSpeakProperty( [
