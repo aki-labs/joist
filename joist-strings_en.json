@@ -155,8 +155,11 @@
   "preferences.tabs.input.title": {
     "value": "Input"
   },
-  "preferences.tabs.input.gestureControls": {
-    "value": "Gesture Controls"
+  "preferences.tabs.input.gestureControls.title": {
+    "value": "Gesture Control"
+  },
+  "preferences.tabs.input.gestureControls.description": {
+    "value": "Use touch with custom swipes and taps instead. No direct touch with gesture control enabled."
   },
   "translation.credits.link": {
     "value": "Translation Credits"
@@ -269,6 +272,16 @@
             },
             "disabledAlert": {
               "value": "Highlights off for mouse and touch."
+            }
+          }
+        },
+        "input": {
+          "gestureControl": {
+            "enabledAlert": {
+              "value": "Custom taps and swipes on."
+            },
+            "disabledAlert": {
+              "value": "Custom taps and swipes off."
             }
           }
         }

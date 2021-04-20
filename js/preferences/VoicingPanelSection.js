@@ -249,7 +249,6 @@ class VoicingPitchSlider extends VBox {
 
     voicePitchProperty.lazyLink( pitch => {
       let pitchDescription;
-      console.log( pitch );
       VOICE_PITCH_DESCRIPTION_MAP.forEach( ( description, range ) => {
         if ( range.contains( pitch ) ) {
           pitchDescription = description;
