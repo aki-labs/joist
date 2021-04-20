@@ -7,6 +7,7 @@
  */
 
 import Text from '../../../scenery/js/nodes/Text.js';
+import Node from '../../../scenery/js/nodes/Node.js';
 import Checkbox from '../../../sun/js/Checkbox.js';
 import soundManager from '../../../tambo/js/soundManager.js';
 import joist from '../joist.js';
@@ -17,8 +18,13 @@ import PreferencesToggleSwitch from './PreferencesToggleSwitch.js';
 
 // constants
 const otherSoundsLabelString = joistStrings.preferences.tabs.audio.otherSounds;
-const extraSoundsLabelString = joistStrings.preferences.tabs.audio.enhancedSound;
-const soundDescriptionString = 'Non-Speech sound will play when enabled.';
+const extraSoundsLabelString = joistStrings.preferences.tabs.audio.extraSounds;
+const soundDescriptionString = 'Plays sonifications and sound effects as you interact.';
+const extraSoundsDescriptionString = 'Plays an additional sound or sounds for this sim.';
+const soundsOnString = 'Sounds on.';
+const soundsOffString = 'Sounds Off.';
+const extraSoundsOnString = 'Extra Sounds On.';
+const extraSoundsOffString = 'Extra Sounds Off.';
 
 class SoundPanelSection extends PreferencesPanelSection {
 
@@ -35,18 +41,36 @@ class SoundPanelSection extends PreferencesPanelSection {
       } )
     } );
 
-    let enhancedSoundCheckbox = null;
+    let enhancedSoundContent = null;
     if ( audioOptions.supportsEnhancedSound ) {
       const enahncedSoundLabel = new Text( extraSoundsLabelString, { font: PreferencesDialog.CONTENT_FONT } );
-      enhancedSoundCheckbox = new Checkbox( enahncedSoundLabel, soundManager.enhancedSoundEnabledProperty );
+      const enhancedSoundCheckbox = new Checkbox( enahncedSoundLabel, soundManager.enhancedSoundEnabledProperty );
       soundManager.enabledProperty.link( enabled => {
         enhancedSoundCheckbox.enabled = enabled;
       } );
+      const enhancedSoundDescription = new Text( extraSoundsDescriptionString, { font: PreferencesDialog.CONTENT_FONT } );
+
+      enhancedSoundContent = new Node( {
+        children: [ enhancedSoundCheckbox, enhancedSoundDescription ]
+      } );
+
+      enhancedSoundDescription.leftTop = enhancedSoundCheckbox.leftBottom.plusXY( 0, 5 );
     }
 
     super( {
       titleNode: titleNode,
-      contentNode: enhancedSoundCheckbox
+      contentNode: enhancedSoundContent
+    } );
+
+    // voicing
+    soundManager.enabledProperty.lazyLink( enabled => {
+      const alert = enabled ? soundsOnString : soundsOffString;
+      phet.joist.sim.joistVoicingUtteranceQueue.addToBack( alert );
+    } );
+
+    soundManager.enhancedSoundEnabledProperty.lazyLink( enabled => {
+      const alert = enabled ? extraSoundsOnString : extraSoundsOffString;
+      phet.joist.sim.joistVoicingUtteranceQueue.addToBack( alert );
     } );
   }
 }
