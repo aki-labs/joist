@@ -8,6 +8,9 @@
 
 import BooleanProperty from '../../../axon/js/BooleanProperty.js';
 import Dimension2 from '../../../dot/js/Dimension2.js';
+import Range from '../../../dot/js/Range.js';
+import Utils from '../../../dot/js/Utils.js';
+import StringUtils from '../../../phetcommon/js/util/StringUtils.js';
 import NumberControl from '../../../scenery-phet/js/NumberControl.js';
 import PhetFont from '../../../scenery-phet/js/PhetFont.js';
 import voicingManager from '../../../scenery/js/accessibility/speaker/voicingManager.js';
@@ -35,7 +38,16 @@ const voicingDisabledString = 'Voicing off.';
 const voiceVariablesPatternString = '{{value}}x';
 const voicingDescriptionString = 'Voices and highlights content as you interact.';
 
-// thumb is larger
+const voiceRateDescriptionPatternString = 'Voice Rate {{value}} times';
+const voiceRateNormalString = 'Voice Rate normal';
+
+const VOICE_PITCH_DESCRIPTION_MAP = new Map();
+VOICE_PITCH_DESCRIPTION_MAP.set( new Range( 0.5, 0.75 ), 'in low range' );
+VOICE_PITCH_DESCRIPTION_MAP.set( new Range( 0.75, 1.24 ), 'in normal range' );
+VOICE_PITCH_DESCRIPTION_MAP.set( new Range( 1.25, 1.49 ), 'above normal range' );
+VOICE_PITCH_DESCRIPTION_MAP.set( new Range( 1.5, 2 ), 'in high range' );
+const voicePitchDescriptionPatternString = 'Voice Pitch {{description}}.';
+
 const THUMB_SIZE = new Dimension2( 13, 26 );
 const TRACK_SIZE = new Dimension2( 100, 5 );
 
@@ -185,6 +197,13 @@ class VoiceRateNumberControl extends NumberControl {
         keyboardStep: 0.25
       }
     } );
+
+    voiceRateProperty.lazyLink( rate => {
+      const alert = rate === 1 ? voiceRateNormalString : StringUtils.fillIn( voiceRateDescriptionPatternString, {
+        value: rate
+      } );
+      phet.joist.sim.joistVoicingUtteranceQueue.addToBack( alert );
+    } );
   }
 }
 
@@ -195,7 +214,7 @@ class VoiceRateNumberControl extends NumberControl {
  * @param {NumberProperty} voicePitchProperty
  * @returns {VBox}
  */
-class VoicingPitchSlider {
+class VoicingPitchSlider extends VBox {
 
   /**
    * @param labelString
@@ -209,7 +228,11 @@ class VoicingPitchSlider {
       thumbSize: THUMB_SIZE,
       trackSize: TRACK_SIZE,
       keyboardStep: 0.25,
-      shiftKeyboardStep: 0.1
+      shiftKeyboardStep: 0.1,
+
+      // constrain the value to the nearest hundredths place so there is no overlap in described ranges in
+      // VOICE_PITCH_DESCRIPTION_MAP
+      constrainValue: value => Utils.roundToInterval( value, 0.01 )
     } );
 
     const lowLabel = new Text( 'Low', { font: new PhetFont( 14 ) } );
@@ -218,10 +241,26 @@ class VoicingPitchSlider {
     const highLabel = new Text( 'High', { font: new PhetFont( 14 ) } );
     slider.addMajorTick( voicePitchProperty.range.max, highLabel );
 
-    return new VBox( {
+    super( {
       children: [ label, slider ],
       align: 'left',
       spacing: 5
+    } );
+
+    voicePitchProperty.lazyLink( pitch => {
+      let pitchDescription;
+      console.log( pitch );
+      VOICE_PITCH_DESCRIPTION_MAP.forEach( ( description, range ) => {
+        if ( range.contains( pitch ) ) {
+          pitchDescription = description;
+        }
+      } );
+      assert && assert( pitchDescription, `no description found for pitch at value: ${pitch}` );
+
+      const alertString = StringUtils.fillIn( voicePitchDescriptionPatternString, {
+        description: pitchDescription
+      } );
+      phet.joist.sim.joistVoicingUtteranceQueue.addToBack( alertString );
     } );
   }
 }
