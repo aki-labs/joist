@@ -140,10 +140,10 @@
   "preferences.tabs.audio.title": {
     "value": "Audio"
   },
-  "preferences.tabs.audio.soundAndSonification": {
-    "value": "Sound and Sonification"
+  "preferences.tabs.audio.otherSounds": {
+    "value": "Other Sounds"
   },
-  "preferences.tabs.audio.enhancedSound": {
+  "preferences.tabs.audio.extraSounds": {
     "value": "Enhanced Sound"
   },
   "preferences.tabs.audio.allAudio.title": {
@@ -244,10 +244,10 @@
     "soundToggle": {
       "alert": {
         "simSoundOn": {
-          "value": "Sim sound on."
+          "value": "Sounds on."
         },
         "simSoundOff": {
-          "value": "Sim sound off."
+          "value": "Sounds off."
         }
       },
       "label": {

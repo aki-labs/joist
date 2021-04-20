@@ -16,8 +16,8 @@ import PreferencesPanelSection from './PreferencesPanelSection.js';
 import PreferencesToggleSwitch from './PreferencesToggleSwitch.js';
 
 // constants
-const soundLabelString = joistStrings.preferences.tabs.audio.soundAndSonification;
-const enhancedSoundLabelString = joistStrings.preferences.tabs.audio.enhancedSound;
+const otherSoundsLabelString = joistStrings.preferences.tabs.audio.otherSounds;
+const extraSoundsLabelString = joistStrings.preferences.tabs.audio.enhancedSound;
 const soundDescriptionString = 'Non-Speech sound will play when enabled.';
 
 class SoundPanelSection extends PreferencesPanelSection {
@@ -27,7 +27,7 @@ class SoundPanelSection extends PreferencesPanelSection {
    */
   constructor( audioOptions ) {
 
-    const soundLabel = new Text( soundLabelString, { font: PreferencesDialog.PANEL_SECTION_LABEL_FONT } );
+    const soundLabel = new Text( otherSoundsLabelString, { font: PreferencesDialog.PANEL_SECTION_LABEL_FONT } );
     const titleNode = new PreferencesToggleSwitch( soundManager.enabledProperty, false, true, {
       labelNode: soundLabel,
       descriptionNode: new Text( soundDescriptionString, {
@@ -37,7 +37,7 @@ class SoundPanelSection extends PreferencesPanelSection {
 
     let enhancedSoundCheckbox = null;
     if ( audioOptions.supportsEnhancedSound ) {
-      const enahncedSoundLabel = new Text( enhancedSoundLabelString, { font: PreferencesDialog.CONTENT_FONT } );
+      const enahncedSoundLabel = new Text( extraSoundsLabelString, { font: PreferencesDialog.CONTENT_FONT } );
       enhancedSoundCheckbox = new Checkbox( enahncedSoundLabel, soundManager.enhancedSoundEnabledProperty );
       soundManager.enabledProperty.link( enabled => {
         enhancedSoundCheckbox.enabled = enabled;
