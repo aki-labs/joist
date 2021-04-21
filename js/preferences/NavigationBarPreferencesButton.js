@@ -58,7 +58,7 @@ class NavigationBarPreferencesButton extends JoistButton {
     // voicing
     this.voicingCreateObjectResponse = event => {
       if ( event.type === 'focus' ) {
-        return preferencesTitleString;
+      return preferencesTitleString;
       }
     };
   }
