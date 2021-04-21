@@ -10,6 +10,7 @@ import Property from '../../axon/js/Property.js';
 import Shape from '../../kite/js/Shape.js';
 import merge from '../../phet-core/js/merge.js';
 import FocusHighlightPath from '../../scenery/js/accessibility/FocusHighlightPath.js';
+import Voicing from '../../scenery/js/accessibility/speaker/Voicing.js';
 import Node from '../../scenery/js/nodes/Node.js';
 import ButtonInteractionState from '../../sun/js/buttons/ButtonInteractionState.js';
 import PushButtonInteractionStateProperty from '../../sun/js/buttons/PushButtonInteractionStateProperty.js';
@@ -106,6 +107,9 @@ class JoistButton extends Node {
     // shift the focus highlight for the joist button so that the bottom is always on screen
     const highlightLineWidth = FocusHighlightPath.getOuterLineWidthFromNode( this );
     this.focusHighlight = Shape.bounds( this.bounds.shiftedY( -highlightLineWidth ) );
+
+    // voicing
+    this.initializeVoicing();
   }
 
   /**
@@ -117,6 +121,8 @@ class JoistButton extends Node {
     return this._pressListener.pdomClickingProperty.get();
   }
 }
+
+Voicing.compose( JoistButton );
 
 joist.register( 'JoistButton', JoistButton );
 export default JoistButton;
