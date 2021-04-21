@@ -88,7 +88,15 @@ class Toolbar extends Node {
       content: chevronIcon,
       listener: () => this.openProperty.toggle(),
       buttonAppearanceStrategy: ButtonNode.FlatAppearanceStrategy,
-      baseColor: 'lightgrey'
+      baseColor: 'lightgrey',
+
+      // voicing
+      voicingCreateObjectResponse: event => {
+        if ( event.type === 'focus' ) {
+          return this.openProperty.value ? 'Hide Toolbar' : 'Show Toolbar';
+        }
+      },
+      utteranceQueue: phet.joist.sim.joistVoicingUtteranceQueue
     } );
 
     // @private {number} - width of content for the toolbar in the local coordinates frame

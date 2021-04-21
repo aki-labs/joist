@@ -29,6 +29,8 @@ const quickInfoString = 'Quick Info';
 const overviewString = 'Overview';
 const detailsString = 'Details';
 const hintString = 'Hint';
+const simVoicingOnString = 'Sim Voicing on.';
+const simVoicingOffString = 'Sim Voicing off.';
 
 class VoicingToolbarItem extends Node {
 
@@ -62,11 +64,23 @@ class VoicingToolbarItem extends Node {
       const textLabel = new Text( labelString, contentFontOptions );
       const labelBox = labelAlignGroup.createBox( textLabel, { xAlign: 'left' } );
       const inputBox = inputAlignGroup.createBox( inputElement, { align: 'right' } );
+
+      // voicing
+      inputElement.voicingCreateObjectResponse = event => { if ( event.type === 'focus' ) { return labelString; } };
+
       return new HBox( { children: [ labelBox, inputBox ], spacing: CONTENT_VERTICAL_SPACING } );
     };
 
     const muteSpeechSwitch = new PreferencesToggleSwitch( simSpeechEnabledProperty, false, true, {
-      labelNode: titleText
+      labelNode: titleText,
+      toggleSwitchOptions: {
+        voicingCreateObjectResponse: event => {
+          if ( event.type === 'focus' ) {
+            return 'Sim Voicing';
+          }
+        },
+        voicingUtteranceQueue: phet.joist.sim.joistVoicingUtteranceQueue
+      }
     } );
 
     const playPauseButtonOptions = { radius: 12 };
@@ -127,6 +141,11 @@ class VoicingToolbarItem extends Node {
     playingOverviewProperty.lazyLink( playingOverview => { playContent( playingOverviewProperty, overviewUtterance, alertManager.createOverviewContent() ); } );
     playingDetailsProperty.lazyLink( playingDetails => { playContent( playingDetailsProperty, detailsUtterance, alertManager.createDetailsContent() ); } );
     playingHintProperty.lazyLink( playingHint => { playContent( playingHintProperty, hintUtterance, alertManager.createHintContent() ); } );
+
+    simSpeechEnabledProperty.lazyLink( enabled => {
+      const alert = enabled ? simVoicingOnString : simVoicingOffString;
+      phet.joist.sim.joistVoicingUtteranceQueue.addToBack( alert );
+    } );
 
     // if the webSpeaker starts speaking any Utterance that is not one of the Utterances for this content,
     // stop speech for each button
