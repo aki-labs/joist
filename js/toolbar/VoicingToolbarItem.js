@@ -8,6 +8,7 @@
  */
 
 import BooleanProperty from '../../../axon/js/BooleanProperty.js';
+import merge from '../../../phet-core/js/merge.js';
 import PlayStopButton from '../../../scenery-phet/js/buttons/PlayStopButton.js';
 import PhetFont from '../../../scenery-phet/js/PhetFont.js';
 import webSpeaker from '../../../scenery/js/accessibility/speaker/webSpeaker.js';
@@ -31,6 +32,10 @@ const detailsString = 'Details';
 const hintString = 'Hint';
 const simVoicingOnString = 'Sim Voicing on.';
 const simVoicingOffString = 'Sim Voicing off.';
+const toolbarString = 'Toolbar';
+const playOverviewString = 'Play Overview';
+const playDetailsString = 'Play Details';
+const playHintString = 'Play Hint';
 
 class VoicingToolbarItem extends Node {
 
@@ -74,6 +79,11 @@ class VoicingToolbarItem extends Node {
     const muteSpeechSwitch = new PreferencesToggleSwitch( simSpeechEnabledProperty, false, true, {
       labelNode: titleText,
       toggleSwitchOptions: {
+
+        // pdom
+        innerContent: titleString,
+
+        // voicing
         voicingCreateObjectResponse: event => {
           if ( event.type === 'focus' ) {
             return 'Sim Voicing';
@@ -86,24 +96,35 @@ class VoicingToolbarItem extends Node {
     const playPauseButtonOptions = { radius: 12 };
 
     const playingOverviewProperty = new BooleanProperty( false );
-    const overviewButton = new PlayStopButton( playingOverviewProperty, playPauseButtonOptions );
+    const overviewButton = new PlayStopButton( playingOverviewProperty, merge( {
+      startPlayingLabel: playOverviewString
+    }, playPauseButtonOptions ) );
     const overviewRow = createLabelledInput( overviewString, overviewButton );
     const overviewUtterance = new Utterance();
 
     const playingDetailsProperty = new BooleanProperty( false );
-    const detailsButton = new PlayStopButton( playingDetailsProperty, playPauseButtonOptions );
+    const detailsButton = new PlayStopButton( playingDetailsProperty, merge( {
+      startPlayingLabel: playDetailsString
+    }, playPauseButtonOptions ) );
     const detailsRow = createLabelledInput( detailsString, detailsButton );
     const detailsUtterance = new Utterance();
 
     const playingHintProperty = new BooleanProperty( false );
-    const hintButton = new PlayStopButton( playingHintProperty, playPauseButtonOptions );
+    const hintButton = new PlayStopButton( playingHintProperty, merge( {
+      startPlayingLabel: playHintString
+    }, playPauseButtonOptions ) );
     const hintRow = createLabelledInput( hintString, hintButton );
     const hintUtterance = new Utterance();
 
     super( {
       children: [ muteSpeechSwitch, quickInfoText, overviewRow, detailsRow, hintRow ],
       spacing: CONTENT_VERTICAL_SPACING,
-      align: 'left'
+      align: 'left',
+
+      // pdom
+      tagName: 'section',
+      labelTagName: 'h2',
+      labelContent: toolbarString
     } );
 
     // layout
@@ -144,6 +165,7 @@ class VoicingToolbarItem extends Node {
 
     simSpeechEnabledProperty.lazyLink( enabled => {
       const alert = enabled ? simVoicingOnString : simVoicingOffString;
+      phet.joist.sim.utteranceQueue.addToBack( alert );
       phet.joist.sim.joistVoicingUtteranceQueue.addToBack( alert );
     } );
 

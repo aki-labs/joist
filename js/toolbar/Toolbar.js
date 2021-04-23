@@ -42,10 +42,9 @@ class Toolbar extends Node {
   constructor( voicingAlertManager, preferencesProperties, soundEnabledProperty, lookAndFeel ) {
     super( {
 
-        // pdom
-        tagName: 'div'
-      }
-    );
+      // pdom
+      tagName: 'div'
+    } );
 
     // @private {BooleanProperty} - Whether or not the Toolbar is enabled (visible to the user)
     this.isEnabledProperty = preferencesProperties.toolbarEnabledProperty;
