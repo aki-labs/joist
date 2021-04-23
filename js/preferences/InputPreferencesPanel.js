@@ -37,7 +37,8 @@ class InputPreferencesPanel extends Node {
           label: gestureControlsString,
           description: gestureControlsDescriptionString
         } )
-      } )
+      } ),
+      a11yLabel: gestureControlsString
     } );
 
     const panelSection = new PreferencesPanelSection( {

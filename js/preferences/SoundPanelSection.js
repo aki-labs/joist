@@ -45,13 +45,26 @@ class SoundPanelSection extends PreferencesPanelSection {
           label: otherSoundsLabelString,
           description: soundDescriptionString
         } )
-      } )
+      } ),
+      a11yLabel: otherSoundsLabelString
     } );
 
     let enhancedSoundContent = null;
     if ( audioOptions.supportsEnhancedSound ) {
       const enahncedSoundLabel = new Text( extraSoundsLabelString, { font: PreferencesDialog.CONTENT_FONT } );
-      const enhancedSoundCheckbox = new Checkbox( enahncedSoundLabel, soundManager.enhancedSoundEnabledProperty );
+      const enhancedSoundCheckbox = new Checkbox( enahncedSoundLabel, soundManager.enhancedSoundEnabledProperty, {
+
+        // pdom
+        labelTagName: 'label',
+        labelContent: extraSoundsLabelString,
+
+        // voicing
+        voicingCreateObjectResponse: event => {
+          if ( event.type === 'focus' ) {
+            return extraSoundsLabelString;
+          }
+        }
+      } );
       soundManager.enabledProperty.link( enabled => {
         enhancedSoundCheckbox.enabled = enabled;
       } );

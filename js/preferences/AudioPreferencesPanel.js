@@ -61,7 +61,8 @@ class AudioPreferencesTabPanel extends VBox {
           label: allAudioString,
           description: allAudioDescriptionString
         } )
-      } )
+      } ),
+      a11yLabel: allAudioString
     } );
 
     const soundEnabledListener = ( enabled, previousValue ) => {

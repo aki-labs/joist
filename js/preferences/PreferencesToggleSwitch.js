@@ -28,6 +28,11 @@ class PreferencesToggleSwitch extends Node {
       // {number} - vertical spacing between ToggleSwitch and description Node
       descriptionSpacing: 5,
 
+      // {string|null} - Sets both the inner content and the voicing response for the toggle switch on focus.
+      // NOTE: Seeing more overlap like this between PDOM and voicing (which is good) but not sure how it will
+      // all work yet. This option is the first of its kind.
+      a11yLabel: null,
+
       // {Object} - options passed to the actual ToggleSwitch
       toggleSwitchOptions: {
         size: new Dimension2( 36, 18 ),
@@ -36,6 +41,11 @@ class PreferencesToggleSwitch extends Node {
     }, options );
     assert && assert( options.labelNode === null || options.labelNode instanceof Node, 'labelNode is null or inserted as child' );
     assert && assert( options.descriptionNode === null || options.descriptionNode instanceof Node, 'labelNode is null or inserted as child' );
+
+    if ( options.toggleSwitchOptions ) {
+      assert && assert( options.toggleSwitchOptions.voicingCreateObjectResponse === undefined, 'PreferencesToggleSwitch creates object response with a11yLabel option' );
+      assert && assert( options.toggleSwitchOptions.innerContent === undefined, 'PreferencesToggleSwitch creates object response with a11yLabel option' );
+    }
 
     super( options );
 
@@ -57,6 +67,15 @@ class PreferencesToggleSwitch extends Node {
       else {
         options.labelNode.rightCenter = toggleSwitch.leftCenter.minusXY( options.labelSpacing, 0 );
       }
+    }
+
+    if ( options.a11yLabel ) {
+      toggleSwitch.innerContent = options.a11yLabel;
+      toggleSwitch.voicingCreateObjectResponse = event => {
+        if ( event.type === 'focus' ) {
+          return options.a11yLabel;
+        }
+      };
     }
   }
 }

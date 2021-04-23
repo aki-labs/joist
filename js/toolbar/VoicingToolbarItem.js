@@ -9,6 +9,7 @@
 
 import BooleanProperty from '../../../axon/js/BooleanProperty.js';
 import merge from '../../../phet-core/js/merge.js';
+import VoicingHighlight from '../../../scenery-phet/js/accessibility/speaker/VoicingHighlight.js';
 import PlayStopButton from '../../../scenery-phet/js/buttons/PlayStopButton.js';
 import PhetFont from '../../../scenery-phet/js/PhetFont.js';
 import VoicingText from '../../../scenery-phet/js/accessibility/speaker/VoicingText.js';
@@ -59,6 +60,12 @@ class VoicingToolbarItem extends Node {
 
     const titleText = new Text( titleString, titleTextOptions );
     const quickInfoText = new VoicingText( quickInfoString, titleTextOptions );
+    quickInfoText.focusHighlight = new VoicingHighlight( quickInfoText, {
+
+      // the inner stroke is white since the toolbar is on a black background
+      // NOTE: This will need to use lookAndFeel probably
+      innerStroke: 'white'
+    } );
 
     // layout
     const labelAlignGroup = new AlignGroup();
@@ -79,17 +86,8 @@ class VoicingToolbarItem extends Node {
 
     const muteSpeechSwitch = new PreferencesToggleSwitch( simSpeechEnabledProperty, false, true, {
       labelNode: titleText,
+      a11yLabel: 'Sim Voicing',
       toggleSwitchOptions: {
-
-        // pdom
-        innerContent: titleString,
-
-        // voicing
-        voicingCreateObjectResponse: event => {
-          if ( event.type === 'focus' ) {
-            return 'Sim Voicing';
-          }
-        },
         voicingUtteranceQueue: phet.joist.sim.joistVoicingUtteranceQueue
       }
     } );

@@ -13,6 +13,7 @@ import Utils from '../../../dot/js/Utils.js';
 import StringUtils from '../../../phetcommon/js/util/StringUtils.js';
 import NumberControl from '../../../scenery-phet/js/NumberControl.js';
 import VoicingText from '../../../scenery-phet/js/accessibility/speaker/VoicingText.js';
+import Voicing from '../../../scenery/js/accessibility/speaker/Voicing.js';
 import joistStrings from '../joistStrings.js';
 import PhetFont from '../../../scenery-phet/js/PhetFont.js';
 import voicingManager from '../../../scenery/js/accessibility/speaker/voicingManager.js';
@@ -39,6 +40,7 @@ const voicingEnabledString = 'Voicing on.';
 const voicingDisabledString = 'Voicing off.';
 const voiceVariablesPatternString = '{{value}}x';
 const voicingDescriptionString = 'Voices and highlights content as you interact.';
+const customizeVoiceString = 'Customize Voice';
 
 const simVoicingOptionsString = 'Sim Voicing Options';
 const simVoicingDescriptionString = 'Choose details you want voiced as you interact.';
@@ -49,6 +51,9 @@ const voicingContextChangesString = 'Voicing indirect sim changes.';
 const contextChangesMutedString = 'Indirect changes muted.';
 const voicingHintsString = 'Voicing extra help.';
 const hintsMutedString = 'Extra help muted.';
+
+const customizeVoiceExpandedString = 'Customize Voice, expanded';
+const customizeVoiceCollapsedString = 'Customize Voice, collapsed';
 
 const voiceRateDescriptionPatternString = 'Voice Rate {{value}} times';
 const voiceRateNormalString = 'Voice Rate normal';
@@ -81,13 +86,15 @@ class VoicingPanelSection extends PreferencesPanelSection {
           label: voicingLabelString,
           description: voicingDescriptionString
         } )
-      } )
+      } ),
+      a11yLabel: voicingLabelString
     } );
 
     // checkbox for the toolbar
     const quickAccessLabel = new Text( toolbarLabelString, { font: PreferencesDialog.PANEL_SECTION_LABEL_FONT } );
     const toolbarSwitch = new PreferencesToggleSwitch( toolbarEnabledProperty, false, true, {
-      labelNode: quickAccessLabel
+      labelNode: quickAccessLabel,
+      a11yLabel: toolbarLabelString
     } );
 
     // Speech output levels
@@ -116,7 +123,7 @@ class VoicingPanelSection extends PreferencesPanelSection {
     speechOutputCheckboxes.leftTop = speechOutputDescription.leftBottom.plusXY( 15, 5 );
 
     // voice options
-    const voiceOptionsLabel = new Text( 'Customize Voice', {
+    const voiceOptionsLabel = new Text( customizeVoiceString, {
       font: PreferencesDialog.PANEL_SECTION_LABEL_FONT
     } );
 
@@ -147,7 +154,19 @@ class VoicingPanelSection extends PreferencesPanelSection {
 
     // controls visibility of voice options
     const voiceOptionsOpenProperty = new BooleanProperty( false );
-    const expandCollapseButton = new ExpandCollapseButton( voiceOptionsOpenProperty, { sideLength: 16 } );
+    const expandCollapseButton = new ExpandCollapseButton( voiceOptionsOpenProperty, {
+      sideLength: 16,
+
+      // pdom
+      innerContent: customizeVoiceString,
+
+      // voicing
+      voicingCreateObjectResponse: event => {
+        if ( event.type === 'focus' ) {
+          return customizeVoiceString;
+        }
+      }
+    } );
 
     const content = new Node( {
       children: [ speechOutputContent, toolbarSwitch, voiceOptionsLabel, expandCollapseButton, voiceOptionsContent ]
@@ -192,6 +211,11 @@ class VoicingPanelSection extends PreferencesPanelSection {
       const alertString = voicingHints ? voicingHintsString : hintsMutedString;
       phet.joist.sim.joistVoicingUtteranceQueue.addToBack( alertString );
     } );
+
+    voiceOptionsOpenProperty.lazyLink( open => {
+      const alert = open ? customizeVoiceExpandedString : customizeVoiceCollapsedString;
+      phet.joist.sim.joistVoicingUtteranceQueue.addToBack( alert );
+    } );
   }
 }
 
@@ -203,7 +227,19 @@ class VoicingPanelSection extends PreferencesPanelSection {
  */
 const createCheckbox = ( labelString, property ) => {
   const labelNode = new Text( labelString, { font: PreferencesDialog.CONTENT_FONT } );
-  return new Checkbox( labelNode, property );
+  return new Checkbox( labelNode, property, {
+
+    // pdom
+    labelTagName: 'label',
+    labelContent: labelString,
+
+    // voicing
+    voicingCreateObjectResponse: event => {
+      if ( event.type === 'focus' ) {
+        return labelString;
+      }
+    }
+  } );
 };
 
 /**
@@ -232,18 +268,42 @@ class VoiceRateNumberControl extends NumberControl {
       sliderOptions: {
         thumbSize: THUMB_SIZE,
         trackSize: TRACK_SIZE,
-        keyboardStep: 0.25
+        keyboardStep: 0.25,
+
+        // pdom
+        labelTagName: 'label',
+        labelContent: labelString
       }
     } );
 
+    // voicing
+    this.initializeVoicing();
+    this.voicingCreateObjectResponse = event => {
+      if ( event.type === 'focus' ) {
+        return this.getRateDescriptionString( webSpeaker.voiceRateProperty.value );
+
+      }
+    };
+
     voiceRateProperty.lazyLink( rate => {
-      const alert = rate === 1 ? voiceRateNormalString : StringUtils.fillIn( voiceRateDescriptionPatternString, {
-        value: rate
-      } );
-      phet.joist.sim.joistVoicingUtteranceQueue.addToBack( alert );
+      phet.joist.sim.joistVoicingUtteranceQueue.addToBack( this.getRateDescriptionString( rate ) );
+    } );
+  }
+
+  /**
+   * Returns a description of the voice rate.
+   * @public
+   *
+   * @param {number} rate
+   */
+  getRateDescriptionString( rate ) {
+    return rate === 1 ? voiceRateNormalString : StringUtils.fillIn( voiceRateDescriptionPatternString, {
+      value: rate
     } );
   }
 }
+
+Voicing.compose( NumberControl );
 
 /**
  * A slider with labels and tick marks used to control voice rate of web speech synthesis.
@@ -270,7 +330,11 @@ class VoicingPitchSlider extends VBox {
 
       // constrain the value to the nearest hundredths place so there is no overlap in described ranges in
       // VOICE_PITCH_DESCRIPTION_MAP
-      constrainValue: value => Utils.roundToInterval( value, 0.01 )
+      constrainValue: value => Utils.roundToInterval( value, 0.01 ),
+
+      // pdom
+      labelTagName: 'label',
+      labelContent: labelString
     } );
 
     const lowLabel = new Text( 'Low', { font: new PhetFont( 14 ) } );
@@ -285,22 +349,45 @@ class VoicingPitchSlider extends VBox {
       spacing: 5
     } );
 
-    voicePitchProperty.lazyLink( pitch => {
-      let pitchDescription;
-      VOICE_PITCH_DESCRIPTION_MAP.forEach( ( description, range ) => {
-        if ( range.contains( pitch ) ) {
-          pitchDescription = description;
-        }
-      } );
-      assert && assert( pitchDescription, `no description found for pitch at value: ${pitch}` );
+    // voicing
+    this.initializeVoicing();
+    this.voicingCreateObjectResponse = event => {
+      if ( event.type === 'focus' ) {
+        return StringUtils.fillIn( 'Pitch, {{description}}', {
+          description: this.getPitchDescriptionString( voicePitchProperty.value )
+        } );
+      }
+    };
 
+    voicePitchProperty.lazyLink( pitch => {
       const alertString = StringUtils.fillIn( voicePitchDescriptionPatternString, {
-        description: pitchDescription
+        description: this.getPitchDescriptionString( pitch )
       } );
       phet.joist.sim.joistVoicingUtteranceQueue.addToBack( alertString );
     } );
   }
+
+  /**
+   * Gets a description of the pitch at the provided value from VOICE_PITCH_DESCRIPTION_MAP.
+   * @public
+   *
+   * @param {number} pitchValue
+   * @returns {string}
+   */
+  getPitchDescriptionString( pitchValue ) {
+    let pitchDescription;
+    VOICE_PITCH_DESCRIPTION_MAP.forEach( ( description, range ) => {
+      if ( range.contains( pitchValue ) ) {
+        pitchDescription = description;
+      }
+    } );
+    assert && assert( pitchDescription, `no description found for pitch at value: ${pitchValue}` );
+
+    return pitchDescription;
+  }
 }
+
+Voicing.compose( VoicingPitchSlider );
 
 joist.register( 'VoicingPanelSection', VoicingPanelSection );
 export default VoicingPanelSection;

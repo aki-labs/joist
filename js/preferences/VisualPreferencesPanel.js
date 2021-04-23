@@ -39,7 +39,8 @@ class VisualPreferencesPanel extends Node {
           label: interactiveHighlightsString,
           description: interactiveHighlightsDescriptionString
         } )
-      } )
+      } ),
+      a11yLabel: interactiveHighlightsString
     } );
 
     const panelSection = new PreferencesPanelSection( {
