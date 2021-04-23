@@ -6,13 +6,12 @@
  * @author Jesse Greenberg (PhET Interactive Simulations)
  */
 
-import PDOMUtils from '../../../scenery/js/accessibility/pdom/PDOMUtils.js';
 import UserCog from '../../../sherpa/js/fontawesome-5/solid/UserCog.js';
-import PhetioCapsule from '../../../tandem/js/PhetioCapsule.js';
 import Dialog from '../../../sun/js/Dialog.js';
+import PhetioCapsule from '../../../tandem/js/PhetioCapsule.js';
 import joist from '../joist.js';
-import joistStrings from '../joistStrings.js';
 import JoistButton from '../JoistButton.js';
+import joistStrings from '../joistStrings.js';
 import PreferencesDialog from './PreferencesDialog.js';
 
 // constants
@@ -46,7 +45,7 @@ class NavigationBarPreferencesButton extends JoistButton {
       listener: () => {
         const dialog = preferencesDialogCapsule.getElement();
         dialog.show();
-        PDOMUtils.getNextFocusable().focus();
+        dialog.focusSelectedTab();
       },
       highlightExtensionWidth: 5,
       highlightExtensionHeight: 10,

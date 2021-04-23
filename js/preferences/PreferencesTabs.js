@@ -44,19 +44,23 @@ class PreferencesTabs extends Node {
     // tab is next in order when cycling through with alternative input.
     this.selectedButton = null;
 
-    const content = [];
+    // @private {EnumerationProperty}
+    this.selectedPanelProperty = selectedPanelProperty;
+
+    //@private {{node: Node, value: PreferenceTab}[]}
+    this.content = [];
     const addTabIfSupported = ( preferenceTab, titleString ) => {
-      _.includes( supportedTabs, preferenceTab ) && content.push( this.createButtonContent( titleString, selectedPanelProperty, preferenceTab ) );
+      _.includes( supportedTabs, preferenceTab ) && this.content.push( this.createButtonContent( titleString, selectedPanelProperty, preferenceTab ) );
     };
     addTabIfSupported( PreferencesDialog.PreferencesTab.GENERAL, generalTitleString );
     addTabIfSupported( PreferencesDialog.PreferencesTab.VISUAL, visualTitleString );
     addTabIfSupported( PreferencesDialog.PreferencesTab.AUDIO, audioTitleString );
     addTabIfSupported( PreferencesDialog.PreferencesTab.INPUT, inputTitleString );
 
-    for ( let i = 0; i < content.length; i++ ) {
-      this.addChild( content[ i ].node );
-      if ( content[ i - 1 ] ) {
-        content[ i ].node.leftCenter = content[ i - 1 ].node.rightCenter.plusXY( 10, 0 );
+    for ( let i = 0; i < this.content.length; i++ ) {
+      this.addChild( this.content[ i ].node );
+      if ( this.content[ i - 1 ] ) {
+        this.content[ i ].node.leftCenter = this.content[ i - 1 ].node.rightCenter.plusXY( 10, 0 );
       }
     }
 
@@ -69,9 +73,9 @@ class PreferencesTabs extends Node {
           event.domEvent.preventDefault();
 
           const direction = ( KeyboardUtils.isKeyEvent( event.domEvent, KeyboardUtils.KEY_RIGHT_ARROW ) ) ? 1 : -1;
-          for ( let i = 0; i < content.length; i++ ) {
-            if ( this.selectedButton === content[ i ].node ) {
-              const nextButtonContent = content[ i + direction ];
+          for ( let i = 0; i < this.content.length; i++ ) {
+            if ( this.selectedButton === this.content[ i ].node ) {
+              const nextButtonContent = this.content[ i + direction ];
               if ( nextButtonContent ) {
 
                 // select the next tab and move focus to it - a listener on selectedPanelProperty sets the next
@@ -92,6 +96,18 @@ class PreferencesTabs extends Node {
       this.focusable = false;
       this.inputEnabledProperty.value = false;
     }
+  }
+
+  /**
+   * Move focus to the selected tab. Useful when the Preferences dialog is opened.
+   * @public
+   */
+  focusSelectedTab() {
+    this.content.forEach( content => {
+      if ( content.value === this.selectedPanelProperty.value ) {
+        content.node.focus();
+      }
+    } );
   }
 
   /**

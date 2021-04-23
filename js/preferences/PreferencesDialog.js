@@ -79,6 +79,17 @@ class PreferencesDialog extends Dialog {
     preferencesPanels.centerTop = tabPanelSeparator.centerBottom.plusXY( 0, 20 );
 
     super( content, options );
+
+    // @private {PreferencesTabs}
+    this.preferencesTabs = preferencesTabs;
+  }
+
+  /**
+   * Move focus to the selected tab. Generally to be used when opening the dialog.
+   * @private
+   */
+  focusSelectedTab() {
+    this.preferencesTabs.focusSelectedTab();
   }
 }
 
