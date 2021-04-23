@@ -43,6 +43,13 @@ const voicingDescriptionString = 'Voices and highlights content as you interact.
 const simVoicingOptionsString = 'Sim Voicing Options';
 const simVoicingDescriptionString = 'Choose details you want voiced as you interact.';
 
+const voicingObjectChangesString = 'Voicing object changes.';
+const objectChangesMutedString = 'Object changes muted.';
+const voicingContextChangesString = 'Voicing indirect sim changes.';
+const contextChangesMutedString = 'Indirect changes muted.';
+const voicingHintsString = 'Voicing extra help.';
+const hintsMutedString = 'Extra help muted.';
+
 const voiceRateDescriptionPatternString = 'Voice Rate {{value}} times';
 const voiceRateNormalString = 'Voice Rate normal';
 const labelledDescriptionPatternString = joistStrings.a11y.preferences.tabs.labelledDescriptionPattern;
@@ -169,6 +176,21 @@ class VoicingPanelSection extends PreferencesPanelSection {
     // in response to user input, otherwise all speech will be blocked on many platforms
     webSpeaker.enabledProperty.lazyLink( enabled => {
       webSpeaker.speakImmediately( enabled ? voicingEnabledString : voicingDisabledString );
+    } );
+
+    voicingManager.objectChangesProperty.lazyLink( voicingObjectChanges => {
+      const alertString = voicingObjectChanges ? voicingObjectChangesString : objectChangesMutedString;
+      phet.joist.sim.joistVoicingUtteranceQueue.addToBack( alertString );
+    } );
+
+    voicingManager.contextChangesProperty.lazyLink( voicingContextChanges => {
+      const alertString = voicingContextChanges ? voicingContextChangesString : contextChangesMutedString;
+      phet.joist.sim.joistVoicingUtteranceQueue.addToBack( alertString );
+    } );
+
+    voicingManager.hintsProperty.lazyLink( voicingHints => {
+      const alertString = voicingHints ? voicingHintsString : hintsMutedString;
+      phet.joist.sim.joistVoicingUtteranceQueue.addToBack( alertString );
     } );
   }
 }

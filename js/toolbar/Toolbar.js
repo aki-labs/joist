@@ -129,7 +129,7 @@ class Toolbar extends Node {
       this.updateDestinationPosition();
 
       if ( oldValue !== null ) {
-        const alert = open ? 'Toolbar Open' : 'Toolbar closed';
+        const alert = open ? 'Toolbar shown.' : 'Toolbar hidden';
         phet.joist.sim.joistVoicingUtteranceQueue.addToBack( alert );
         phet.joist.sim.utteranceQueue.addToBack( alert );
       }
