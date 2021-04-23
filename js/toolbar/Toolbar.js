@@ -31,6 +31,10 @@ import VoicingToolbarItem from './VoicingToolbarItem.js';
 const MAX_ANIMATION_SPEED = 5; // in view coordinates, maximum speed at which Toolbar will open/close
 const CONTENT_TOP_MARGIN = 15; // margin between top of Toolbar and contents
 
+// constants
+const openToolbarString = 'Open Toolbar';
+const closeToolbarString = 'Close Toolbar';
+
 class Toolbar extends Node {
 
   /**
@@ -120,8 +124,15 @@ class Toolbar extends Node {
 
       // when closed, menu content should be hidden from screen readers and the navigation order
       this.menuContent.pdomVisible = open;
+      this.openButton.innerContent = open ? closeToolbarString : openToolbarString;
 
       this.updateDestinationPosition();
+
+      if ( oldValue !== null ) {
+        const alert = open ? 'Toolbar Open' : 'Toolbar closed';
+        phet.joist.sim.joistVoicingUtteranceQueue.addToBack( alert );
+        phet.joist.sim.utteranceQueue.addToBack( alert );
+      }
     } );
 
     // when shown or hidden update destination positions so it animates open or close
