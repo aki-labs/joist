@@ -8,8 +8,10 @@
  */
 
 import Property from '../../../axon/js/Property.js';
+import StringUtils from '../../../phetcommon/js/util/StringUtils.js';
 import FocusHighlightPath from '../../../scenery/js/accessibility/FocusHighlightPath.js';
 import KeyboardUtils from '../../../scenery/js/accessibility/KeyboardUtils.js';
+import Voicing from '../../../scenery/js/accessibility/speaker/Voicing.js';
 import PressListener from '../../../scenery/js/listeners/PressListener.js';
 import Rectangle from '../../../scenery/js/nodes/Rectangle.js';
 import joist from '../joist.js';
@@ -24,6 +26,7 @@ const generalTitleString = joistStrings.preferences.tabs.general.title;
 const visualTitleString = joistStrings.preferences.tabs.visual.title;
 const audioTitleString = joistStrings.preferences.tabs.audio.title;
 const inputTitleString = joistStrings.preferences.tabs.input.title;
+const preferencesTabResponsePatternString = 'Preferences, {{title}} Tab';
 
 class PreferencesTabs extends Node {
 
@@ -50,7 +53,7 @@ class PreferencesTabs extends Node {
     //@private {{node: Node, value: PreferenceTab}[]}
     this.content = [];
     const addTabIfSupported = ( preferenceTab, titleString ) => {
-      _.includes( supportedTabs, preferenceTab ) && this.content.push( this.createButtonContent( titleString, selectedPanelProperty, preferenceTab ) );
+      _.includes( supportedTabs, preferenceTab ) && this.content.push( new Tab( titleString, selectedPanelProperty, preferenceTab ) );
     };
     addTabIfSupported( PreferencesDialog.PreferencesTab.GENERAL, generalTitleString );
     addTabIfSupported( PreferencesDialog.PreferencesTab.VISUAL, visualTitleString );
@@ -58,9 +61,9 @@ class PreferencesTabs extends Node {
     addTabIfSupported( PreferencesDialog.PreferencesTab.INPUT, inputTitleString );
 
     for ( let i = 0; i < this.content.length; i++ ) {
-      this.addChild( this.content[ i ].node );
+      this.addChild( this.content[ i ] );
       if ( this.content[ i - 1 ] ) {
-        this.content[ i ].node.leftCenter = this.content[ i - 1 ].node.rightCenter.plusXY( 10, 0 );
+        this.content[ i ].leftCenter = this.content[ i - 1 ].rightCenter.plusXY( 10, 0 );
       }
     }
 
@@ -74,7 +77,7 @@ class PreferencesTabs extends Node {
 
           const direction = ( KeyboardUtils.isKeyEvent( event.domEvent, KeyboardUtils.KEY_RIGHT_ARROW ) ) ? 1 : -1;
           for ( let i = 0; i < this.content.length; i++ ) {
-            if ( this.selectedButton === this.content[ i ].node ) {
+            if ( this.selectedButton === this.content[ i ] ) {
               const nextButtonContent = this.content[ i + direction ];
               if ( nextButtonContent ) {
 
@@ -91,6 +94,14 @@ class PreferencesTabs extends Node {
       }
     } );
 
+    selectedPanelProperty.link( selectedPanel => {
+      this.content.forEach( content => {
+        if ( content.value === this.selectedPanelProperty.value ) {
+          this.selectedButton = content;
+        }
+      } );
+    } );
+
     // if there is only one tab, it is not interactive
     if ( supportedTabs.length === 1 ) {
       this.focusable = false;
@@ -105,23 +116,24 @@ class PreferencesTabs extends Node {
   focusSelectedTab() {
     this.content.forEach( content => {
       if ( content.value === this.selectedPanelProperty.value ) {
-        content.node.focus();
+        content.focus();
       }
     } );
   }
+}
+
+/**
+ * Inner class, a single tab for the list of tabs.
+ * @mixes Voicing
+ */
+class Tab extends Node {
 
   /**
-   * Creates content for one of the tabs, including a Text label and Line Node that will be displayed when a tab
-   * is selected. Returns an object containing the tab content and the associated value for the Property controlling
-   * the selected tab.
-   * @private
-   *
-   * @param {string} label - for the displayed label
-   * @param {EnumerationProperty.<PreferencesDialog.PreferenceTab>} property -
-   * @param {PreferencesDialog.PreferenceTab} value - value for the tab
-   * @returns {{node: Node, value: PreferencesDialog.PreferenceTab}}
+   * @param {string} label - text label for the tab
+   * @param {EnumerationProperty.<PreferencesDialog.<PreferencesTab>} property
+   * @param {PreferencesDialog.PreferencesTab} value - PreferencesTab shown when this tab is selected
    */
-  createButtonContent( label, property, value ) {
+  constructor( label, property, value ) {
 
     const textNode = new Text( label, {
       font: PreferencesDialog.TAB_FONT
@@ -138,43 +150,50 @@ class PreferencesTabs extends Node {
       centerTop: textNode.centerBottom.plusXY( 0, 5 )
     } );
 
-    // all contents of the tab, with pdom
-    const contentNode = new Node( {
+    super( {
       children: [ backgroundNode, underlineNode ],
       cursor: 'pointer',
 
       // pdom
       tagName: 'div',
+      innerContent: label,
       ariaRole: 'tab',
       focusable: true,
       containerTagName: 'li'
     } );
+
+    // @public {PreferenceTab}
+    this.value = value;
 
     const buttonListener = new PressListener( {
       press: () => {
         property.set( value );
       }
     } );
-    contentNode.addInputListener( buttonListener );
+    this.addInputListener( buttonListener );
 
     Property.multilink( [ property, buttonListener.isOverProperty ], ( selectedTab, isOver ) => {
       textNode.opacity = selectedTab === value ? 1 :
                          isOver ? 0.8 :
                          0.6;
 
-      contentNode.focusable = selectedTab === value;
+      this.focusable = selectedTab === value;
       underlineNode.visible = selectedTab === value;
-      if ( contentNode.focusable ) {
-        this.selectedButton = contentNode;
-      }
     } );
 
-    return {
-      node: contentNode,
-      value: value
-    };
+    // voicing
+    this.initializeVoicing();
+    this.mutate( {
+      voicingCreateObjectResponse: event => {
+        return StringUtils.fillIn( preferencesTabResponsePatternString, {
+          title: label
+        } );
+      }
+    } );
   }
 }
+
+Voicing.compose( Tab );
 
 joist.register( 'PreferencesTabs', PreferencesTabs );
 export default PreferencesTabs;
