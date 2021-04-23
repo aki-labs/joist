@@ -25,7 +25,13 @@ const labelledDescriptionPatternString = joistStrings.a11y.preferences.tabs.labe
 
 class InputPreferencesPanel extends Node {
   constructor( gestureControlsEnabledProperty ) {
-    super();
+    super( {
+
+      // pdom
+      tagName: 'div',
+      labelTagName: 'h2',
+      labelContent: 'Input'
+    } );
 
     const toggleSwitch = new PreferencesToggleSwitch( gestureControlsEnabledProperty, false, true, {
       labelNode: new Text( gestureControlsString, { font: PreferencesDialog.PANEL_SECTION_LABEL_FONT } ),

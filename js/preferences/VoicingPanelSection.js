@@ -13,7 +13,9 @@ import Utils from '../../../dot/js/Utils.js';
 import StringUtils from '../../../phetcommon/js/util/StringUtils.js';
 import NumberControl from '../../../scenery-phet/js/NumberControl.js';
 import VoicingText from '../../../scenery-phet/js/accessibility/speaker/VoicingText.js';
+import FocusHighlightFromNode from '../../../scenery/js/accessibility/FocusHighlightFromNode.js';
 import Voicing from '../../../scenery/js/accessibility/speaker/Voicing.js';
+import PressListener from '../../../scenery/js/listeners/PressListener.js';
 import joistStrings from '../joistStrings.js';
 import PhetFont from '../../../scenery-phet/js/PhetFont.js';
 import voicingManager from '../../../scenery/js/accessibility/speaker/voicingManager.js';
@@ -45,8 +47,8 @@ const customizeVoiceString = 'Customize Voice';
 const simVoicingOptionsString = 'Sim Voicing Options';
 const simVoicingDescriptionString = 'Choose details you want voiced as you interact.';
 
-const voicingObjectChangesString = 'Voicing object changes.';
-const objectChangesMutedString = 'Object changes muted.';
+const voicingObjectChangesString = 'Voicing object details and changes.';
+const objectChangesMutedString = 'Object details and changes muted.';
 const voicingContextChangesString = 'Voicing indirect sim changes.';
 const contextChangesMutedString = 'Indirect changes muted.';
 const voicingHintsString = 'Voicing extra help.';
@@ -98,7 +100,13 @@ class VoicingPanelSection extends PreferencesPanelSection {
     } );
 
     // Speech output levels
-    const speechOutputLabel = new Text( simVoicingOptionsString, { font: PreferencesDialog.PANEL_SECTION_LABEL_FONT } );
+    const speechOutputLabel = new Text( simVoicingOptionsString, {
+      font: PreferencesDialog.PANEL_SECTION_LABEL_FONT,
+
+      // pdom
+      tagName: 'h3',
+      innerContent: simVoicingOptionsString
+    } );
     const speechOutputDescription = new VoicingText( simVoicingDescriptionString, {
       font: PreferencesDialog.CONTENT_FONT,
       voicingText: StringUtils.fillIn( labelledDescriptionPatternString, {
@@ -110,7 +118,7 @@ class VoicingPanelSection extends PreferencesPanelSection {
       align: 'left',
       spacing: 5,
       children: [
-        createCheckbox( 'Voice direct object changes', voicingManager.objectChangesProperty ),
+        createCheckbox( 'Voice direct object details and changes', voicingManager.objectChangesProperty ),
         createCheckbox( 'Voice other sim changes as objects change', voicingManager.contextChangesProperty ),
         createCheckbox( 'Voice helpful hints on sim interactions', voicingManager.hintsProperty )
       ]
@@ -121,11 +129,6 @@ class VoicingPanelSection extends PreferencesPanelSection {
     } );
     speechOutputDescription.leftTop = speechOutputLabel.leftBottom.plusXY( 0, 5 );
     speechOutputCheckboxes.leftTop = speechOutputDescription.leftBottom.plusXY( 15, 5 );
-
-    // voice options
-    const voiceOptionsLabel = new Text( customizeVoiceString, {
-      font: PreferencesDialog.PANEL_SECTION_LABEL_FONT
-    } );
 
     // only grab the first 12 options for the ComboBox, its all we have space for
     const parentNode = phet.joist.sim.topLayer;
@@ -152,7 +155,11 @@ class VoicingPanelSection extends PreferencesPanelSection {
       ]
     } );
 
-    // controls visibility of voice options
+    // voice options
+    const voiceOptionsLabel = new Text( customizeVoiceString, {
+      font: PreferencesDialog.PANEL_SECTION_LABEL_FONT,
+      cursor: 'pointer'
+    } );
     const voiceOptionsOpenProperty = new BooleanProperty( false );
     const expandCollapseButton = new ExpandCollapseButton( voiceOptionsOpenProperty, {
       sideLength: 16,
@@ -168,8 +175,20 @@ class VoicingPanelSection extends PreferencesPanelSection {
       }
     } );
 
+    const voiceOptionsContainer = new Node( {
+      children: [ voiceOptionsLabel, expandCollapseButton ]
+    } );
+
+    // the visual title of the ExpandCollapseButton needs to be clickable
+    const voiceOptionsPressListener = new PressListener( {
+      press: () => {
+        voiceOptionsOpenProperty.toggle();
+      }
+    } );
+    voiceOptionsLabel.addInputListener( voiceOptionsPressListener );
+
     const content = new Node( {
-      children: [ speechOutputContent, toolbarSwitch, voiceOptionsLabel, expandCollapseButton, voiceOptionsContent ]
+      children: [ speechOutputContent, toolbarSwitch, voiceOptionsContainer, voiceOptionsContent ]
     } );
 
     // layout for section content, custom rather than using a LayoutBox because the voice options label needs
@@ -179,6 +198,9 @@ class VoicingPanelSection extends PreferencesPanelSection {
     expandCollapseButton.leftCenter = voiceOptionsLabel.rightCenter.plusXY( 10, 0 );
     voiceOptionsContent.leftTop = voiceOptionsLabel.leftBottom.plusXY( 0, 10 );
     voiceOptionsOpenProperty.link( open => { voiceOptionsContent.visible = open; } );
+
+    // the focus highlight for the voice options expand collapse button should surround the label
+    expandCollapseButton.focusHighlight = new FocusHighlightFromNode( voiceOptionsContainer );
 
     super( {
       titleNode: voicingSwitch,

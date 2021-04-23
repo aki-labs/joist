@@ -28,7 +28,13 @@ class VisualPreferencesPanel extends Node {
    * @param {BooleanProperty} interactiveHighlightsEnabledProperty - whether or not interactive highlights are enabled
    */
   constructor( interactiveHighlightsEnabledProperty ) {
-    super();
+    super( {
+
+      // pdom
+      tagName: 'div',
+      labelTagName: 'h2',
+      labelContent: 'Visual'
+    } );
 
     const label = new Text( interactiveHighlightsString, { font: PreferencesDialog.PANEL_SECTION_LABEL_FONT } );
     const toggleSwitch = new PreferencesToggleSwitch( interactiveHighlightsEnabledProperty, false, true, {

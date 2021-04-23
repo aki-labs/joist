@@ -27,7 +27,12 @@ class GeneralPreferencesPanel extends VBox {
   constructor( generalConfiguration ) {
     super( {
       align: 'left',
-      spacing: 40
+      spacing: 40,
+
+      // pdom
+      tagName: 'div',
+      labelTagName: 'h2',
+      labelContent: 'General'
     } );
 
     const panelChildren = [];

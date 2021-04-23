@@ -82,7 +82,12 @@ class AudioPreferencesTabPanel extends VBox {
     super( {
       align: 'center',
       spacing: 25,
-      children: [ allAudioSwitch, sections ]
+      children: [ allAudioSwitch, sections ],
+
+      // pdom
+      tagName: 'div',
+      labelTagName: 'h2',
+      labelContent: 'Audio'
     } );
 
     // @private - for disposal
