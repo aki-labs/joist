@@ -6,8 +6,9 @@
  * @author Jesse Greenberg (PhET Interactive Simulations)
  */
 
+import StringUtils from '../../../phetcommon/js/util/StringUtils.js';
+import VoicingRichText from '../../../scenery-phet/js/accessibility/speaker/VoicingRichText.js';
 import Node from '../../../scenery/js/nodes/Node.js';
-import RichText from '../../../scenery/js/nodes/RichText.js';
 import Text from '../../../scenery/js/nodes/Text.js';
 import joist from '../joist.js';
 import joistStrings from '../joistStrings.js';
@@ -20,6 +21,7 @@ const gestureControlsString = joistStrings.preferences.tabs.input.gestureControl
 const gestureControlsDescriptionString = joistStrings.preferences.tabs.input.gestureControls.description;
 const gestureControlEnabledAlertString = joistStrings.a11y.preferences.tabs.input.gestureControl.enabledAlert;
 const gestureControlDisabledAlertString = joistStrings.a11y.preferences.tabs.input.gestureControl.disabledAlert;
+const labelledDescriptionPatternString = joistStrings.a11y.preferences.tabs.labelledDescriptionPattern;
 
 class InputPreferencesPanel extends Node {
   constructor( gestureControlsEnabledProperty ) {
@@ -27,9 +29,14 @@ class InputPreferencesPanel extends Node {
 
     const toggleSwitch = new PreferencesToggleSwitch( gestureControlsEnabledProperty, false, true, {
       labelNode: new Text( gestureControlsString, { font: PreferencesDialog.PANEL_SECTION_LABEL_FONT } ),
-      descriptionNode: new RichText( gestureControlsDescriptionString, {
+      descriptionNode: new VoicingRichText( gestureControlsDescriptionString, {
         font: PreferencesDialog.CONTENT_FONT,
-        lineWrap: 350
+        lineWrap: 350,
+
+        voicingText: StringUtils.fillIn( labelledDescriptionPatternString, {
+          label: gestureControlsString,
+          description: gestureControlsDescriptionString
+        } )
       } )
     } );
 

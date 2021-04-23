@@ -7,7 +7,8 @@
  * @author Jesse Greenberg (PhET Interactive Simulations)
  */
 
-import RichText from '../../../scenery/js/nodes/RichText.js';
+import merge from '../../../phet-core/js/merge.js';
+import VoicingRichText from '../../../scenery-phet/js/accessibility/speaker/VoicingRichText.js';
 import VBox from '../../../scenery/js/nodes/VBox.js';
 import joist from '../joist.js';
 import joistStrings from '../joistStrings.js';
@@ -35,10 +36,14 @@ class GeneralPreferencesPanel extends VBox {
     }
 
     const introParagraphs = new VBox( { spacing: 10, align: 'left' } );
-    const introTextOptions = { font: PreferencesDialog.CONTENT_FONT, lineWrap: 600 };
+    const introTextOptions = { font: PreferencesDialog.CONTENT_FONT, lineWrap: 600, tagName: 'p' };
     introParagraphs.children = [
-      new RichText( accessibilityIntroString, introTextOptions ),
-      new RichText( moreAccessibilityString, introTextOptions )
+      new VoicingRichText( accessibilityIntroString, merge( {
+        innerContent: accessibilityIntroString
+      }, introTextOptions ) ),
+      new VoicingRichText( moreAccessibilityString, merge( {
+        innerContent: moreAccessibilityString
+      }, introTextOptions ) )
     ];
     panelChildren.push( introParagraphs );
 

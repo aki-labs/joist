@@ -42,7 +42,11 @@ class PreferencesDialog extends Dialog {
   constructor( preferencesConfiguration, preferencesProperties, simSoundProperty, options ) {
 
     const titleText = new Text( preferencesTitleString, {
-      font: TITLE_FONT
+      font: TITLE_FONT,
+
+      // pdom
+      tagName: 'h1',
+      innerContent: preferencesTitleString
     } );
 
     options = merge( {

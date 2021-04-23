@@ -5,6 +5,8 @@
  * @author Jesse Greenberg (PhET Interactive Simulations)
  */
 
+import StringUtils from '../../../phetcommon/js/util/StringUtils.js';
+import VoicingText from '../../../scenery-phet/js/accessibility/speaker/VoicingText.js';
 import Node from '../../../scenery/js/nodes/Node.js';
 import Text from '../../../scenery/js/nodes/Text.js';
 import joist from '../joist.js';
@@ -18,6 +20,7 @@ const interactiveHighlightsString = joistStrings.preferences.tabs.visual.interac
 const interactiveHighlightsDescriptionString = joistStrings.preferences.tabs.visual.interactiveHighlightsDescription;
 const interactiveHighlightsEnabledAlertString = joistStrings.a11y.preferences.tabs.visual.interactiveHighlights.enabledAlert;
 const interactiveHighlightsDisabledAlertString = joistStrings.a11y.preferences.tabs.visual.interactiveHighlights.disabledAlert;
+const labelledDescriptionPatternString = joistStrings.a11y.preferences.tabs.labelledDescriptionPattern;
 
 class VisualPreferencesPanel extends Node {
 
@@ -30,8 +33,12 @@ class VisualPreferencesPanel extends Node {
     const label = new Text( interactiveHighlightsString, { font: PreferencesDialog.PANEL_SECTION_LABEL_FONT } );
     const toggleSwitch = new PreferencesToggleSwitch( interactiveHighlightsEnabledProperty, false, true, {
       labelNode: label,
-      descriptionNode: new Text( interactiveHighlightsDescriptionString, {
-        font: PreferencesDialog.CONTENT_FONT
+      descriptionNode: new VoicingText( interactiveHighlightsDescriptionString, {
+        font: PreferencesDialog.CONTENT_FONT,
+        voicingText: StringUtils.fillIn( labelledDescriptionPatternString, {
+          label: interactiveHighlightsString,
+          description: interactiveHighlightsDescriptionString
+        } )
       } )
     } );
 

@@ -11,6 +11,7 @@ import BooleanProperty from '../../../axon/js/BooleanProperty.js';
 import merge from '../../../phet-core/js/merge.js';
 import PlayStopButton from '../../../scenery-phet/js/buttons/PlayStopButton.js';
 import PhetFont from '../../../scenery-phet/js/PhetFont.js';
+import VoicingText from '../../../scenery-phet/js/accessibility/speaker/VoicingText.js';
 import webSpeaker from '../../../scenery/js/accessibility/speaker/webSpeaker.js';
 import AlignGroup from '../../../scenery/js/nodes/AlignGroup.js';
 import HBox from '../../../scenery/js/nodes/HBox.js';
@@ -57,7 +58,7 @@ class VoicingToolbarItem extends Node {
     };
 
     const titleText = new Text( titleString, titleTextOptions );
-    const quickInfoText = new Text( quickInfoString, titleTextOptions );
+    const quickInfoText = new VoicingText( quickInfoString, titleTextOptions );
 
     // layout
     const labelAlignGroup = new AlignGroup();

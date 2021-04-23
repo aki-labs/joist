@@ -12,6 +12,8 @@ import Range from '../../../dot/js/Range.js';
 import Utils from '../../../dot/js/Utils.js';
 import StringUtils from '../../../phetcommon/js/util/StringUtils.js';
 import NumberControl from '../../../scenery-phet/js/NumberControl.js';
+import VoicingText from '../../../scenery-phet/js/accessibility/speaker/VoicingText.js';
+import joistStrings from '../joistStrings.js';
 import PhetFont from '../../../scenery-phet/js/PhetFont.js';
 import voicingManager from '../../../scenery/js/accessibility/speaker/voicingManager.js';
 import webSpeaker from '../../../scenery/js/accessibility/speaker/webSpeaker.js';
@@ -38,8 +40,12 @@ const voicingDisabledString = 'Voicing off.';
 const voiceVariablesPatternString = '{{value}}x';
 const voicingDescriptionString = 'Voices and highlights content as you interact.';
 
+const simVoicingOptionsString = 'Sim Voicing Options';
+const simVoicingDescriptionString = 'Choose details you want voiced as you interact.';
+
 const voiceRateDescriptionPatternString = 'Voice Rate {{value}} times';
 const voiceRateNormalString = 'Voice Rate normal';
+const labelledDescriptionPatternString = joistStrings.a11y.preferences.tabs.labelledDescriptionPattern;
 
 const VOICE_PITCH_DESCRIPTION_MAP = new Map();
 VOICE_PITCH_DESCRIPTION_MAP.set( new Range( 0.5, 0.75 ), 'in low range' );
@@ -62,8 +68,12 @@ class VoicingPanelSection extends PreferencesPanelSection {
     const voicingLabel = new Text( voicingLabelString, { font: PreferencesDialog.PANEL_SECTION_LABEL_FONT } );
     const voicingSwitch = new PreferencesToggleSwitch( webSpeaker.enabledProperty, false, true, {
       labelNode: voicingLabel,
-      descriptionNode: new Text( voicingDescriptionString, {
-        font: PreferencesDialog.CONTENT_FONT
+      descriptionNode: new VoicingText( voicingDescriptionString, {
+        font: PreferencesDialog.CONTENT_FONT,
+        voicingText: StringUtils.fillIn( labelledDescriptionPatternString, {
+          label: voicingLabelString,
+          description: voicingDescriptionString
+        } )
       } )
     } );
 
@@ -74,8 +84,14 @@ class VoicingPanelSection extends PreferencesPanelSection {
     } );
 
     // Speech output levels
-    const speechOutputLabel = new Text( 'Sim Voicing Options', { font: PreferencesDialog.PANEL_SECTION_LABEL_FONT } );
-    const speechOutputDescription = new Text( 'Choose details you want voiced as you interact', { font: PreferencesDialog.CONTENT_FONT } );
+    const speechOutputLabel = new Text( simVoicingOptionsString, { font: PreferencesDialog.PANEL_SECTION_LABEL_FONT } );
+    const speechOutputDescription = new VoicingText( simVoicingDescriptionString, {
+      font: PreferencesDialog.CONTENT_FONT,
+      voicingText: StringUtils.fillIn( labelledDescriptionPatternString, {
+        label: simVoicingOptionsString,
+        description: simVoicingDescriptionString
+      } )
+    } );
     const speechOutputCheckboxes = new VBox( {
       align: 'left',
       spacing: 5,

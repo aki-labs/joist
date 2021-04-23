@@ -265,6 +265,9 @@
     },
     "preferences": {
       "tabs": {
+        "labelledDescriptionPattern": {
+          "value": "{{label}}, {{description}}"
+        },
         "visual": {
           "interactiveHighlights": {
             "enabledAlert": {

@@ -6,7 +6,9 @@
  * @author Jesse Greenberg (PhET Interactive Simulations)
  */
 
+import StringUtils from '../../../phetcommon/js/util/StringUtils.js';
 import webSpeaker from '../../../scenery/js/accessibility/speaker/webSpeaker.js';
+import VoicingText from '../../../scenery-phet/js/accessibility/speaker/VoicingText.js';
 import HBox from '../../../scenery/js/nodes/HBox.js';
 import Text from '../../../scenery/js/nodes/Text.js';
 import VBox from '../../../scenery/js/nodes/VBox.js';
@@ -22,6 +24,7 @@ const allAudioString = joistStrings.preferences.tabs.audio.allAudio.title;
 const allAudioDescriptionString = joistStrings.preferences.tabs.audio.allAudio.description;
 const allAudioEnabledAlert = joistStrings.a11y.allAudio.enabledAlert;
 const allAudioDisabledAlert = joistStrings.a11y.allAudio.disabledAlert;
+const labelledDescriptionPatternString = joistStrings.a11y.preferences.tabs.labelledDescriptionPattern;
 
 class AudioPreferencesTabPanel extends VBox {
 
@@ -52,7 +55,13 @@ class AudioPreferencesTabPanel extends VBox {
 
     const allAudioSwitch = new PreferencesToggleSwitch( simSoundProperty, false, true, {
       labelNode: new Text( allAudioString, { font: PreferencesDialog.PANEL_SECTION_LABEL_FONT } ),
-      descriptionNode: new Text( allAudioDescriptionString, { font: PreferencesDialog.CONTENT_FONT } )
+      descriptionNode: new VoicingText( allAudioDescriptionString, {
+        font: PreferencesDialog.CONTENT_FONT,
+        voicingText: StringUtils.fillIn( labelledDescriptionPatternString, {
+          label: allAudioString,
+          description: allAudioDescriptionString
+        } )
+      } )
     } );
 
     const soundEnabledListener = ( enabled, previousValue ) => {

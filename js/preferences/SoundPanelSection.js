@@ -6,6 +6,8 @@
  * @author Jesse Greenberg (PhET Interactive Simulations)
  */
 
+import StringUtils from '../../../phetcommon/js/util/StringUtils.js';
+import VoicingText from '../../../scenery-phet/js/accessibility/speaker/VoicingText.js';
 import Text from '../../../scenery/js/nodes/Text.js';
 import Node from '../../../scenery/js/nodes/Node.js';
 import Checkbox from '../../../sun/js/Checkbox.js';
@@ -25,6 +27,7 @@ const soundsOnString = 'Sounds on.';
 const soundsOffString = 'Sounds Off.';
 const extraSoundsOnString = 'Extra Sounds On.';
 const extraSoundsOffString = 'Extra Sounds Off.';
+const labelledDescriptionPatternString = joistStrings.a11y.preferences.tabs.labelledDescriptionPattern;
 
 class SoundPanelSection extends PreferencesPanelSection {
 
@@ -36,8 +39,12 @@ class SoundPanelSection extends PreferencesPanelSection {
     const soundLabel = new Text( otherSoundsLabelString, { font: PreferencesDialog.PANEL_SECTION_LABEL_FONT } );
     const titleNode = new PreferencesToggleSwitch( soundManager.enabledProperty, false, true, {
       labelNode: soundLabel,
-      descriptionNode: new Text( soundDescriptionString, {
-        font: PreferencesDialog.CONTENT_FONT
+      descriptionNode: new VoicingText( soundDescriptionString, {
+        font: PreferencesDialog.CONTENT_FONT,
+        voicingText: StringUtils.fillIn( labelledDescriptionPatternString, {
+          label: otherSoundsLabelString,
+          description: soundDescriptionString
+        } )
       } )
     } );
 
@@ -48,7 +55,13 @@ class SoundPanelSection extends PreferencesPanelSection {
       soundManager.enabledProperty.link( enabled => {
         enhancedSoundCheckbox.enabled = enabled;
       } );
-      const enhancedSoundDescription = new Text( extraSoundsDescriptionString, { font: PreferencesDialog.CONTENT_FONT } );
+      const enhancedSoundDescription = new VoicingText( extraSoundsDescriptionString, {
+        font: PreferencesDialog.CONTENT_FONT,
+        voicingText: StringUtils.fillIn( labelledDescriptionPatternString, {
+          label: extraSoundsLabelString,
+          description: extraSoundsDescriptionString
+        } )
+      } );
 
       enhancedSoundContent = new Node( {
         children: [ enhancedSoundCheckbox, enhancedSoundDescription ]
