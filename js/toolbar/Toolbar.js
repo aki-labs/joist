@@ -15,6 +15,7 @@
 import BooleanProperty from '../../../axon/js/BooleanProperty.js';
 import DerivedProperty from '../../../axon/js/DerivedProperty.js';
 import NumberProperty from '../../../axon/js/NumberProperty.js';
+import Property from '../../../axon/js/Property.js';
 import stepTimer from '../../../axon/js/stepTimer.js';
 import Matrix3 from '../../../dot/js/Matrix3.js';
 import Shape from '../../../kite/js/Shape.js';
@@ -127,16 +128,16 @@ class Toolbar extends Node {
       this.openButton.innerContent = open ? closeToolbarString : openToolbarString;
 
       this.updateDestinationPosition();
-
-      if ( oldValue !== null ) {
-        const alert = open ? 'Toolbar shown.' : 'Toolbar hidden';
-        phet.joist.sim.joistVoicingUtteranceQueue.addToBack( alert );
-        phet.joist.sim.utteranceQueue.addToBack( alert );
-      }
     } );
 
     // when shown or hidden update destination positions so it animates open or close
     this.isShowingProperty.link( showing => this.updateDestinationPosition() );
+
+    Property.lazyMultilink( [ this.isEnabledProperty, this.openProperty ], ( enabled, open ) => {
+      const alert = ( enabled && open ) ? 'Toolbar shown.' : 'Toolbar hidden';
+      phet.joist.sim.joistVoicingUtteranceQueue.addToBack( alert );
+      phet.joist.sim.utteranceQueue.addToBack( alert );
+    } );
   }
 
   /**
