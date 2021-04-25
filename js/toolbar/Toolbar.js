@@ -82,7 +82,7 @@ class Toolbar extends Node {
 
     // @private {VoicingToolbarItem} - Contents for the Toolbar, currently only controls related to the voicing
     // feature.
-    this.menuContent = new VoicingToolbarItem( voicingAlertManager, preferencesProperties.simSpeechEnabledProperty, lookAndFeel );
+    this.menuContent = new VoicingToolbarItem( voicingAlertManager, lookAndFeel );
 
     // icon for the openButton
     const chevronIcon = new DoubleChevron();

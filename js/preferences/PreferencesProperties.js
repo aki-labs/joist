@@ -16,11 +16,6 @@ class PreferencesProperties {
     // controls for the simulation or active screen.
     this.toolbarEnabledProperty = new BooleanProperty( true );
 
-    // @public {BooleanProperty} - Whether or not speech from content within the simulation is enabled. If this
-    // Property is false, voicing content related to objects within the simulation play area will never be heard. Other
-    // content from things surrounding the sim (joist controls) may still be spoken.
-    this.simSpeechEnabledProperty = new BooleanProperty( true );
-
     // @public {BooleanProperty} - Whether or not "Interactive Highlights" are enabled for the simulation. If enabled,
     // focus highlights will appear around focusable components with 'over' events, and persist around the focused
     // element even with mouse and touch interaction.

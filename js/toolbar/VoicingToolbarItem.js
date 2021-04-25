@@ -13,6 +13,7 @@ import VoicingHighlight from '../../../scenery-phet/js/accessibility/speaker/Voi
 import PlayStopButton from '../../../scenery-phet/js/buttons/PlayStopButton.js';
 import PhetFont from '../../../scenery-phet/js/PhetFont.js';
 import VoicingText from '../../../scenery-phet/js/accessibility/speaker/VoicingText.js';
+import voicingManager from '../../../scenery/js/accessibility/speaker/voicingManager.js';
 import webSpeaker from '../../../scenery/js/accessibility/speaker/webSpeaker.js';
 import AlignGroup from '../../../scenery/js/nodes/AlignGroup.js';
 import HBox from '../../../scenery/js/nodes/HBox.js';
@@ -43,10 +44,9 @@ class VoicingToolbarItem extends Node {
 
   /**
    * @param {VoicingToolbarAlertManager} alertManager - generates the alert content when buttons are pressed
-   * @param {BooleanProperty} simSpeechEnabledProperty - whether speech from things within sim screens will be heard
    * @param {LookAndFeel} lookAndFeel
    */
-  constructor( alertManager, simSpeechEnabledProperty, lookAndFeel ) {
+  constructor( alertManager, lookAndFeel ) {
 
     const titleTextOptions = {
       font: new PhetFont( 14 ),
@@ -84,7 +84,7 @@ class VoicingToolbarItem extends Node {
       return new HBox( { children: [ labelBox, inputBox ], spacing: CONTENT_VERTICAL_SPACING } );
     };
 
-    const muteSpeechSwitch = new PreferencesToggleSwitch( simSpeechEnabledProperty, false, true, {
+    const muteSpeechSwitch = new PreferencesToggleSwitch( voicingManager.mainWindowVoicingEnabledProperty, false, true, {
       labelNode: titleText,
       a11yLabel: 'Sim Voicing',
       toggleSwitchOptions: {
@@ -162,7 +162,7 @@ class VoicingToolbarItem extends Node {
     playingDetailsProperty.lazyLink( playingDetails => { playContent( playingDetailsProperty, detailsUtterance, alertManager.createDetailsContent() ); } );
     playingHintProperty.lazyLink( playingHint => { playContent( playingHintProperty, hintUtterance, alertManager.createHintContent() ); } );
 
-    simSpeechEnabledProperty.lazyLink( enabled => {
+    voicingManager.mainWindowVoicingEnabledProperty.lazyLink( enabled => {
       const alert = enabled ? simVoicingOnString : simVoicingOffString;
       phet.joist.sim.utteranceQueue.addToBack( alert );
       phet.joist.sim.joistVoicingUtteranceQueue.addToBack( alert );

@@ -31,6 +31,7 @@ import BarrierRectangle from '../../scenery-phet/js/BarrierRectangle.js';
 import globalKeyStateTracker from '../../scenery/js/accessibility/globalKeyStateTracker.js';
 import KeyboardFuzzer from '../../scenery/js/accessibility/KeyboardFuzzer.js';
 import KeyboardUtils from '../../scenery/js/accessibility/KeyboardUtils.js';
+import voicingManager from '../../scenery/js/accessibility/speaker/voicingManager.js';
 import webSpeaker from '../../scenery/js/accessibility/speaker/webSpeaker.js';
 import Display from '../../scenery/js/display/Display.js';
 import InputFuzzer from '../../scenery/js/input/InputFuzzer.js';
@@ -747,8 +748,8 @@ class Sim {
 
         // the default utteranceQueue will control voicing for the simulation components, and is disabled
         // when the user has selected to disable sim speech
-        Property.multilink( [ webSpeaker.enabledProperty, this.preferencesProperties.simSpeechEnabledProperty ], ( enabled, simSpeechEnabled ) => {
-          this.voicingUtteranceQueue.enabled = enabled && simSpeechEnabled;
+        Property.multilink( [ webSpeaker.enabledProperty, voicingManager.mainWindowVoicingEnabledProperty ], ( enabled, mainWindowEnabled ) => {
+          this.voicingUtteranceQueue.enabled = enabled && mainWindowEnabled;
         } );
 
         // the utteranceQueue for surrounding user controls is enabled as long as voicing is enabled
@@ -767,6 +768,14 @@ class Sim {
         this.preferencesProperties.gestureControlsEnabledProperty
       ], ( highlightsEnabled, gesturesEnabled ) => {
         this.display.interactiveHighlightsVisibleProperty.value = highlightsEnabled || gesturesEnabled;
+      } );
+
+      // reading blocks are disabled
+      Property.multilink( [
+        webSpeaker.enabledProperty,
+        voicingManager.mainWindowVoicingEnabledProperty
+      ], ( voicingEnabled, simVoicingEnabled ) => {
+        this.display.readingBlockHighlightsVisibleProperty.value = voicingEnabled && simVoicingEnabled;
       } );
     }
 
