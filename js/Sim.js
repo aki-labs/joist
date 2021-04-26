@@ -771,12 +771,15 @@ class Sim {
         this.display.interactiveHighlightsVisibleProperty.value = highlightsEnabled || gesturesEnabled;
       } );
 
-      // reading blocks are disabled
+      // For now, sim reading blocks are disabled when voicing is disabled, sim voicing is disabled, and
+      // whenever all audio is off. We decided that having reading blocks that do nothing is too confusing
+      // so they should be removed unless they have some output.
       Property.multilink( [
         webSpeaker.enabledProperty,
-        voicingManager.mainWindowVoicingEnabledProperty
-      ], ( voicingEnabled, simVoicingEnabled ) => {
-        this.display.readingBlockHighlightsVisibleProperty.value = voicingEnabled && simVoicingEnabled;
+        voicingManager.mainWindowVoicingEnabledProperty,
+        this.allAudioEnabledProperty
+      ], ( voicingEnabled, simVoicingEnabled, allAudioEnabled ) => {
+        this.display.readingBlockHighlightsVisibleProperty.value = voicingEnabled && simVoicingEnabled && allAudioEnabled;
       } );
     }
 
