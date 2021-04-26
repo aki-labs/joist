@@ -96,21 +96,36 @@ class VoicingToolbarItem extends Node {
 
     const playingOverviewProperty = new BooleanProperty( false );
     const overviewButton = new PlayStopButton( playingOverviewProperty, merge( {
-      startPlayingLabel: playOverviewString
+      startPlayingLabel: playOverviewString,
+      voicingCreateOverrideResponse: event => {
+        if ( event.type === 'focus' ) {
+          return playOverviewString;
+        }
+      }
     }, playPauseButtonOptions ) );
     const overviewRow = createLabelledInput( overviewString, overviewButton );
     const overviewUtterance = new Utterance();
 
     const playingDetailsProperty = new BooleanProperty( false );
     const detailsButton = new PlayStopButton( playingDetailsProperty, merge( {
-      startPlayingLabel: playDetailsString
+      startPlayingLabel: playDetailsString,
+      voicingCreateOverrideResponse: event => {
+        if ( event.type === 'focus' ) {
+          return playDetailsString;
+        }
+      }
     }, playPauseButtonOptions ) );
     const detailsRow = createLabelledInput( detailsString, detailsButton );
     const detailsUtterance = new Utterance();
 
     const playingHintProperty = new BooleanProperty( false );
     const hintButton = new PlayStopButton( playingHintProperty, merge( {
-      startPlayingLabel: playHintString
+      startPlayingLabel: playHintString,
+      voicingCreateOverrideResponse: event => {
+        if ( event.type === 'focus' ) {
+          return playHintString;
+        }
+      }
     }, playPauseButtonOptions ) );
     const hintRow = createLabelledInput( hintString, hintButton );
     const hintUtterance = new Utterance();
