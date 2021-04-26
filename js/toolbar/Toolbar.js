@@ -99,8 +99,7 @@ class Toolbar extends Node {
         if ( event.type === 'focus' ) {
           return this.openProperty.value ? 'Hide Toolbar' : 'Show Toolbar';
         }
-      },
-      utteranceQueue: phet.joist.sim.joistVoicingUtteranceQueue
+      }
     } );
 
     // @private {number} - width of content for the toolbar in the local coordinates frame
@@ -135,7 +134,7 @@ class Toolbar extends Node {
 
     Property.lazyMultilink( [ this.isEnabledProperty, this.openProperty ], ( enabled, open ) => {
       const alert = ( enabled && open ) ? 'Toolbar shown.' : 'Toolbar hidden';
-      phet.joist.sim.joistVoicingUtteranceQueue.addToBack( alert );
+      phet.joist.sim.voicingUtteranceQueue.addToBack( alert );
       phet.joist.sim.utteranceQueue.addToBack( alert );
     } );
   }

@@ -54,7 +54,7 @@ class InputPreferencesPanel extends Node {
 
     gestureControlsEnabledProperty.lazyLink( enabled => {
       const alert = enabled ? gestureControlEnabledAlertString : gestureControlDisabledAlertString;
-      phet.joist.sim.joistVoicingUtteranceQueue.addToBack( alert );
+      phet.joist.sim.voicingUtteranceQueue.addToBack( alert );
     } );
   }
 }

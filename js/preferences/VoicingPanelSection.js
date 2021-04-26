@@ -216,27 +216,32 @@ class VoicingPanelSection extends PreferencesPanelSection {
     // Speak when voicing becomes initially enabled. First speech is done synchronously (not using utterance-queue)
     // in response to user input, otherwise all speech will be blocked on many platforms
     webSpeaker.enabledProperty.lazyLink( enabled => {
-      webSpeaker.speakImmediately( enabled ? voicingEnabledString : voicingDisabledString );
+
+      // only speak if "Sim Voicing" is on, all voicing should be disabled except for the Toolbar
+      // buttons in this case
+      if ( voicingManager.mainWindowVoicingEnabledProperty.value ) {
+        webSpeaker.speakImmediately( enabled ? voicingEnabledString : voicingDisabledString );
+      }
     } );
 
     voicingManager.objectChangesProperty.lazyLink( voicingObjectChanges => {
       const alertString = voicingObjectChanges ? voicingObjectChangesString : objectChangesMutedString;
-      phet.joist.sim.joistVoicingUtteranceQueue.addToBack( alertString );
+      phet.joist.sim.voicingUtteranceQueue.addToBack( alertString );
     } );
 
     voicingManager.contextChangesProperty.lazyLink( voicingContextChanges => {
       const alertString = voicingContextChanges ? voicingContextChangesString : contextChangesMutedString;
-      phet.joist.sim.joistVoicingUtteranceQueue.addToBack( alertString );
+      phet.joist.sim.voicingUtteranceQueue.addToBack( alertString );
     } );
 
     voicingManager.hintsProperty.lazyLink( voicingHints => {
       const alertString = voicingHints ? voicingHintsString : hintsMutedString;
-      phet.joist.sim.joistVoicingUtteranceQueue.addToBack( alertString );
+      phet.joist.sim.voicingUtteranceQueue.addToBack( alertString );
     } );
 
     voiceOptionsOpenProperty.lazyLink( open => {
       const alert = open ? customizeVoiceExpandedString : customizeVoiceCollapsedString;
-      phet.joist.sim.joistVoicingUtteranceQueue.addToBack( alert );
+      phet.joist.sim.voicingUtteranceQueue.addToBack( alert );
     } );
   }
 }
@@ -308,7 +313,7 @@ class VoiceRateNumberControl extends NumberControl {
     };
 
     voiceRateProperty.lazyLink( rate => {
-      phet.joist.sim.joistVoicingUtteranceQueue.addToBack( this.getRateDescriptionString( rate ) );
+      phet.joist.sim.voicingUtteranceQueue.addToBack( this.getRateDescriptionString( rate ) );
     } );
   }
 
@@ -385,7 +390,7 @@ class VoicingPitchSlider extends VBox {
       const alertString = StringUtils.fillIn( voicePitchDescriptionPatternString, {
         description: this.getPitchDescriptionString( pitch )
       } );
-      phet.joist.sim.joistVoicingUtteranceQueue.addToBack( alertString );
+      phet.joist.sim.voicingUtteranceQueue.addToBack( alertString );
     } );
   }
 

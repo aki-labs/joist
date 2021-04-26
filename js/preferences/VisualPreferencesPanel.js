@@ -63,7 +63,7 @@ class VisualPreferencesPanel extends Node {
 
       // voicing
       const alertString = enabled ? interactiveHighlightsEnabledAlertString : interactiveHighlightsDisabledAlertString;
-      phet.joist.sim.joistVoicingUtteranceQueue.addToBack( alertString );
+      phet.joist.sim.voicingUtteranceQueue.addToBack( alertString );
 
       // pdom
       phet.joist.sim.utteranceQueue.addToBack( alertString );

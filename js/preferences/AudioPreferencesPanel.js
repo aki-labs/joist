@@ -7,6 +7,7 @@
  */
 
 import StringUtils from '../../../phetcommon/js/util/StringUtils.js';
+import voicingManager from '../../../scenery/js/accessibility/speaker/voicingManager.js';
 import webSpeaker from '../../../scenery/js/accessibility/speaker/webSpeaker.js';
 import VoicingText from '../../../scenery-phet/js/accessibility/speaker/VoicingText.js';
 import HBox from '../../../scenery/js/nodes/HBox.js';
@@ -73,7 +74,10 @@ class AudioPreferencesTabPanel extends VBox {
         const alertString = enabled ? allAudioEnabledAlert : allAudioDisabledAlert;
 
         phet.joist.sim.utteranceQueue.addToBack( alertString );
-        webSpeaker.enabled && webSpeaker.speakImmediately( alertString );
+
+        if ( webSpeaker.enabled && voicingManager.mainWindowVoicingEnabledProperty.value ) {
+          webSpeaker.speakImmediately( alertString );
+        }
       }
     };
 
