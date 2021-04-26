@@ -7,13 +7,15 @@
  * @author Jesse Greenberg
  */
 
+import Shape from '../../kite/js/Shape.js';
 import merge from '../../phet-core/js/merge.js';
+import VoicingText from '../../scenery-phet/js/accessibility/speaker/VoicingText.js';
 import KeyboardHelpSection from '../../scenery-phet/js/keyboard/help/KeyboardHelpSection.js';
 import TextKeyNode from '../../scenery-phet/js/keyboard/TextKeyNode.js';
 import PhetFont from '../../scenery-phet/js/PhetFont.js';
 import PDOMPeer from '../../scenery/js/accessibility/pdom/PDOMPeer.js';
+import ReadingBlockNode from '../../scenery/js/accessibility/speaker/ReadingBlockNode.js';
 import HBox from '../../scenery/js/nodes/HBox.js';
-import Text from '../../scenery/js/nodes/Text.js';
 import VBox from '../../scenery/js/nodes/VBox.js';
 import Dialog from '../../sun/js/Dialog.js';
 import Tandem from '../../tandem/js/Tandem.js';
@@ -46,7 +48,7 @@ class KeyboardHelpDialog extends Dialog {
 
     // title
     assert && assert( !options.title, 'KeyboardHelpDialog sets title' );
-    const shortcutsTitleText = new Text( joistStrings.keyboardShortcuts.title, {
+    const shortcutsTitleText = new VoicingText( joistStrings.keyboardShortcuts.title, {
       font: new PhetFont( {
         weight: 'bold',
         size: 24
@@ -66,13 +68,19 @@ class KeyboardHelpDialog extends Dialog {
         }
       } );
 
+    // labelWithIcon is meant to be passed to KeyboardHelpSection, so we have to hack a bit here
+    const titleBox = new HBox( { children: [ tabHintLine.icon, tabHintLine.label ], spacing: 4 } );
+    const titleBlock = new ReadingBlockNode( {
+      voicingText: joistStrings.a11y.keyboardHelp.tabToGetStarted,
+      children: [ titleBox ],
+      readingBlockHitShape: Shape.bounds( titleBox.localBounds )
+    } );
+
     // stack the two items with a bit of spacing
     options.title = new VBox( {
         children: [
           shortcutsTitleText,
-
-          // labelWithIcon is meant to be passed to KeyboardHelpSection, so we have to hack a bit here
-          new HBox( { children: [ tabHintLine.icon, tabHintLine.label ], spacing: 4 } )
+          titleBlock
         ],
         spacing: 5,
 
