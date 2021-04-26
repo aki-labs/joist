@@ -79,7 +79,7 @@ class VoicingToolbarItem extends Node {
       const inputBox = inputAlignGroup.createBox( inputElement, { align: 'right' } );
 
       // voicing
-      inputElement.voicingCreateObjectResponse = event => { if ( event.type === 'focus' ) { return labelString; } };
+      inputElement.voicingCreateO = event => { if ( event.type === 'focus' ) { return labelString; } };
 
       return new HBox( { children: [ labelBox, inputBox ], spacing: CONTENT_VERTICAL_SPACING } );
     };

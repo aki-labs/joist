@@ -168,7 +168,7 @@ class VoicingPanelSection extends PreferencesPanelSection {
       innerContent: customizeVoiceString,
 
       // voicing
-      voicingCreateObjectResponse: event => {
+      voicingCreateOverrideResponse: event => {
         if ( event.type === 'focus' ) {
           return customizeVoiceString;
         }
@@ -261,7 +261,7 @@ const createCheckbox = ( labelString, property ) => {
     labelContent: labelString,
 
     // voicing
-    voicingCreateObjectResponse: event => {
+    voicingCreateOverrideResponse: event => {
       if ( event.type === 'focus' ) {
         return labelString;
       }
@@ -305,7 +305,7 @@ class VoiceRateNumberControl extends NumberControl {
 
     // voicing
     this.initializeVoicing();
-    this.voicingCreateObjectResponse = event => {
+    this.voicingCreateOverrideResponse = event => {
       if ( event.type === 'focus' ) {
         return this.getRateDescriptionString( webSpeaker.voiceRateProperty.value );
 
@@ -378,7 +378,7 @@ class VoicingPitchSlider extends VBox {
 
     // voicing
     this.initializeVoicing();
-    this.voicingCreateObjectResponse = event => {
+    this.voicingCreateOverrideResponse = event => {
       if ( event.type === 'focus' ) {
         return StringUtils.fillIn( 'Pitch, {{description}}', {
           description: this.getPitchDescriptionString( voicePitchProperty.value )

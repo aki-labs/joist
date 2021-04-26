@@ -184,7 +184,7 @@ class Tab extends Node {
     // voicing
     this.initializeVoicing();
     this.mutate( {
-      voicingCreateObjectResponse: event => {
+      voicingCreateOverrideResponse: event => {
         return StringUtils.fillIn( preferencesTabResponsePatternString, {
           title: label
         } );

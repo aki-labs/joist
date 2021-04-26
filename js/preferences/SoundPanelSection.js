@@ -59,7 +59,7 @@ class SoundPanelSection extends PreferencesPanelSection {
         labelContent: extraSoundsLabelString,
 
         // voicing
-        voicingCreateObjectResponse: event => {
+        voicingCreateOverrideResponse: event => {
           if ( event.type === 'focus' ) {
             return extraSoundsLabelString;
           }
