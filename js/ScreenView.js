@@ -289,6 +289,33 @@ class ScreenView extends Node {
       0, 0, 1
     );
   }
+
+  /**
+   * To support voicing, this method should be overwritten.
+   * @abstract
+   * @public
+   */
+  getVoicingOverviewContent() {
+    throw new Error( 'getVoicingOverviewContent should be overridden by subtype' );
+  }
+
+  /**
+   * To support voicing, this method should be overwritten.
+   * @abstract
+   * @public
+   */
+  getVoicingDetailsContent() {
+    throw new Error( 'getVoicingDetailsContent should be overridden by subtype' );
+  }
+
+  /**
+   * To support voicing, this method should be overwritten.
+   * @abstract
+   * @public
+   */
+  getVoicingHintContent() {
+    throw new Error( 'getVoicingHintContent should be overridden by subtype' );
+  }
 }
 
 // @public

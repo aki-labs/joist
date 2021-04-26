@@ -181,6 +181,33 @@ class HomeScreenView extends ScreenView {
       }
     }
   }
+
+  /**
+   * To support voicing read-me buttons.
+   * @override
+   * @public
+   */
+  getVoicingOverviewContent() {
+    return 'This has not been implemented yet';
+  }
+
+  /**
+   * To support voicing read-me buttons.
+   * @override
+   * @public
+   */
+  getVoicingDetailsContent() {
+    return 'This has not been implemented yet';
+  }
+
+  /**
+   * To support voicing read-me buttons.
+   * @override
+   * @public
+   */
+  getVoicingHintContent() {
+    return 'This has not been implemented yet';
+  }
 }
 
 // @public
