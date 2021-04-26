@@ -110,6 +110,14 @@ class JoistButton extends Node {
 
     // voicing
     this.initializeVoicing();
+
+    // the object name of the joist components should always be spoken regardless of user settings in the Preferences
+    // dialog
+    this.voicingCreateOverrideResponse = event => {
+      if ( event.type === 'focus' ) {
+        return this.innerContent;
+      }
+    };
   }
 
   /**
