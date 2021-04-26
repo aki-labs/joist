@@ -501,11 +501,12 @@ class Sim {
 
     // @public {BooleanProperty} - Whether or not all features involving sound are enabled in the simulation (sound,
     // enhanced sound, voicing). When false the sim should be totally silent.
-    this.soundEnabledProperty = new BooleanProperty( true );
+    this.allAudioEnabledProperty = new BooleanProperty( true );
 
     // Initialize the sound library if enabled, then hook up sound generation for screen changes.
     if ( this.supportsSound ) {
       soundManager.initialize(
+        this.allAudioEnabledProperty,
         this.isConstructionCompleteProperty,
         this.browserTabVisibleProperty,
         this.activeProperty,
@@ -732,7 +733,7 @@ class Sim {
 
         // create the toolbar and make it first in the focus order
         const voicingAlertManager = new VoicingToolbarAlertManager( this.screenProperty );
-        this.toolbar = new Toolbar( voicingAlertManager, this.preferencesProperties, this.soundEnabledProperty, this.lookAndFeel );
+        this.toolbar = new Toolbar( voicingAlertManager, this.preferencesProperties, this.allAudioEnabledProperty, this.lookAndFeel );
         this.simulationRoot.pdomOrder = [ this.toolbar ];
 
         // hook up Properties that should control all speech
@@ -741,9 +742,9 @@ class Sim {
           this.browserTabVisibleProperty,
           this.activeProperty,
           this.isSettingPhetioStateProperty,
-          this.soundEnabledProperty
-        ], ( simConstructionComplete, simVisible, simActive, simSettingPhetioState, simSoundEnabled ) => {
-          return simConstructionComplete && simVisible && simActive && !simSettingPhetioState && simSoundEnabled;
+          this.allAudioEnabledProperty
+        ], ( simConstructionComplete, simVisible, simActive, simSettingPhetioState, allAudioEnabled ) => {
+          return simConstructionComplete && simVisible && simActive && !simSettingPhetioState && allAudioEnabled;
         } );
 
         // the default utteranceQueue will control voicing for the simulation components, and is disabled
