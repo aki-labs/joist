@@ -95,7 +95,7 @@ class Toolbar extends Node {
       baseColor: 'lightgrey',
 
       // voicing
-      voicingCreateObjectResponse: event => {
+      voicingCreateOverrideResponse: event => {
         if ( event.type === 'focus' ) {
           return this.openProperty.value ? 'Hide Toolbar' : 'Show Toolbar';
         }
