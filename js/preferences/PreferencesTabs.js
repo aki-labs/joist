@@ -70,12 +70,12 @@ class PreferencesTabs extends Node {
     // pdom - alternative input support to move through tabs with arrow keys
     this.addInputListener( {
       keyup: event => {
-        if ( KeyboardUtils.isAnyKeyEvent( event.domEvent, [ KeyboardUtils.KEY_LEFT_ARROW, KeyboardUtils.KEY_RIGHT_ARROW ] ) ) {
+        if ( KeyboardUtils.isArrowKey( event.domEvent ) ) {
 
           // prevent "native" behavior so that Safari doesn't make an error sound with arrow keys in full screen mode
           event.domEvent.preventDefault();
 
-          const direction = ( KeyboardUtils.isKeyEvent( event.domEvent, KeyboardUtils.KEY_RIGHT_ARROW ) ) ? 1 : -1;
+          const direction = ( KeyboardUtils.isAnyKeyEvent( event.domEvent, [ KeyboardUtils.KEY_RIGHT_ARROW, KeyboardUtils.KEY_UP_ARROW ] ) ) ? 1 : -1;
           for ( let i = 0; i < this.content.length; i++ ) {
             if ( this.selectedButton === this.content[ i ] ) {
               const nextButtonContent = this.content[ i + direction ];
