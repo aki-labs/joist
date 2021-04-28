@@ -7,6 +7,7 @@
  */
 
 import StringUtils from '../../../phetcommon/js/util/StringUtils.js';
+import VoicingRichText from '../../../scenery-phet/js/accessibility/speaker/VoicingRichText.js';
 import VoicingText from '../../../scenery-phet/js/accessibility/speaker/VoicingText.js';
 import Text from '../../../scenery/js/nodes/Text.js';
 import Node from '../../../scenery/js/nodes/Node.js';
@@ -68,8 +69,9 @@ class SoundPanelSection extends PreferencesPanelSection {
       soundManager.enabledProperty.link( enabled => {
         enhancedSoundCheckbox.enabled = enabled;
       } );
-      const enhancedSoundDescription = new VoicingText( extraSoundsDescriptionString, {
+      const enhancedSoundDescription = new VoicingRichText( extraSoundsDescriptionString, {
         font: PreferencesDialog.CONTENT_FONT,
+        lineWrap: 300,
         voicingText: StringUtils.fillIn( labelledDescriptionPatternString, {
           label: extraSoundsLabelString,
           description: extraSoundsDescriptionString
