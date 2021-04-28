@@ -22,7 +22,7 @@ import PreferencesToggleSwitch from './PreferencesToggleSwitch.js';
 const otherSoundsLabelString = joistStrings.preferences.tabs.audio.otherSounds;
 const extraSoundsLabelString = joistStrings.preferences.tabs.audio.extraSounds;
 const soundDescriptionString = 'Play sonifications and sound effects as you interact.';
-const extraSoundsDescriptionString = 'Play an additional sound or sounds for this sim.';
+const extraSoundsDescriptionString = 'Play an additional sound or sounds that may be helpful for some learners.';
 const soundsOnString = 'Sounds on.';
 const soundsOffString = 'Sounds Off.';
 const extraSoundsOnString = 'Extra Sounds On.';
