@@ -54,6 +54,8 @@ const contextChangesMutedString = 'Indirect changes muted.';
 const voicingHintsString = 'Voicing extra help.';
 const hintsMutedString = 'Extra help muted.';
 
+const voiceLabelString = 'Voice';
+
 const customizeVoiceExpandedString = 'Customize Voice, expanded';
 const customizeVoiceCollapsedString = 'Customize Voice, collapsed';
 
@@ -139,8 +141,16 @@ class VoicingPanelSection extends PreferencesPanelSection {
         a11yLabel: voice.name
       } ) );
     } );
+
     const voiceComboBox = new ComboBox( comboBoxItems, webSpeaker.voiceProperty, parentNode, {
-      listPosition: 'above'
+      listPosition: 'above',
+      accessibleName: voiceLabelString,
+      buttonVoicingCreateOverrideResponse: event => {
+        return StringUtils.fillIn( '{{label}}: {{value}} ', {
+          label: voiceLabelString,
+          value: _.find( comboBoxItems, item => item.value === webSpeaker.voiceProperty.value ).value.name
+        } );
+      }
     } );
 
     const rateSlider = new VoiceRateNumberControl( rateString, webSpeaker.voiceRateProperty );
