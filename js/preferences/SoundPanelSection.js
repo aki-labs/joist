@@ -21,8 +21,8 @@ import PreferencesToggleSwitch from './PreferencesToggleSwitch.js';
 // constants
 const otherSoundsLabelString = joistStrings.preferences.tabs.audio.otherSounds;
 const extraSoundsLabelString = joistStrings.preferences.tabs.audio.extraSounds;
-const soundDescriptionString = 'Plays sonifications and sound effects as you interact.';
-const extraSoundsDescriptionString = 'Plays an additional sound or sounds for this sim.';
+const soundDescriptionString = 'Play sonifications and sound effects as you interact.';
+const extraSoundsDescriptionString = 'Play an additional sound or sounds for this sim.';
 const soundsOnString = 'Sounds on.';
 const soundsOffString = 'Sounds Off.';
 const extraSoundsOnString = 'Extra Sounds On.';
