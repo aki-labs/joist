@@ -206,7 +206,7 @@ class AboutDialog extends Dialog {
 
           voicingText: link.text,
           innerContent: null,
-          voicingTagName: null
+          readingBlockTagName: null
         } ) );
       }
 

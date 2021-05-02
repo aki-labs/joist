@@ -7,7 +7,6 @@
  * @author Jesse Greenberg
  */
 
-import Shape from '../../kite/js/Shape.js';
 import merge from '../../phet-core/js/merge.js';
 import VoicingText from '../../scenery-phet/js/accessibility/speaker/VoicingText.js';
 import KeyboardHelpSection from '../../scenery-phet/js/keyboard/help/KeyboardHelpSection.js';
@@ -72,8 +71,7 @@ class KeyboardHelpDialog extends Dialog {
     const titleBox = new HBox( { children: [ tabHintLine.icon, tabHintLine.label ], spacing: 4 } );
     const titleBlock = new ReadingBlockNode( {
       voicingText: joistStrings.a11y.keyboardHelp.tabToGetStarted,
-      children: [ titleBox ],
-      readingBlockHitShape: Shape.bounds( titleBox.localBounds )
+      children: [ titleBox ]
     } );
 
     // stack the two items with a bit of spacing
