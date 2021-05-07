@@ -8,6 +8,7 @@
 
 import StringUtils from '../../../phetcommon/js/util/StringUtils.js';
 import VoicingRichText from '../../../scenery-phet/js/accessibility/speaker/VoicingRichText.js';
+import voicingUtteranceQueue from '../../../scenery/js/accessibility/speaker/voicingUtteranceQueue.js';
 import Node from '../../../scenery/js/nodes/Node.js';
 import Text from '../../../scenery/js/nodes/Text.js';
 import joist from '../joist.js';
@@ -39,7 +40,7 @@ class InputPreferencesPanel extends Node {
         font: PreferencesDialog.CONTENT_FONT,
         lineWrap: 350,
 
-        voicingText: StringUtils.fillIn( labelledDescriptionPatternString, {
+        readingBlockContent: StringUtils.fillIn( labelledDescriptionPatternString, {
           label: gestureControlsString,
           description: gestureControlsDescriptionString
         } )
@@ -54,7 +55,7 @@ class InputPreferencesPanel extends Node {
 
     gestureControlsEnabledProperty.lazyLink( enabled => {
       const alert = enabled ? gestureControlEnabledAlertString : gestureControlDisabledAlertString;
-      phet.joist.sim.voicingUtteranceQueue.addToBack( alert );
+      voicingUtteranceQueue.addToBack( alert );
     } );
   }
 }

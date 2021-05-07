@@ -10,15 +10,15 @@
 import BooleanProperty from '../../../axon/js/BooleanProperty.js';
 import merge from '../../../phet-core/js/merge.js';
 import VoicingHighlight from '../../../scenery-phet/js/accessibility/speaker/VoicingHighlight.js';
+import VoicingText from '../../../scenery-phet/js/accessibility/speaker/VoicingText.js';
 import PlayStopButton from '../../../scenery-phet/js/buttons/PlayStopButton.js';
 import PhetFont from '../../../scenery-phet/js/PhetFont.js';
-import VoicingText from '../../../scenery-phet/js/accessibility/speaker/VoicingText.js';
 import voicingManager from '../../../scenery/js/accessibility/speaker/voicingManager.js';
 import webSpeaker from '../../../scenery/js/accessibility/speaker/webSpeaker.js';
 import AlignGroup from '../../../scenery/js/nodes/AlignGroup.js';
 import HBox from '../../../scenery/js/nodes/HBox.js';
-import Text from '../../../scenery/js/nodes/Text.js';
 import Node from '../../../scenery/js/nodes/Node.js';
+import Text from '../../../scenery/js/nodes/Text.js';
 import Utterance from '../../../utterance-queue/js/Utterance.js';
 import joist from '../joist.js';
 import PreferencesToggleSwitch from '../preferences/PreferencesToggleSwitch.js';
@@ -78,9 +78,6 @@ class VoicingToolbarItem extends Node {
       const labelBox = labelAlignGroup.createBox( textLabel, { xAlign: 'left' } );
       const inputBox = inputAlignGroup.createBox( inputElement, { align: 'right' } );
 
-      // voicing
-      inputElement.voicingCreateO = event => { if ( event.type === 'focus' ) { return labelString; } };
-
       return new HBox( { children: [ labelBox, inputBox ], spacing: CONTENT_VERTICAL_SPACING } );
     };
 
@@ -97,11 +94,7 @@ class VoicingToolbarItem extends Node {
     const playingOverviewProperty = new BooleanProperty( false );
     const overviewButton = new PlayStopButton( playingOverviewProperty, merge( {
       startPlayingLabel: playOverviewString,
-      voicingCreateOverrideResponse: event => {
-        if ( event.type === 'focus' ) {
-          return playOverviewString;
-        }
-      }
+      voicingObjectResponse: playOverviewString
     }, playPauseButtonOptions ) );
     const overviewRow = createLabelledInput( overviewString, overviewButton );
     const overviewUtterance = new Utterance();
@@ -109,11 +102,7 @@ class VoicingToolbarItem extends Node {
     const playingDetailsProperty = new BooleanProperty( false );
     const detailsButton = new PlayStopButton( playingDetailsProperty, merge( {
       startPlayingLabel: playDetailsString,
-      voicingCreateOverrideResponse: event => {
-        if ( event.type === 'focus' ) {
-          return playDetailsString;
-        }
-      }
+      voicingObjectResponse: playDetailsString
     }, playPauseButtonOptions ) );
     const detailsRow = createLabelledInput( detailsString, detailsButton );
     const detailsUtterance = new Utterance();
@@ -121,11 +110,7 @@ class VoicingToolbarItem extends Node {
     const playingHintProperty = new BooleanProperty( false );
     const hintButton = new PlayStopButton( playingHintProperty, merge( {
       startPlayingLabel: playHintString,
-      voicingCreateOverrideResponse: event => {
-        if ( event.type === 'focus' ) {
-          return playHintString;
-        }
-      }
+      voicingObjectResponse: playHintString
     }, playPauseButtonOptions ) );
     const hintRow = createLabelledInput( hintString, hintButton );
     const hintUtterance = new Utterance();

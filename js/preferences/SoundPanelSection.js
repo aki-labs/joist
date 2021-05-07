@@ -9,8 +9,9 @@
 import StringUtils from '../../../phetcommon/js/util/StringUtils.js';
 import VoicingRichText from '../../../scenery-phet/js/accessibility/speaker/VoicingRichText.js';
 import VoicingText from '../../../scenery-phet/js/accessibility/speaker/VoicingText.js';
-import Text from '../../../scenery/js/nodes/Text.js';
+import voicingUtteranceQueue from '../../../scenery/js/accessibility/speaker/voicingUtteranceQueue.js';
 import Node from '../../../scenery/js/nodes/Node.js';
+import Text from '../../../scenery/js/nodes/Text.js';
 import Checkbox from '../../../sun/js/Checkbox.js';
 import soundManager from '../../../tambo/js/soundManager.js';
 import joist from '../joist.js';
@@ -42,7 +43,7 @@ class SoundPanelSection extends PreferencesPanelSection {
       labelNode: soundLabel,
       descriptionNode: new VoicingText( soundDescriptionString, {
         font: PreferencesDialog.CONTENT_FONT,
-        voicingText: StringUtils.fillIn( labelledDescriptionPatternString, {
+        readingBlockContent: StringUtils.fillIn( labelledDescriptionPatternString, {
           label: otherSoundsLabelString,
           description: soundDescriptionString
         } )
@@ -60,11 +61,7 @@ class SoundPanelSection extends PreferencesPanelSection {
         labelContent: extraSoundsLabelString,
 
         // voicing
-        voicingCreateOverrideResponse: event => {
-          if ( event.type === 'focus' ) {
-            return extraSoundsLabelString;
-          }
-        }
+        voicingObjectResponse: extraSoundsLabelString
       } );
       soundManager.enabledProperty.link( enabled => {
         enhancedSoundCheckbox.enabled = enabled;
@@ -72,7 +69,7 @@ class SoundPanelSection extends PreferencesPanelSection {
       const enhancedSoundDescription = new VoicingRichText( extraSoundsDescriptionString, {
         font: PreferencesDialog.CONTENT_FONT,
         lineWrap: 300,
-        voicingText: StringUtils.fillIn( labelledDescriptionPatternString, {
+        readingBlockContent: StringUtils.fillIn( labelledDescriptionPatternString, {
           label: extraSoundsLabelString,
           description: extraSoundsDescriptionString
         } )
@@ -93,12 +90,12 @@ class SoundPanelSection extends PreferencesPanelSection {
     // voicing
     soundManager.enabledProperty.lazyLink( enabled => {
       const alert = enabled ? soundsOnString : soundsOffString;
-      phet.joist.sim.voicingUtteranceQueue.addToBack( alert );
+      voicingUtteranceQueue.addToBack( alert );
     } );
 
     soundManager.enhancedSoundEnabledProperty.lazyLink( enabled => {
       const alert = enabled ? extraSoundsOnString : extraSoundsOffString;
-      phet.joist.sim.voicingUtteranceQueue.addToBack( alert );
+      voicingUtteranceQueue.addToBack( alert );
     } );
   }
 }

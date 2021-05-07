@@ -19,6 +19,7 @@ import Property from '../../../axon/js/Property.js';
 import stepTimer from '../../../axon/js/stepTimer.js';
 import Matrix3 from '../../../dot/js/Matrix3.js';
 import Shape from '../../../kite/js/Shape.js';
+import voicingUtteranceQueue from '../../../scenery/js/accessibility/speaker/voicingUtteranceQueue.js';
 import webSpeaker from '../../../scenery/js/accessibility/speaker/webSpeaker.js';
 import Node from '../../../scenery/js/nodes/Node.js';
 import Path from '../../../scenery/js/nodes/Path.js';
@@ -92,14 +93,7 @@ class Toolbar extends Node {
       content: chevronIcon,
       listener: () => this.openProperty.toggle(),
       buttonAppearanceStrategy: ButtonNode.FlatAppearanceStrategy,
-      baseColor: 'lightgrey',
-
-      // voicing
-      voicingCreateOverrideResponse: event => {
-        if ( event.type === 'focus' ) {
-          return this.openProperty.value ? 'Hide Toolbar' : 'Show Toolbar';
-        }
-      }
+      baseColor: 'lightgrey'
     } );
 
     // @private {number} - width of content for the toolbar in the local coordinates frame
@@ -126,6 +120,8 @@ class Toolbar extends Node {
       this.menuContent.pdomVisible = open;
       this.openButton.innerContent = open ? closeToolbarString : openToolbarString;
 
+      this.openButton.voicingObjectResponse = open ? 'Hide Toolbar' : 'Show Toolbar';
+
       this.updateDestinationPosition();
     } );
 
@@ -134,7 +130,7 @@ class Toolbar extends Node {
 
     Property.lazyMultilink( [ this.isEnabledProperty, this.openProperty ], ( enabled, open ) => {
       const alert = ( enabled && open ) ? 'Toolbar shown.' : 'Toolbar hidden';
-      phet.joist.sim.voicingUtteranceQueue.addToBack( alert );
+      voicingUtteranceQueue.addToBack( alert );
       phet.joist.sim.utteranceQueue.addToBack( alert );
     } );
   }

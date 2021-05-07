@@ -108,16 +108,10 @@ class JoistButton extends Node {
     const highlightLineWidth = FocusHighlightPath.getOuterLineWidthFromNode( this );
     this.focusHighlight = Shape.bounds( this.bounds.shiftedY( -highlightLineWidth ) );
 
-    // voicing
+    // voicing - voicing for joist components should always be spoken regardless of user preferences
     this.initializeVoicing();
-
-    // the object name of the joist components should always be spoken regardless of user settings in the Preferences
-    // dialog
-    this.voicingCreateOverrideResponse = event => {
-      if ( event.type === 'focus' ) {
-        return this.innerContent;
-      }
-    };
+    this.voicingObjectResponse = this.innerContent;
+    this.voicingIgnoreVoicingManagerProperties = true;
   }
 
   /**

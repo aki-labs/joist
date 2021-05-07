@@ -43,13 +43,21 @@ class PreferencesToggleSwitch extends Node {
     assert && assert( options.descriptionNode === null || options.descriptionNode instanceof Node, 'labelNode is null or inserted as child' );
 
     if ( options.toggleSwitchOptions ) {
-      assert && assert( options.toggleSwitchOptions.voicingCreateOverrideResponse === undefined, 'PreferencesToggleSwitch creates object responses with a11yLabel option' );
+      assert && assert( options.toggleSwitchOptions.voicingIgnoreVoicingManagerProperties === undefined, 'PreferencesToggleSwitch creates object responses with a11yLabel option' );
       assert && assert( options.toggleSwitchOptions.innerContent === undefined, 'PreferencesToggleSwitch creates object response with a11yLabel option' );
     }
 
     super( options );
 
-    const toggleSwitch = new ToggleSwitch( property, leftValue, rightValue, options.toggleSwitchOptions );
+    const toggleSwitch = new ToggleSwitch( property, leftValue, rightValue, merge( options.toggleSwitchOptions, {
+
+      // pdom
+      innerContent: options.a11yLabel,
+
+      // voicing
+      voicingIgnoreVoicingManagerProperties: true,
+      voicingObjectResponse: options.a11yLabel
+    } ) );
     this.addChild( toggleSwitch );
 
     // layout code, dependent on whether label/description are provided
@@ -67,15 +75,6 @@ class PreferencesToggleSwitch extends Node {
       else {
         options.labelNode.rightCenter = toggleSwitch.leftCenter.minusXY( options.labelSpacing, 0 );
       }
-    }
-
-    if ( options.a11yLabel ) {
-      toggleSwitch.innerContent = options.a11yLabel;
-      toggleSwitch.voicingCreateOverrideResponse = event => {
-        if ( event.type === 'focus' ) {
-          return options.a11yLabel;
-        }
-      };
     }
   }
 }

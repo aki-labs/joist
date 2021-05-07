@@ -11,15 +11,15 @@ import Dimension2 from '../../../dot/js/Dimension2.js';
 import Range from '../../../dot/js/Range.js';
 import Utils from '../../../dot/js/Utils.js';
 import StringUtils from '../../../phetcommon/js/util/StringUtils.js';
-import NumberControl from '../../../scenery-phet/js/NumberControl.js';
 import VoicingText from '../../../scenery-phet/js/accessibility/speaker/VoicingText.js';
+import NumberControl from '../../../scenery-phet/js/NumberControl.js';
+import PhetFont from '../../../scenery-phet/js/PhetFont.js';
 import FocusHighlightFromNode from '../../../scenery/js/accessibility/FocusHighlightFromNode.js';
 import Voicing from '../../../scenery/js/accessibility/speaker/Voicing.js';
-import PressListener from '../../../scenery/js/listeners/PressListener.js';
-import joistStrings from '../joistStrings.js';
-import PhetFont from '../../../scenery-phet/js/PhetFont.js';
 import voicingManager from '../../../scenery/js/accessibility/speaker/voicingManager.js';
+import voicingUtteranceQueue from '../../../scenery/js/accessibility/speaker/voicingUtteranceQueue.js';
 import webSpeaker from '../../../scenery/js/accessibility/speaker/webSpeaker.js';
+import PressListener from '../../../scenery/js/listeners/PressListener.js';
 import Node from '../../../scenery/js/nodes/Node.js';
 import Text from '../../../scenery/js/nodes/Text.js';
 import VBox from '../../../scenery/js/nodes/VBox.js';
@@ -29,6 +29,7 @@ import ComboBoxItem from '../../../sun/js/ComboBoxItem.js';
 import ExpandCollapseButton from '../../../sun/js/ExpandCollapseButton.js';
 import HSlider from '../../../sun/js/HSlider.js';
 import joist from '../joist.js';
+import joistStrings from '../joistStrings.js';
 import PreferencesDialog from './PreferencesDialog.js';
 import PreferencesPanelSection from './PreferencesPanelSection.js';
 import PreferencesToggleSwitch from './PreferencesToggleSwitch.js';
@@ -68,7 +69,6 @@ VOICE_PITCH_DESCRIPTION_MAP.set( new Range( 0.5, 0.75 ), 'in low range' );
 VOICE_PITCH_DESCRIPTION_MAP.set( new Range( 0.75, 1.24 ), 'in normal range' );
 VOICE_PITCH_DESCRIPTION_MAP.set( new Range( 1.25, 1.49 ), 'above normal range' );
 VOICE_PITCH_DESCRIPTION_MAP.set( new Range( 1.5, 2 ), 'in high range' );
-const voicePitchDescriptionPatternString = 'Voice Pitch {{description}}.';
 
 const THUMB_SIZE = new Dimension2( 13, 26 );
 const TRACK_SIZE = new Dimension2( 100, 5 );
@@ -86,7 +86,7 @@ class VoicingPanelSection extends PreferencesPanelSection {
       labelNode: voicingLabel,
       descriptionNode: new VoicingText( voicingDescriptionString, {
         font: PreferencesDialog.CONTENT_FONT,
-        voicingText: StringUtils.fillIn( labelledDescriptionPatternString, {
+        readingBlockContent: StringUtils.fillIn( labelledDescriptionPatternString, {
           label: voicingLabelString,
           description: voicingDescriptionString
         } )
@@ -111,7 +111,7 @@ class VoicingPanelSection extends PreferencesPanelSection {
     } );
     const speechOutputDescription = new VoicingText( simVoicingDescriptionString, {
       font: PreferencesDialog.CONTENT_FONT,
-      voicingText: StringUtils.fillIn( labelledDescriptionPatternString, {
+      readingBlockContent: StringUtils.fillIn( labelledDescriptionPatternString, {
         label: simVoicingOptionsString,
         description: simVoicingDescriptionString
       } )
@@ -144,13 +144,7 @@ class VoicingPanelSection extends PreferencesPanelSection {
 
     const voiceComboBox = new ComboBox( comboBoxItems, webSpeaker.voiceProperty, parentNode, {
       listPosition: 'above',
-      accessibleName: voiceLabelString,
-      buttonVoicingCreateOverrideResponse: event => {
-        return StringUtils.fillIn( '{{label}}: {{value}} ', {
-          label: voiceLabelString,
-          value: _.find( comboBoxItems, item => item.value === webSpeaker.voiceProperty.value ).value.name
-        } );
-      }
+      accessibleName: voiceLabelString
     } );
 
     const rateSlider = new VoiceRateNumberControl( rateString, webSpeaker.voiceRateProperty );
@@ -178,11 +172,7 @@ class VoicingPanelSection extends PreferencesPanelSection {
       innerContent: customizeVoiceString,
 
       // voicing
-      voicingCreateOverrideResponse: event => {
-        if ( event.type === 'focus' ) {
-          return customizeVoiceString;
-        }
-      }
+      voicingObjectResponse: customizeVoiceString
     } );
 
     const voiceOptionsContainer = new Node( {
@@ -236,22 +226,30 @@ class VoicingPanelSection extends PreferencesPanelSection {
 
     voicingManager.objectChangesProperty.lazyLink( voicingObjectChanges => {
       const alertString = voicingObjectChanges ? voicingObjectChangesString : objectChangesMutedString;
-      phet.joist.sim.voicingUtteranceQueue.addToBack( alertString );
+      voicingUtteranceQueue.addToBack( alertString );
     } );
 
     voicingManager.contextChangesProperty.lazyLink( voicingContextChanges => {
       const alertString = voicingContextChanges ? voicingContextChangesString : contextChangesMutedString;
-      phet.joist.sim.voicingUtteranceQueue.addToBack( alertString );
+      voicingUtteranceQueue.addToBack( alertString );
     } );
 
     voicingManager.hintsProperty.lazyLink( voicingHints => {
       const alertString = voicingHints ? voicingHintsString : hintsMutedString;
-      phet.joist.sim.voicingUtteranceQueue.addToBack( alertString );
+      voicingUtteranceQueue.addToBack( alertString );
+    } );
+
+    // NOTE: This somehow needs to be built into ComboBox
+    webSpeaker.voiceProperty.link( voice => {
+      voiceComboBox.button.voicingObjectResponse = StringUtils.fillIn( '{{label}}: {{value}} ', {
+        label: voiceLabelString,
+        value: _.find( comboBoxItems, item => item.value === webSpeaker.voiceProperty.value ).value.name
+      } );
     } );
 
     voiceOptionsOpenProperty.lazyLink( open => {
       const alert = open ? customizeVoiceExpandedString : customizeVoiceCollapsedString;
-      phet.joist.sim.voicingUtteranceQueue.addToBack( alert );
+      voicingUtteranceQueue.addToBack( alert );
     } );
   }
 }
@@ -271,11 +269,7 @@ const createCheckbox = ( labelString, property ) => {
     labelContent: labelString,
 
     // voicing
-    voicingCreateOverrideResponse: event => {
-      if ( event.type === 'focus' ) {
-        return labelString;
-      }
-    }
+    voicingObjectResponse: labelString
   } );
 };
 
@@ -309,21 +303,22 @@ class VoiceRateNumberControl extends NumberControl {
 
         // pdom
         labelTagName: 'label',
-        labelContent: labelString
+        labelContent: labelString,
+
+        // voicing
+        voicingObjectResponse: 'Heyo'
       }
     } );
 
     // voicing
     this.initializeVoicing();
-    this.voicingCreateOverrideResponse = event => {
-      if ( event.type === 'focus' ) {
-        return this.getRateDescriptionString( webSpeaker.voiceRateProperty.value );
 
+    voiceRateProperty.link( ( rate, previousValue ) => {
+
+      this.slider.voicingObjectResponse = this.getRateDescriptionString( rate );
+      if ( previousValue !== null ) {
+        voicingUtteranceQueue.addToBack( this.getRateDescriptionString( rate ) );
       }
-    };
-
-    voiceRateProperty.lazyLink( rate => {
-      phet.joist.sim.voicingUtteranceQueue.addToBack( this.getRateDescriptionString( rate ) );
     } );
   }
 
@@ -387,26 +382,21 @@ class VoicingPitchSlider extends VBox {
     } );
 
     // voicing
-    this.initializeVoicing();
-    this.voicingCreateOverrideResponse = event => {
-      if ( event.type === 'focus' ) {
-        return StringUtils.fillIn( 'Pitch, {{description}}', {
-          description: this.getPitchDescriptionString( voicePitchProperty.value )
-        } );
-      }
-    };
-
-    voicePitchProperty.lazyLink( pitch => {
-      const alertString = StringUtils.fillIn( voicePitchDescriptionPatternString, {
+    voicePitchProperty.link( ( pitch, previousValue ) => {
+      slider.voicingObjectResponse = StringUtils.fillIn( 'Pitch, {{description}}', {
         description: this.getPitchDescriptionString( pitch )
       } );
-      phet.joist.sim.voicingUtteranceQueue.addToBack( alertString );
+
+      // alert made lazily so it is not heard on construction
+      if ( previousValue !== null ) {
+        voicingUtteranceQueue.addToBack( slider.voicingObjectResponse );
+      }
     } );
   }
 
   /**
    * Gets a description of the pitch at the provided value from VOICE_PITCH_DESCRIPTION_MAP.
-   * @public
+   * @private
    *
    * @param {number} pitchValue
    * @returns {string}
@@ -423,8 +413,6 @@ class VoicingPitchSlider extends VBox {
     return pitchDescription;
   }
 }
-
-Voicing.compose( VoicingPitchSlider );
 
 joist.register( 'VoicingPanelSection', VoicingPanelSection );
 export default VoicingPanelSection;

@@ -14,9 +14,6 @@ import JoistButton from '../JoistButton.js';
 import joistStrings from '../joistStrings.js';
 import PreferencesDialog from './PreferencesDialog.js';
 
-// constants
-const preferencesTitleString = joistStrings.preferences.title;
-
 class NavigationBarPreferencesButton extends JoistButton {
 
   /**
@@ -53,13 +50,6 @@ class NavigationBarPreferencesButton extends JoistButton {
       // pdom
       innerContent: joistStrings.preferences.title
     } );
-
-    // voicing
-    this.voicingCreateObjectResponse = event => {
-      if ( event.type === 'focus' ) {
-      return preferencesTitleString;
-      }
-    };
   }
 }
 

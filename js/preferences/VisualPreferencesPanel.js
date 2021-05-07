@@ -7,6 +7,7 @@
 
 import StringUtils from '../../../phetcommon/js/util/StringUtils.js';
 import VoicingText from '../../../scenery-phet/js/accessibility/speaker/VoicingText.js';
+import voicingUtteranceQueue from '../../../scenery/js/accessibility/speaker/voicingUtteranceQueue.js';
 import Node from '../../../scenery/js/nodes/Node.js';
 import Text from '../../../scenery/js/nodes/Text.js';
 import joist from '../joist.js';
@@ -41,7 +42,7 @@ class VisualPreferencesPanel extends Node {
       labelNode: label,
       descriptionNode: new VoicingText( interactiveHighlightsDescriptionString, {
         font: PreferencesDialog.CONTENT_FONT,
-        voicingText: StringUtils.fillIn( labelledDescriptionPatternString, {
+        readingBlockContent: StringUtils.fillIn( labelledDescriptionPatternString, {
           label: interactiveHighlightsString,
           description: interactiveHighlightsDescriptionString
         } )
@@ -63,7 +64,7 @@ class VisualPreferencesPanel extends Node {
 
       // voicing
       const alertString = enabled ? interactiveHighlightsEnabledAlertString : interactiveHighlightsDisabledAlertString;
-      phet.joist.sim.voicingUtteranceQueue.addToBack( alertString );
+      voicingUtteranceQueue.addToBack( alertString );
 
       // pdom
       phet.joist.sim.utteranceQueue.addToBack( alertString );

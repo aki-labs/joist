@@ -70,7 +70,7 @@ class KeyboardHelpDialog extends Dialog {
     // labelWithIcon is meant to be passed to KeyboardHelpSection, so we have to hack a bit here
     const titleBox = new HBox( { children: [ tabHintLine.icon, tabHintLine.label ], spacing: 4 } );
     const titleBlock = new ReadingBlockNode( {
-      voicingText: joistStrings.a11y.keyboardHelp.tabToGetStarted,
+      readingBlockContent: joistStrings.a11y.keyboardHelp.tabToGetStarted,
       children: [ titleBox ]
     } );
 

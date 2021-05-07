@@ -165,9 +165,18 @@ class Tab extends Node {
     // @public {PreferenceTab}
     this.value = value;
 
+    // voicing
+    this.initializeVoicing();
+    this.voicingObjectResponse = StringUtils.fillIn( preferencesTabResponsePatternString, {
+      title: label
+    } );
+
     const buttonListener = new PressListener( {
       press: () => {
         property.set( value );
+
+        // speak the object response on activation
+        this.voicingSpeakResponse();
       }
     } );
     this.addInputListener( buttonListener );
@@ -181,15 +190,6 @@ class Tab extends Node {
       underlineNode.visible = selectedTab === value;
     } );
 
-    // voicing
-    this.initializeVoicing();
-    this.mutate( {
-      voicingCreateOverrideResponse: event => {
-        return StringUtils.fillIn( preferencesTabResponsePatternString, {
-          title: label
-        } );
-      }
-    } );
   }
 }
 

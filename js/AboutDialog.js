@@ -204,7 +204,7 @@ class AboutDialog extends Dialog {
           tandem: tandem.createTandem( link.tandemName ),
           phetioReadOnly: true,
 
-          voicingText: link.text,
+          readingBlockContent: link.text,
           innerContent: null,
           readingBlockTagName: null
         } ) );

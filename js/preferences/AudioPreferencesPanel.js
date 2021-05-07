@@ -58,7 +58,7 @@ class AudioPreferencesTabPanel extends VBox {
       labelNode: new Text( allAudioString, { font: PreferencesDialog.PANEL_SECTION_LABEL_FONT } ),
       descriptionNode: new VoicingText( allAudioDescriptionString, {
         font: PreferencesDialog.CONTENT_FONT,
-        voicingText: StringUtils.fillIn( labelledDescriptionPatternString, {
+        readingBlockContent: StringUtils.fillIn( labelledDescriptionPatternString, {
           label: allAudioString,
           description: allAudioDescriptionString
         } )
