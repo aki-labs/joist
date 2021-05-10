@@ -61,7 +61,7 @@ class SoundPanelSection extends PreferencesPanelSection {
         labelContent: extraSoundsLabelString,
 
         // voicing
-        voicingObjectResponse: extraSoundsLabelString
+        voicingNameResponse: extraSoundsLabelString
       } );
       soundManager.enabledProperty.link( enabled => {
         enhancedSoundCheckbox.enabled = enabled;

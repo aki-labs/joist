@@ -110,7 +110,7 @@ class JoistButton extends Node {
 
     // voicing - voicing for joist components should always be spoken regardless of user preferences
     this.initializeVoicing();
-    this.voicingObjectResponse = this.innerContent;
+    this.voicingNameResponse = this.innerContent;
     this.voicingIgnoreVoicingManagerProperties = true;
   }
 

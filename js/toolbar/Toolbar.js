@@ -120,7 +120,7 @@ class Toolbar extends Node {
       this.menuContent.pdomVisible = open;
       this.openButton.innerContent = open ? closeToolbarString : openToolbarString;
 
-      this.openButton.voicingObjectResponse = open ? 'Hide Toolbar' : 'Show Toolbar';
+      this.openButton.voicingNameResponse = open ? 'Hide Toolbar' : 'Show Toolbar';
 
       this.updateDestinationPosition();
     } );

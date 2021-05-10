@@ -60,7 +60,7 @@ const voiceLabelString = 'Voice';
 const customizeVoiceExpandedString = 'Customize Voice, expanded';
 const customizeVoiceCollapsedString = 'Customize Voice, collapsed';
 
-const voiceRateDescriptionPatternString = 'Voice Rate {{value}} times';
+const voiceRateDescriptionPatternString = '{{value}} times';
 const voiceRateNormalString = 'Voice Rate normal';
 const labelledDescriptionPatternString = joistStrings.a11y.preferences.tabs.labelledDescriptionPattern;
 
@@ -172,7 +172,7 @@ class VoicingPanelSection extends PreferencesPanelSection {
       innerContent: customizeVoiceString,
 
       // voicing
-      voicingObjectResponse: customizeVoiceString
+      voicingNameResponse: customizeVoiceString
     } );
 
     const voiceOptionsContainer = new Node( {
@@ -240,11 +240,11 @@ class VoicingPanelSection extends PreferencesPanelSection {
     } );
 
     // NOTE: This somehow needs to be built into ComboBox
+    voiceComboBox.button.voicingNameResponse = voiceLabelString;
     webSpeaker.voiceProperty.link( voice => {
-      voiceComboBox.button.voicingObjectResponse = StringUtils.fillIn( '{{label}}: {{value}} ', {
-        label: voiceLabelString,
-        value: _.find( comboBoxItems, item => item.value === webSpeaker.voiceProperty.value ).value.name
-      } );
+      voiceComboBox.button.voicingObjectResponse = _.find(
+        comboBoxItems, item => item.value === webSpeaker.voiceProperty.value
+      ).value.name;
     } );
 
     voiceOptionsOpenProperty.lazyLink( open => {
@@ -269,7 +269,7 @@ const createCheckbox = ( labelString, property ) => {
     labelContent: labelString,
 
     // voicing
-    voicingObjectResponse: labelString
+    voicingNameResponse: labelString
   } );
 };
 
@@ -306,7 +306,7 @@ class VoiceRateNumberControl extends NumberControl {
         labelContent: labelString,
 
         // voicing
-        voicingObjectResponse: 'Heyo'
+        voicingNameResponse: labelString
       }
     } );
 
@@ -317,7 +317,7 @@ class VoiceRateNumberControl extends NumberControl {
 
       this.slider.voicingObjectResponse = this.getRateDescriptionString( rate );
       if ( previousValue !== null ) {
-        voicingUtteranceQueue.addToBack( this.getRateDescriptionString( rate ) );
+        this.slider.voicingSpeakResponse();
       }
     } );
   }
@@ -366,7 +366,10 @@ class VoicingPitchSlider extends VBox {
 
       // pdom
       labelTagName: 'label',
-      labelContent: labelString
+      labelContent: labelString,
+
+      // voicing
+      voicingNameResponse: labelString
     } );
 
     const lowLabel = new Text( 'Low', { font: new PhetFont( 14 ) } );
@@ -383,13 +386,11 @@ class VoicingPitchSlider extends VBox {
 
     // voicing
     voicePitchProperty.link( ( pitch, previousValue ) => {
-      slider.voicingObjectResponse = StringUtils.fillIn( 'Pitch, {{description}}', {
-        description: this.getPitchDescriptionString( pitch )
-      } );
+      slider.voicingObjectResponse = this.getPitchDescriptionString( pitch );
 
       // alert made lazily so it is not heard on construction
       if ( previousValue !== null ) {
-        voicingUtteranceQueue.addToBack( slider.voicingObjectResponse );
+        slider.voicingSpeakResponse();
       }
     } );
   }

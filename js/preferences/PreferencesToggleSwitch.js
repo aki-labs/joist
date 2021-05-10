@@ -56,7 +56,7 @@ class PreferencesToggleSwitch extends Node {
 
       // voicing
       voicingIgnoreVoicingManagerProperties: true,
-      voicingObjectResponse: options.a11yLabel
+      voicingNameResponse: options.a11yLabel
     } ) );
     this.addChild( toggleSwitch );
 

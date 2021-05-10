@@ -167,7 +167,7 @@ class Tab extends Node {
 
     // voicing
     this.initializeVoicing();
-    this.voicingObjectResponse = StringUtils.fillIn( preferencesTabResponsePatternString, {
+    this.voicingNameResponse = StringUtils.fillIn( preferencesTabResponsePatternString, {
       title: label
     } );
 

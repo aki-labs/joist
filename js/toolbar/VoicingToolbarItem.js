@@ -94,7 +94,7 @@ class VoicingToolbarItem extends Node {
     const playingOverviewProperty = new BooleanProperty( false );
     const overviewButton = new PlayStopButton( playingOverviewProperty, merge( {
       startPlayingLabel: playOverviewString,
-      voicingObjectResponse: playOverviewString
+      voicingNameResponse: playOverviewString
     }, playPauseButtonOptions ) );
     const overviewRow = createLabelledInput( overviewString, overviewButton );
     const overviewUtterance = new Utterance();
@@ -102,7 +102,7 @@ class VoicingToolbarItem extends Node {
     const playingDetailsProperty = new BooleanProperty( false );
     const detailsButton = new PlayStopButton( playingDetailsProperty, merge( {
       startPlayingLabel: playDetailsString,
-      voicingObjectResponse: playDetailsString
+      voicingNameResponse: playDetailsString
     }, playPauseButtonOptions ) );
     const detailsRow = createLabelledInput( detailsString, detailsButton );
     const detailsUtterance = new Utterance();
@@ -110,7 +110,7 @@ class VoicingToolbarItem extends Node {
     const playingHintProperty = new BooleanProperty( false );
     const hintButton = new PlayStopButton( playingHintProperty, merge( {
       startPlayingLabel: playHintString,
-      voicingObjectResponse: playHintString
+      voicingNameResponse: playHintString
     }, playPauseButtonOptions ) );
     const hintRow = createLabelledInput( hintString, hintButton );
     const hintUtterance = new Utterance();
