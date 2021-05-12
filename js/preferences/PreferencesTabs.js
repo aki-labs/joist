@@ -176,7 +176,7 @@ class Tab extends Node {
         property.set( value );
 
         // speak the object response on activation
-        this.voicingSpeakResponse();
+        this.voicingSpeakNameResponse();
       }
     } );
     this.addInputListener( buttonListener );

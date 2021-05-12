@@ -317,7 +317,9 @@ class VoiceRateNumberControl extends NumberControl {
 
       this.slider.voicingObjectResponse = this.getRateDescriptionString( rate );
       if ( previousValue !== null ) {
-        this.slider.voicingSpeakResponse();
+
+        // every change read the name and object response for the slider
+        this.slider.voicingSpeakFullResponse();
       }
     } );
   }
@@ -388,9 +390,9 @@ class VoicingPitchSlider extends VBox {
     voicePitchProperty.link( ( pitch, previousValue ) => {
       slider.voicingObjectResponse = this.getPitchDescriptionString( pitch );
 
-      // alert made lazily so it is not heard on construction
+      // alert made lazily so it is not heard on construction, speak the name and object response every change
       if ( previousValue !== null ) {
-        slider.voicingSpeakResponse();
+        slider.voicingSpeakFullResponse();
       }
     } );
   }
