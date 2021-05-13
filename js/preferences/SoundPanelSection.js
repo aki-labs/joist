@@ -21,10 +21,10 @@ import PreferencesPanelSection from './PreferencesPanelSection.js';
 import PreferencesToggleSwitch from './PreferencesToggleSwitch.js';
 
 // constants
-const otherSoundsLabelString = joistStrings.preferences.tabs.audio.otherSounds;
+const soundsLabelString = joistStrings.preferences.tabs.audio.sounds;
 const extraSoundsLabelString = joistStrings.preferences.tabs.audio.extraSounds;
 const soundDescriptionString = 'Play sonifications and sound effects as you interact.';
-const extraSoundsDescriptionString = 'Play an additional sound or sounds that may be helpful for some learners.';
+const extraSoundsDescriptionString = 'Play additional sound that may be helpful for some learners.';
 const soundsOnString = 'Sounds on.';
 const soundsOffString = 'Sounds Off.';
 const extraSoundsOnString = 'Extra Sounds On.';
@@ -38,17 +38,17 @@ class SoundPanelSection extends PreferencesPanelSection {
    */
   constructor( audioOptions ) {
 
-    const soundLabel = new Text( otherSoundsLabelString, { font: PreferencesDialog.PANEL_SECTION_LABEL_FONT } );
+    const soundLabel = new Text( soundsLabelString, { font: PreferencesDialog.PANEL_SECTION_LABEL_FONT } );
     const titleNode = new PreferencesToggleSwitch( soundManager.enabledProperty, false, true, {
       labelNode: soundLabel,
       descriptionNode: new VoicingText( soundDescriptionString, {
         font: PreferencesDialog.CONTENT_FONT,
         readingBlockContent: StringUtils.fillIn( labelledDescriptionPatternString, {
-          label: otherSoundsLabelString,
+          label: soundsLabelString,
           description: soundDescriptionString
         } )
       } ),
-      a11yLabel: otherSoundsLabelString
+      a11yLabel: soundsLabelString
     } );
 
     let enhancedSoundContent = null;

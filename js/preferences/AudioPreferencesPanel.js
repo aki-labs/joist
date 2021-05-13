@@ -6,10 +6,8 @@
  * @author Jesse Greenberg (PhET Interactive Simulations)
  */
 
-import StringUtils from '../../../phetcommon/js/util/StringUtils.js';
 import voicingManager from '../../../scenery/js/accessibility/speaker/voicingManager.js';
 import webSpeaker from '../../../scenery/js/accessibility/speaker/webSpeaker.js';
-import VoicingText from '../../../scenery-phet/js/accessibility/speaker/VoicingText.js';
 import HBox from '../../../scenery/js/nodes/HBox.js';
 import Text from '../../../scenery/js/nodes/Text.js';
 import VBox from '../../../scenery/js/nodes/VBox.js';
@@ -21,11 +19,9 @@ import SoundPanelSection from './SoundPanelSection.js';
 import VoicingPanelSection from './VoicingPanelSection.js';
 
 // constants
-const allAudioString = joistStrings.preferences.tabs.audio.allAudio.title;
-const allAudioDescriptionString = joistStrings.preferences.tabs.audio.allAudio.description;
-const allAudioEnabledAlert = joistStrings.a11y.allAudio.enabledAlert;
-const allAudioDisabledAlert = joistStrings.a11y.allAudio.disabledAlert;
-const labelledDescriptionPatternString = joistStrings.a11y.preferences.tabs.labelledDescriptionPattern;
+const audioFeaturesString = joistStrings.preferences.tabs.audio.audioFeatures.title;
+const audioFeaturesEnabledAlert = joistStrings.a11y.audioFeatures.enabledAlert;
+const audioFeaturesDisabledAlert = joistStrings.a11y.audioFeatures.disabledAlert;
 
 class AudioPreferencesTabPanel extends VBox {
 
@@ -55,15 +51,8 @@ class AudioPreferencesTabPanel extends VBox {
     } );
 
     const allAudioSwitch = new PreferencesToggleSwitch( simSoundProperty, false, true, {
-      labelNode: new Text( allAudioString, { font: PreferencesDialog.PANEL_SECTION_LABEL_FONT } ),
-      descriptionNode: new VoicingText( allAudioDescriptionString, {
-        font: PreferencesDialog.CONTENT_FONT,
-        readingBlockContent: StringUtils.fillIn( labelledDescriptionPatternString, {
-          label: allAudioString,
-          description: allAudioDescriptionString
-        } )
-      } ),
-      a11yLabel: allAudioString
+      labelNode: new Text( audioFeaturesString, { font: PreferencesDialog.PANEL_SECTION_LABEL_FONT } ),
+      a11yLabel: audioFeaturesString
     } );
 
     const soundEnabledListener = ( enabled, previousValue ) => {
@@ -71,7 +60,7 @@ class AudioPreferencesTabPanel extends VBox {
 
       // alerts should occur lazily, not on construction
       if ( previousValue !== null ) {
-        const alertString = enabled ? allAudioEnabledAlert : allAudioDisabledAlert;
+        const alertString = enabled ? audioFeaturesEnabledAlert : audioFeaturesDisabledAlert;
 
         phet.joist.sim.utteranceQueue.addToBack( alertString );
 

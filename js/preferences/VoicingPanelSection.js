@@ -42,7 +42,7 @@ const pitchString = 'Pitch';
 const voicingEnabledString = 'Voicing on.';
 const voicingDisabledString = 'Voicing off.';
 const voiceVariablesPatternString = '{{value}}x';
-const voicingDescriptionString = 'Voices and highlights content as you interact.';
+const voicingDescriptionString = 'Voice and highlight content as you interact.';
 const customizeVoiceString = 'Customize Voice';
 
 const simVoicingOptionsString = 'Sim Voicing Options';
@@ -50,8 +50,8 @@ const simVoicingDescriptionString = 'Choose details you want voiced as you inter
 
 const voicingObjectChangesString = 'Voicing object details and changes.';
 const objectChangesMutedString = 'Object details and changes muted.';
-const voicingContextChangesString = 'Voicing indirect sim changes.';
-const contextChangesMutedString = 'Indirect changes muted.';
+const voicingContextChangesString = 'Voicing surrounding context changes.';
+const contextChangesMutedString = 'Surrounding context changes muted.';
 const voicingHintsString = 'Voicing extra help.';
 const hintsMutedString = 'Extra help muted.';
 
@@ -120,9 +120,9 @@ class VoicingPanelSection extends PreferencesPanelSection {
       align: 'left',
       spacing: 5,
       children: [
-        createCheckbox( 'Voice direct object details and changes', voicingManager.objectChangesProperty ),
-        createCheckbox( 'Voice other sim changes as objects change', voicingManager.contextChangesProperty ),
-        createCheckbox( 'Voice helpful hints on sim interactions', voicingManager.hintsProperty )
+        createCheckbox( 'Voice object details and changes', voicingManager.objectChangesProperty ),
+        createCheckbox( 'Voice surrounding context changes', voicingManager.contextChangesProperty ),
+        createCheckbox( 'Voice helpful hints', voicingManager.hintsProperty )
       ]
     } );
 
@@ -300,6 +300,7 @@ class VoiceRateNumberControl extends NumberControl {
         thumbSize: THUMB_SIZE,
         trackSize: TRACK_SIZE,
         keyboardStep: 0.25,
+        minorTickSpacing: 0.25,
 
         // pdom
         labelTagName: 'label',

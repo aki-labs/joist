@@ -117,10 +117,10 @@
     "value": "General"
   },
   "preferences.tabs.general.accessibilityIntro": {
-    "value": "We are working to make our simulations more inclusive. This sim has preferences that allow you to adjust the default presentation. Use the available tabs in this Preferences Menu to review and adjust the available preferences."
+    "value": "We are making our simulations more inclusive and accessible. Explore the tabs in this menu to review or change the default presentation settings."
   },
   "preferences.tabs.general.moreAccessibility": {
-    "value": "To find other sims with a range of accessibility features, please use the Accessibility filter on our simulations page."
+    "value": "To find more simulations with accessibility features, go to the simulation filter page on the PhET website, and filter by Accessibility feature."
   },
   "preferences.tabs.general.accessibilityIntroLink": {
     "value": "accessible simulations"
@@ -140,17 +140,14 @@
   "preferences.tabs.audio.title": {
     "value": "Audio"
   },
-  "preferences.tabs.audio.otherSounds": {
-    "value": "Other Sounds"
+  "preferences.tabs.audio.sounds": {
+    "value": "Sounds"
   },
   "preferences.tabs.audio.extraSounds": {
     "value": "Extra Sounds"
   },
-  "preferences.tabs.audio.allAudio.title": {
-    "value": "All Audio"
-  },
-  "preferences.tabs.audio.allAudio.description": {
-    "value": "Voices content and plays sounds."
+  "preferences.tabs.audio.audioFeatures.title": {
+    "value": "Audio Features"
   },
   "preferences.tabs.input.title": {
     "value": "Input"
@@ -236,12 +233,12 @@
     "simResources": {
       "value": "Sim Resources"
     },
-    "allAudio": {
+    "audioFeatures": {
       "enabledAlert": {
-        "value": "All Audio on."
+        "value": "Audio Features on."
       },
       "disabledAlert": {
-        "value": "All Audio off."
+        "value": "Audio Features off."
       }
     },
     "soundToggle": {
