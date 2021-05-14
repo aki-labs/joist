@@ -91,11 +91,13 @@ class SoundPanelSection extends PreferencesPanelSection {
     soundManager.enabledProperty.lazyLink( enabled => {
       const alert = enabled ? soundsOnString : soundsOffString;
       voicingUtteranceQueue.addToBack( alert );
+      phet.joist.sim.utteranceQueue.addToBack( alert );
     } );
 
     soundManager.enhancedSoundEnabledProperty.lazyLink( enabled => {
       const alert = enabled ? extraSoundsOnString : extraSoundsOffString;
       voicingUtteranceQueue.addToBack( alert );
+      phet.joist.sim.utteranceQueue.addToBack( alert );
     } );
   }
 }

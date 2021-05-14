@@ -220,23 +220,28 @@ class VoicingPanelSection extends PreferencesPanelSection {
       // only speak if "Sim Voicing" is on, all voicing should be disabled except for the Toolbar
       // buttons in this case
       if ( voicingManager.mainWindowVoicingEnabledProperty.value ) {
-        webSpeaker.speakImmediately( enabled ? voicingEnabledString : voicingDisabledString );
+        const alertString = enabled ? voicingEnabledString : voicingDisabledString;
+        webSpeaker.speakImmediately( alertString );
+        phet.joist.sim.utteranceQueue.addToBack( alertString );
       }
     } );
 
     voicingManager.objectChangesProperty.lazyLink( voicingObjectChanges => {
       const alertString = voicingObjectChanges ? voicingObjectChangesString : objectChangesMutedString;
       voicingUtteranceQueue.addToBack( alertString );
+      phet.joist.sim.utteranceQueue.addToBack( alertString );
     } );
 
     voicingManager.contextChangesProperty.lazyLink( voicingContextChanges => {
       const alertString = voicingContextChanges ? voicingContextChangesString : contextChangesMutedString;
       voicingUtteranceQueue.addToBack( alertString );
+      phet.joist.sim.utteranceQueue.addToBack( alertString );
     } );
 
     voicingManager.hintsProperty.lazyLink( voicingHints => {
       const alertString = voicingHints ? voicingHintsString : hintsMutedString;
       voicingUtteranceQueue.addToBack( alertString );
+      phet.joist.sim.utteranceQueue.addToBack( alertString );
     } );
 
     // NOTE: This somehow needs to be built into ComboBox
@@ -250,6 +255,7 @@ class VoicingPanelSection extends PreferencesPanelSection {
     voiceOptionsOpenProperty.lazyLink( open => {
       const alert = open ? customizeVoiceExpandedString : customizeVoiceCollapsedString;
       voicingUtteranceQueue.addToBack( alert );
+      phet.joist.sim.utteranceQueue.addToBack( alert );
     } );
   }
 }

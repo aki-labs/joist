@@ -15,7 +15,6 @@ import Node from '../../scenery/js/nodes/Node.js';
 import Path from '../../scenery/js/nodes/Path.js';
 import Rectangle from '../../scenery/js/nodes/Rectangle.js';
 import ToggleNode from '../../sun/js/ToggleNode.js';
-import ActivationUtterance from '../../utterance-queue/js/ActivationUtterance.js';
 import joist from './joist.js';
 import JoistButton from './JoistButton.js';
 import joistStrings from './joistStrings.js';
@@ -149,13 +148,8 @@ class NavigationBarSoundToggleButton extends JoistButton {
 
     // pdom attribute lets user know when the toggle is pressed, linked lazily so that an alert isn't triggered
     // on construction and must be unlinked in dispose
-    const soundUtterance = new ActivationUtterance();
     const pressedListener = value => {
       this.setPDOMAttribute( 'aria-pressed', !value );
-
-      soundUtterance.alert = value ? joistStrings.a11y.soundToggle.alert.simSoundOn
-                                   : joistStrings.a11y.soundToggle.alert.simSoundOff;
-      phet.joist.sim.utteranceQueue.addToBack( soundUtterance );
     };
     soundEnabledProperty.lazyLink( pressedListener );
     this.setPDOMAttribute( 'aria-pressed', !soundEnabledProperty.get() );
