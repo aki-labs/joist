@@ -10,7 +10,7 @@ import Property from '../../axon/js/Property.js';
 import Shape from '../../kite/js/Shape.js';
 import merge from '../../phet-core/js/merge.js';
 import FocusHighlightPath from '../../scenery/js/accessibility/FocusHighlightPath.js';
-import Voicing from '../../scenery/js/accessibility/speaker/Voicing.js';
+import Voicing from '../../scenery/js/accessibility/voicing/Voicing.js';
 import Node from '../../scenery/js/nodes/Node.js';
 import ButtonInteractionState from '../../sun/js/buttons/ButtonInteractionState.js';
 import PushButtonInteractionStateProperty from '../../sun/js/buttons/PushButtonInteractionStateProperty.js';

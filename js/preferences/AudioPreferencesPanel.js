@@ -6,8 +6,8 @@
  * @author Jesse Greenberg (PhET Interactive Simulations)
  */
 
-import voicingManager from '../../../scenery/js/accessibility/speaker/voicingManager.js';
-import webSpeaker from '../../../scenery/js/accessibility/speaker/webSpeaker.js';
+import voicingManager from '../../../scenery/js/accessibility/voicing/voicingManager.js';
+import webSpeaker from '../../../scenery/js/accessibility/voicing/webSpeaker.js';
 import HBox from '../../../scenery/js/nodes/HBox.js';
 import Text from '../../../scenery/js/nodes/Text.js';
 import VBox from '../../../scenery/js/nodes/VBox.js';

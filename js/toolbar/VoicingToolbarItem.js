@@ -13,8 +13,8 @@ import VoicingHighlight from '../../../scenery-phet/js/accessibility/speaker/Voi
 import VoicingText from '../../../scenery-phet/js/accessibility/speaker/VoicingText.js';
 import PlayStopButton from '../../../scenery-phet/js/buttons/PlayStopButton.js';
 import PhetFont from '../../../scenery-phet/js/PhetFont.js';
-import voicingManager from '../../../scenery/js/accessibility/speaker/voicingManager.js';
-import webSpeaker from '../../../scenery/js/accessibility/speaker/webSpeaker.js';
+import voicingManager from '../../../scenery/js/accessibility/voicing/voicingManager.js';
+import webSpeaker from '../../../scenery/js/accessibility/voicing/webSpeaker.js';
 import AlignGroup from '../../../scenery/js/nodes/AlignGroup.js';
 import HBox from '../../../scenery/js/nodes/HBox.js';
 import Node from '../../../scenery/js/nodes/Node.js';

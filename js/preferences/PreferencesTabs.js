@@ -11,7 +11,7 @@ import Property from '../../../axon/js/Property.js';
 import StringUtils from '../../../phetcommon/js/util/StringUtils.js';
 import FocusHighlightPath from '../../../scenery/js/accessibility/FocusHighlightPath.js';
 import KeyboardUtils from '../../../scenery/js/accessibility/KeyboardUtils.js';
-import Voicing from '../../../scenery/js/accessibility/speaker/Voicing.js';
+import Voicing from '../../../scenery/js/accessibility/voicing/Voicing.js';
 import PressListener from '../../../scenery/js/listeners/PressListener.js';
 import Rectangle from '../../../scenery/js/nodes/Rectangle.js';
 import joist from '../joist.js';

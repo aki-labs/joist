@@ -15,10 +15,10 @@ import VoicingText from '../../../scenery-phet/js/accessibility/speaker/VoicingT
 import NumberControl from '../../../scenery-phet/js/NumberControl.js';
 import PhetFont from '../../../scenery-phet/js/PhetFont.js';
 import FocusHighlightFromNode from '../../../scenery/js/accessibility/FocusHighlightFromNode.js';
-import Voicing from '../../../scenery/js/accessibility/speaker/Voicing.js';
-import voicingManager from '../../../scenery/js/accessibility/speaker/voicingManager.js';
-import voicingUtteranceQueue from '../../../scenery/js/accessibility/speaker/voicingUtteranceQueue.js';
-import webSpeaker from '../../../scenery/js/accessibility/speaker/webSpeaker.js';
+import Voicing from '../../../scenery/js/accessibility/voicing/Voicing.js';
+import voicingManager from '../../../scenery/js/accessibility/voicing/voicingManager.js';
+import voicingUtteranceQueue from '../../../scenery/js/accessibility/voicing/voicingUtteranceQueue.js';
+import webSpeaker from '../../../scenery/js/accessibility/voicing/webSpeaker.js';
 import PressListener from '../../../scenery/js/listeners/PressListener.js';
 import Node from '../../../scenery/js/nodes/Node.js';
 import Text from '../../../scenery/js/nodes/Text.js';

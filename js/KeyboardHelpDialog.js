@@ -13,7 +13,7 @@ import KeyboardHelpSection from '../../scenery-phet/js/keyboard/help/KeyboardHel
 import TextKeyNode from '../../scenery-phet/js/keyboard/TextKeyNode.js';
 import PhetFont from '../../scenery-phet/js/PhetFont.js';
 import PDOMPeer from '../../scenery/js/accessibility/pdom/PDOMPeer.js';
-import ReadingBlockNode from '../../scenery/js/accessibility/speaker/ReadingBlockNode.js';
+import ReadingBlockNode from '../../scenery/js/accessibility/voicing/ReadingBlockNode.js';
 import HBox from '../../scenery/js/nodes/HBox.js';
 import VBox from '../../scenery/js/nodes/VBox.js';
 import Dialog from '../../sun/js/Dialog.js';
