@@ -120,9 +120,9 @@ class VoicingPanelSection extends PreferencesPanelSection {
       align: 'left',
       spacing: 5,
       children: [
-        createCheckbox( 'Voice object details and changes', voicingManager.objectChangesProperty ),
-        createCheckbox( 'Voice surrounding context changes', voicingManager.contextChangesProperty ),
-        createCheckbox( 'Voice helpful hints', voicingManager.hintsProperty )
+        createCheckbox( 'Voice object details and changes', voicingManager.objectResponsesEnabledProperty ),
+        createCheckbox( 'Voice surrounding context changes', voicingManager.contextResponsesEnabledProperty ),
+        createCheckbox( 'Voice helpful hints', voicingManager.hintResponsesEnabledProperty )
       ]
     } );
 
@@ -226,19 +226,19 @@ class VoicingPanelSection extends PreferencesPanelSection {
       }
     } );
 
-    voicingManager.objectChangesProperty.lazyLink( voicingObjectChanges => {
+    voicingManager.objectResponsesEnabledProperty.lazyLink( voicingObjectChanges => {
       const alertString = voicingObjectChanges ? voicingObjectChangesString : objectChangesMutedString;
       voicingUtteranceQueue.addToBack( alertString );
       phet.joist.sim.utteranceQueue.addToBack( alertString );
     } );
 
-    voicingManager.contextChangesProperty.lazyLink( voicingContextChanges => {
+    voicingManager.contextResponsesEnabledProperty.lazyLink( voicingContextChanges => {
       const alertString = voicingContextChanges ? voicingContextChangesString : contextChangesMutedString;
       voicingUtteranceQueue.addToBack( alertString );
       phet.joist.sim.utteranceQueue.addToBack( alertString );
     } );
 
-    voicingManager.hintsProperty.lazyLink( voicingHints => {
+    voicingManager.hintResponsesEnabledProperty.lazyLink( voicingHints => {
       const alertString = voicingHints ? voicingHintsString : hintsMutedString;
       voicingUtteranceQueue.addToBack( alertString );
       phet.joist.sim.utteranceQueue.addToBack( alertString );
