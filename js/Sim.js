@@ -739,6 +739,7 @@ class Sim {
         this.simulationRoot.pdomOrder = [ this.toolbar ];
 
         // hook up Properties that should control all speech
+        // REVIEW: I think this may be a redundant call over to webSpeaker, what if instead of having a public setter like this, `canSpeakProperties` was an option to `initialze`? https://github.com/phetsims/scenery/issues/1223
         webSpeaker.setCanSpeakProperty( [
           this.isConstructionCompleteProperty,
           this.browserTabVisibleProperty,
