@@ -64,7 +64,7 @@ class AudioPreferencesTabPanel extends VBox {
 
         phet.joist.sim.utteranceQueue.addToBack( alertString );
 
-        if ( webSpeaker.enabled && voicingManager.mainWindowVoicingEnabledProperty.value ) {
+        if ( voicingManager.voicingFullyEnabledProperty.value ) {
           webSpeaker.speakImmediately( alertString );
         }
       }

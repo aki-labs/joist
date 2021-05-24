@@ -63,8 +63,8 @@ import ScreenshotGenerator from './ScreenshotGenerator.js';
 import selectScreens from './selectScreens.js';
 import SimInfo from './SimInfo.js';
 import LegendsOfLearningSupport from './thirdPartySupport/LegendsOfLearningSupport.js';
-import VoicingToolbarAlertManager from './toolbar/VoicingToolbarAlertManager.js';
 import Toolbar from './toolbar/Toolbar.js';
+import VoicingToolbarAlertManager from './toolbar/VoicingToolbarAlertManager.js';
 import updateCheck from './updateCheck.js';
 
 // constants
@@ -750,10 +750,20 @@ class Sim {
           return simConstructionComplete && simVisible && simActive && !simSettingPhetioState && allAudioEnabled;
         } );
 
-        // the default utteranceQueue will control voicing for the simulation components, and is disabled
-        // when the user has selected to disable sim speech
-        Property.multilink( [ webSpeaker.enabledProperty, voicingManager.mainWindowVoicingEnabledProperty ], ( enabled, mainWindowEnabled ) => {
-          voicingUtteranceQueue.enabled = enabled && mainWindowEnabled;
+        // the default utteranceQueue will control voicing for the simulation components, and is enabled when the
+        // voicing feature is fully enabled
+        voicingManager.voicingFullyEnabledProperty.link( enabled => {
+          voicingUtteranceQueue.enabled = enabled;
+        } );
+
+        // For now, ReadingBlocks are only enabled when voicing is fully enabled and when sound is on. We decided that
+        // having ReadingBlock highlights that do nothing is too confusing so they should be removed unless they
+        // have some output.
+        Property.multilink( [
+          voicingManager.voicingFullyEnabledProperty,
+          this.allAudioEnabledProperty
+        ], ( voicingFullyEnabled, allAudioEnabled ) => {
+          this.display.readingBlockHighlightsVisibleProperty.value = voicingFullyEnabled && allAudioEnabled;
         } );
 
         // the utteranceQueue for surrounding user controls is enabled as long as voicing is enabled
@@ -772,17 +782,6 @@ class Sim {
         this.preferencesProperties.gestureControlsEnabledProperty
       ], ( highlightsEnabled, gesturesEnabled ) => {
         this.display.interactiveHighlightsVisibleProperty.value = highlightsEnabled || gesturesEnabled;
-      } );
-
-      // For now, sim reading blocks are disabled when voicing is disabled, sim voicing is disabled, and
-      // whenever all audio is off. We decided that having reading blocks that do nothing is too confusing
-      // so they should be removed unless they have some output.
-      Property.multilink( [
-        webSpeaker.enabledProperty,
-        voicingManager.mainWindowVoicingEnabledProperty,
-        this.allAudioEnabledProperty
-      ], ( voicingEnabled, simVoicingEnabled, allAudioEnabled ) => {
-        this.display.readingBlockHighlightsVisibleProperty.value = voicingEnabled && simVoicingEnabled && allAudioEnabled;
       } );
     }
 
