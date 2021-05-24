@@ -731,24 +731,24 @@ class Sim {
       const audioOptions = options.preferencesConfiguration.audioOptions;
       if ( audioOptions.supportsVoicing ) {
 
-        webSpeaker.initialize();
+        webSpeaker.initialize( {
+
+          // specify the Properties that control whether or not output is allowed from webSpeaker
+          speechAllowedProperty: new DerivedProperty( [
+            this.isConstructionCompleteProperty,
+            this.browserTabVisibleProperty,
+            this.activeProperty,
+            this.isSettingPhetioStateProperty,
+            this.allAudioEnabledProperty
+          ], ( simConstructionComplete, simVisible, simActive, simSettingPhetioState, allAudioEnabled ) => {
+            return simConstructionComplete && simVisible && simActive && !simSettingPhetioState && allAudioEnabled;
+          } )
+        } );
 
         // create the toolbar and make it first in the focus order
         const voicingAlertManager = new VoicingToolbarAlertManager( this.screenProperty );
         this.toolbar = new Toolbar( voicingAlertManager, this.preferencesProperties, this.allAudioEnabledProperty, this.lookAndFeel );
         this.simulationRoot.pdomOrder = [ this.toolbar ];
-
-        // hook up Properties that should control all speech
-        // REVIEW: I think this may be a redundant call over to webSpeaker, what if instead of having a public setter like this, `canSpeakProperties` was an option to `initialze`? https://github.com/phetsims/scenery/issues/1223
-        webSpeaker.setCanSpeakProperty( [
-          this.isConstructionCompleteProperty,
-          this.browserTabVisibleProperty,
-          this.activeProperty,
-          this.isSettingPhetioStateProperty,
-          this.allAudioEnabledProperty
-        ], ( simConstructionComplete, simVisible, simActive, simSettingPhetioState, allAudioEnabled ) => {
-          return simConstructionComplete && simVisible && simActive && !simSettingPhetioState && allAudioEnabled;
-        } );
 
         // the default utteranceQueue will control voicing for the simulation components, and is enabled when the
         // voicing feature is fully enabled
