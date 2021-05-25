@@ -7,8 +7,8 @@
  */
 
 import StringUtils from '../../../phetcommon/js/util/StringUtils.js';
-import VoicingRichText from '../../../scenery-phet/js/accessibility/speaker/VoicingRichText.js';
-import VoicingText from '../../../scenery-phet/js/accessibility/speaker/VoicingText.js';
+import VoicingRichText from '../../../scenery/js/accessibility/voicing/nodes/VoicingRichText.js';
+import VoicingText from '../../../scenery/js/accessibility/voicing/nodes/VoicingText.js';
 import voicingUtteranceQueue from '../../../scenery/js/accessibility/voicing/voicingUtteranceQueue.js';
 import Node from '../../../scenery/js/nodes/Node.js';
 import Text from '../../../scenery/js/nodes/Text.js';

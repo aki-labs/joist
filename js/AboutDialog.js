@@ -8,8 +8,8 @@
 
 import stepTimer from '../../axon/js/stepTimer.js';
 import StringUtils from '../../phetcommon/js/util/StringUtils.js';
-import VoicingRichText from '../../scenery-phet/js/accessibility/speaker/VoicingRichText.js';
-import VoicingText from '../../scenery-phet/js/accessibility/speaker/VoicingText.js';
+import VoicingRichText from '../../scenery/js/accessibility/voicing/nodes/VoicingRichText.js';
+import VoicingText from '../../scenery/js/accessibility/voicing/nodes/VoicingText.js';
 import PhetFont from '../../scenery-phet/js/PhetFont.js';
 import PDOMPeer from '../../scenery/js/accessibility/pdom/PDOMPeer.js';
 import Node from '../../scenery/js/nodes/Node.js';

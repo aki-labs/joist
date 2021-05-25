@@ -9,10 +9,10 @@
 
 import BooleanProperty from '../../../axon/js/BooleanProperty.js';
 import merge from '../../../phet-core/js/merge.js';
-import VoicingHighlight from '../../../scenery-phet/js/accessibility/speaker/VoicingHighlight.js';
-import VoicingText from '../../../scenery-phet/js/accessibility/speaker/VoicingText.js';
 import PlayStopButton from '../../../scenery-phet/js/buttons/PlayStopButton.js';
 import PhetFont from '../../../scenery-phet/js/PhetFont.js';
+import VoicingText from '../../../scenery/js/accessibility/voicing/nodes/VoicingText.js';
+import ReadingBlockHighlight from '../../../scenery/js/accessibility/voicing/ReadingBlockHighlight.js';
 import voicingManager from '../../../scenery/js/accessibility/voicing/voicingManager.js';
 import webSpeaker from '../../../scenery/js/accessibility/voicing/webSpeaker.js';
 import AlignGroup from '../../../scenery/js/nodes/AlignGroup.js';
@@ -60,7 +60,7 @@ class VoicingToolbarItem extends Node {
 
     const titleText = new Text( titleString, titleTextOptions );
     const quickInfoText = new VoicingText( quickInfoString, titleTextOptions );
-    quickInfoText.focusHighlight = new VoicingHighlight( quickInfoText, {
+    quickInfoText.focusHighlight = new ReadingBlockHighlight( quickInfoText, {
 
       // the inner stroke is white since the toolbar is on a black background
       // NOTE: This will need to use lookAndFeel probably

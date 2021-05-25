@@ -8,7 +8,7 @@
  */
 
 import merge from '../../../phet-core/js/merge.js';
-import VoicingRichText from '../../../scenery-phet/js/accessibility/speaker/VoicingRichText.js';
+import VoicingRichText from '../../../scenery/js/accessibility/voicing/nodes/VoicingRichText.js';
 import VBox from '../../../scenery/js/nodes/VBox.js';
 import joist from '../joist.js';
 import joistStrings from '../joistStrings.js';

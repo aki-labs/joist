@@ -8,7 +8,7 @@
  */
 
 import merge from '../../phet-core/js/merge.js';
-import VoicingText from '../../scenery-phet/js/accessibility/speaker/VoicingText.js';
+import VoicingText from '../../scenery/js/accessibility/voicing/nodes/VoicingText.js';
 import KeyboardHelpSection from '../../scenery-phet/js/keyboard/help/KeyboardHelpSection.js';
 import TextKeyNode from '../../scenery-phet/js/keyboard/TextKeyNode.js';
 import PhetFont from '../../scenery-phet/js/PhetFont.js';

@@ -1,7 +1,8 @@
 // Copyright 2015-2020, University of Colorado Boulder
 
 /**
- * Displays the credits section in the About dialog
+ * CreditsNode displays the credits section in the About dialog.
+ * See documentation below for conventions related to each credits field.
  *
  * @author Sam Reid (PhET Interactive Simulations)
  * @author Chris Malley (PixelZoom, Inc.)
@@ -10,8 +11,8 @@
 
 import merge from '../../phet-core/js/merge.js';
 import StringUtils from '../../phetcommon/js/util/StringUtils.js';
-import VoicingRichText from '../../scenery-phet/js/accessibility/speaker/VoicingRichText.js';
-import VoicingText from '../../scenery-phet/js/accessibility/speaker/VoicingText.js';
+import VoicingRichText from '../../scenery/js/accessibility/voicing/nodes/VoicingRichText.js';
+import VoicingText from '../../scenery/js/accessibility/voicing/nodes/VoicingText.js';
 import PhetFont from '../../scenery-phet/js/PhetFont.js';
 import VBox from '../../scenery/js/nodes/VBox.js';
 import VStrut from '../../scenery/js/nodes/VStrut.js';
@@ -66,43 +67,43 @@ class CreditsNode extends VBox {
       innerContent: creditsTitleString
     } ) );
 
-    // Primary lead designer should be listed first, followed by contributing designers in alphabetical order.
+    // Primary HTML5 designer first, followed by contributing designers (HTML5 and legacy) in alphabetical order.
     if ( credits.leadDesign ) {
       const designString = StringUtils.format( creditsLeadDesignString, `\u202a${credits.leadDesign}\u202c` );
       children.push( new VoicingRichText( designString, merge( { innerContent: designString }, richTextOptions ) ) );
     }
 
-    // Primary developer should be listed first, followed by contributing developers in alphabetical order.
+    // Primary HTML5 developer first, followed by contributing developers (HTML5 and legacy) in alphabetical order.
     if ( credits.softwareDevelopment ) {
       const developmentString = StringUtils.format( creditsSoftwareDevelopmentString, `\u202a${credits.softwareDevelopment}\u202c` );
       children.push( new VoicingRichText( developmentString, merge( { innerContent: developmentString }, richTextOptions ) ) );
     }
 
-    // In alphabetical order
+    // In alphabetical order (includes HTML5 and legacy team members)
     if ( credits.team ) {
       const teamString = StringUtils.format( creditsTeamString, `\u202a${credits.team}\u202c` );
       children.push( new VoicingRichText( teamString, merge( { innerContent: teamString }, richTextOptions ) ) );
     }
 
-    // In alphabetical order
+    // In alphabetical order (this field is new for HTML5 sims)
     if ( credits.contributors ) {
       const contributorsString = StringUtils.format( creditsContributorsString, `\u202a${credits.contributors}\u202c` );
       children.push( new VoicingRichText( contributorsString, merge( { innerContent: contributorsString }, richTextOptions ) ) );
     }
 
-    // In alphabetical order
+    // In alphabetical order (this field is new for HTML5 sims)
     if ( credits.qualityAssurance ) {
       const qualityAssuranceString = StringUtils.format( creditsQualityAssuranceString, `\u202a${credits.qualityAssurance}\u202c` );
       children.push( new VoicingRichText( qualityAssuranceString, merge( { innerContent: qualityAssuranceString }, richTextOptions ) ) );
     }
 
-    // In alphabetical order
+    // In alphabetical order (this field is new for HTML5 sims)
     if ( credits.graphicArts ) {
       const graphicArtsString = StringUtils.format( creditsGraphicArtsString, `\u202a${credits.graphicArts}\u202c` );
       children.push( new VoicingRichText( graphicArtsString, merge( { innerContent: graphicArtsString }, richTextOptions ) ) );
     }
 
-    // In alphabetical order
+    // In alphabetical order (this field is new for HTML5 sims)
     if ( credits.soundDesign ) {
       const soundDesignString = StringUtils.format( creditsSoundDesignString, `\u202a${credits.soundDesign}\u202c` );
       children.push( new VoicingRichText( soundDesignString, merge( { innerContent: soundDesignString }, richTextOptions ) ) );

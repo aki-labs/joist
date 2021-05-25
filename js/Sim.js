@@ -42,6 +42,7 @@ import scenery from '../../scenery/js/scenery.js';
 import Utils from '../../scenery/js/util/Utils.js';
 import '../../sherpa/lib/game-up-camera-1.0.0.js';
 import soundManager from '../../tambo/js/soundManager.js';
+import PhetioObject from '../../tandem/js/PhetioObject.js';
 import Tandem from '../../tandem/js/Tandem.js';
 import NumberIO from '../../tandem/js/types/NumberIO.js';
 import UtteranceQueue from '../../utterance-queue/js/UtteranceQueue.js';
@@ -88,7 +89,7 @@ phet.joist.playbackModeEnabledProperty = new BooleanProperty( phet.chipper.query
 
 assert && assert( typeof phet.chipper.brand === 'string', 'phet.chipper.brand is required to run a sim' );
 
-class Sim {
+class Sim extends PhetioObject {
 
   /**
    * @param {string} name - the name of the simulation, to be displayed in the navbar and homescreen
@@ -140,9 +141,15 @@ class Sim {
 
       // {boolean} - Whether to allow WebGL 2x scaling when antialiasing is detected. If running out of memory on
       // things like iPad 2s (e.g. https://github.com/phetsims/scenery/issues/859), this can be turned to false to help.
-      allowBackingScaleAntialiasing: true
+      allowBackingScaleAntialiasing: true,
 
+      // phet-io
+      phetioState: false,
+      phetioReadOnly: true,
+      tandem: Tandem.ROOT
     }, options );
+
+    super( options );
 
     // @public - used by PhetButton and maybe elsewhere
     this.options = options;
@@ -938,39 +945,40 @@ class Sim {
   }
 
   /*
-   * Adds a popup in the global coordinate frame, and optionally displays a semi-transparent black input barrier behind it.
-   * Use hidePopup() to remove it.
-   * @param {Node} node - Should have node.hide() implemented to hide the popup (should subsequently call
-   *                      sim.hidePopup()).
-   * @param {boolean} isModal - Whether to display the semi-transparent black input barrier behind it.
+   * Adds a popup in the global coordinate frame. If the popup is model, it displays a semi-transparent black input
+   * barrier behind it. A modal popup prevent the user from interacting with the reset of the application until the
+   * popup is hidden. Use hidePopup() to hide the popup.
+   * @param {Node} popup - the popup, must implemented node.hide(), called by hidePopup
+   * @param {boolean} isModal - whether popup is modal
    * @public
    */
-  showPopup( node, isModal ) {
-    assert && assert( node );
-    assert && assert( !!node.hide, 'Missing node.hide() for showPopup' );
-    assert && assert( !this.topLayer.hasChild( node ), 'Popup already shown' );
+  showPopup( popup, isModal ) {
+    assert && assert( popup );
+    assert && assert( !!popup.hide, 'Missing popup.hide() for showPopup' );
+    assert && assert( !this.topLayer.hasChild( popup ), 'popup already shown' );
     if ( isModal ) {
-      this.modalNodeStack.push( node );
+      this.rootNode.interruptSubtreeInput();
+      this.modalNodeStack.push( popup );
     }
-    if ( node.layout ) {
-      node.layout( this.screenBoundsProperty.value );
+    if ( popup.layout ) {
+      popup.layout( this.screenBoundsProperty.value );
     }
-    this.topLayer.addChild( node );
+    this.topLayer.addChild( popup );
   }
 
   /*
    * Hides a popup that was previously displayed with showPopup()
-   * @param {Node} node
-   * @param {boolean} isModal - Whether the previous popup was modal (or not)
+   * @param {Node} popup
+   * @param {boolean} isModal - whether popup is modal
    * @public
    */
-  hidePopup( node, isModal ) {
-    assert && assert( node && this.modalNodeStack.includes( node ) );
-    assert && assert( this.topLayer.hasChild( node ), 'Popup was not shown' );
+  hidePopup( popup, isModal ) {
+    assert && assert( popup && this.modalNodeStack.includes( popup ) );
+    assert && assert( this.topLayer.hasChild( popup ), 'popup was not shown' );
     if ( isModal ) {
-      this.modalNodeStack.remove( node );
+      this.modalNodeStack.remove( popup );
     }
-    this.topLayer.removeChild( node );
+    this.topLayer.removeChild( popup );
   }
 
   /**
