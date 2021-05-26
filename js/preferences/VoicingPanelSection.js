@@ -220,7 +220,9 @@ class VoicingPanelSection extends PreferencesPanelSection {
 
       // for now, only english voices are available because the Voicing feature is not translatable
       const englishVoices = _.filter( webSpeaker.voices, voice => {
-        return voice.lang === 'en-US';
+
+        // most browsers use dashes to separate the local, Android uses underscore
+        return voice.lang === 'en-US' || voice.lang === 'en_US';
       } );
       const includedVoices = englishVoices.slice( 0, 12 );
 
@@ -381,9 +383,13 @@ class VoiceComboBox extends ComboBox {
 
     // NOTE: This somehow needs to be built into ComboBox
     const voicePropertyListener = voice => {
-      this.button.voicingObjectResponse = _.find(
-        items, item => item.value === webSpeaker.voiceProperty.value
-      ).value.name;
+
+      // the voice can be null
+      if ( voice ) {
+        this.button.voicingObjectResponse = _.find(
+          items, item => item.value === webSpeaker.voiceProperty.value
+        ).value.name;
+      }
     };
     webSpeaker.voiceProperty.link( voicePropertyListener );
 
