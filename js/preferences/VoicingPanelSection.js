@@ -11,10 +11,10 @@ import Dimension2 from '../../../dot/js/Dimension2.js';
 import Range from '../../../dot/js/Range.js';
 import Utils from '../../../dot/js/Utils.js';
 import StringUtils from '../../../phetcommon/js/util/StringUtils.js';
-import VoicingText from '../../../scenery/js/accessibility/voicing/nodes/VoicingText.js';
 import NumberControl from '../../../scenery-phet/js/NumberControl.js';
 import PhetFont from '../../../scenery-phet/js/PhetFont.js';
 import FocusHighlightFromNode from '../../../scenery/js/accessibility/FocusHighlightFromNode.js';
+import VoicingText from '../../../scenery/js/accessibility/voicing/nodes/VoicingText.js';
 import Voicing from '../../../scenery/js/accessibility/voicing/Voicing.js';
 import voicingManager from '../../../scenery/js/accessibility/voicing/voicingManager.js';
 import voicingUtteranceQueue from '../../../scenery/js/accessibility/voicing/voicingUtteranceQueue.js';
@@ -56,6 +56,7 @@ const voicingHintsString = 'Voicing extra help.';
 const hintsMutedString = 'Extra help muted.';
 
 const voiceLabelString = 'Voice';
+const noVoicesAvailableString = 'No voices available.';
 
 const customizeVoiceExpandedString = 'Customize Voice, expanded';
 const customizeVoiceCollapsedString = 'Customize Voice, collapsed';
@@ -132,21 +133,6 @@ class VoicingPanelSection extends PreferencesPanelSection {
     speechOutputDescription.leftTop = speechOutputLabel.leftBottom.plusXY( 0, 5 );
     speechOutputCheckboxes.leftTop = speechOutputDescription.leftBottom.plusXY( 15, 5 );
 
-    // only grab the first 12 options for the ComboBox, its all we have space for
-    const parentNode = phet.joist.sim.topLayer;
-    const comboBoxItems = [];
-    webSpeaker.voices.slice( 0, 12 ).forEach( voice => {
-      const textNode = new Text( voice.name, { font: PreferencesDialog.CONTENT_FONT } );
-      comboBoxItems.push( new ComboBoxItem( textNode, voice, {
-        a11yLabel: voice.name
-      } ) );
-    } );
-
-    const voiceComboBox = new ComboBox( comboBoxItems, webSpeaker.voiceProperty, parentNode, {
-      listPosition: 'above',
-      accessibleName: voiceLabelString
-    } );
-
     const rateSlider = new VoiceRateNumberControl( rateString, webSpeaker.voiceRateProperty );
     const pitchSlider = new VoicingPitchSlider( pitchString, webSpeaker.voicePitchProperty );
     const voiceOptionsContent = new VBox( {
@@ -154,8 +140,7 @@ class VoicingPanelSection extends PreferencesPanelSection {
       align: 'left',
       children: [
         rateSlider,
-        pitchSlider,
-        voiceComboBox
+        pitchSlider
       ]
     } );
 
@@ -211,8 +196,6 @@ class VoicingPanelSection extends PreferencesPanelSection {
       content.visible = enabled;
     } );
 
-    // webSpeaker.enabledProperty.link( enabled => SunConstants.componentEnabledListener( enabled, content ) );
-
     // Speak when voicing becomes initially enabled. First speech is done synchronously (not using utterance-queue)
     // in response to user input, otherwise all speech will be blocked on many platforms
     webSpeaker.enabledProperty.lazyLink( enabled => {
@@ -225,6 +208,29 @@ class VoicingPanelSection extends PreferencesPanelSection {
         phet.joist.sim.utteranceQueue.addToBack( alertString );
       }
     } );
+
+    // when the list of voices for the ComboBox changes, create a new ComboBox that includes the supported
+    // voices
+    let voiceComboBox = null;
+    const voicesChangedListener = () => {
+      if ( voiceComboBox ) {
+        voiceOptionsContent.removeChild( voiceComboBox );
+        voiceComboBox.dispose();
+      }
+
+      // for now, only english voices are available because the Voicing feature is not translatable
+      const englishVoices = _.filter( webSpeaker.voices, voice => {
+        return voice.lang === 'en-US';
+      } );
+      const includedVoices = englishVoices.slice( 0, 12 );
+
+      voiceComboBox = new VoiceComboBox( phet.joist.sim.topLayer, includedVoices );
+      voiceOptionsContent.addChild( voiceComboBox );
+    };
+    webSpeaker.voicesChangedEmitter.addListener( voicesChangedListener );
+
+    // eagerly create the first ComboBox, even if no voices are available
+    voicesChangedListener();
 
     voicingManager.objectResponsesEnabledProperty.lazyLink( voicingObjectChanges => {
       const alertString = voicingObjectChanges ? voicingObjectChangesString : objectChangesMutedString;
@@ -242,14 +248,6 @@ class VoicingPanelSection extends PreferencesPanelSection {
       const alertString = voicingHints ? voicingHintsString : hintsMutedString;
       voicingUtteranceQueue.addToBack( alertString );
       phet.joist.sim.utteranceQueue.addToBack( alertString );
-    } );
-
-    // NOTE: This somehow needs to be built into ComboBox
-    voiceComboBox.button.voicingNameResponse = voiceLabelString;
-    webSpeaker.voiceProperty.link( voice => {
-      voiceComboBox.button.voicingObjectResponse = _.find(
-        comboBoxItems, item => item.value === webSpeaker.voiceProperty.value
-      ).value.name;
     } );
 
     voiceOptionsOpenProperty.lazyLink( open => {
@@ -341,6 +339,65 @@ class VoiceRateNumberControl extends NumberControl {
     return rate === 1 ? voiceRateNormalString : StringUtils.fillIn( voiceRateDescriptionPatternString, {
       value: rate
     } );
+  }
+}
+
+/**
+ * Inner class for the ComboBox that selects the voice for the webSpeaker. This ComboBox can be created and destroyed
+ * a few times as the browser list of supported voices may change while the SpeechSynthesis is first getting put to
+ * use.
+ */
+class VoiceComboBox extends ComboBox {
+
+  /**
+   * @param {Node} parentNode - node that acts as a parent for the ComboBox list
+   * @param {SpeechSynthesisVoice[]} voices - list of voices to include from the webSpeaker
+   */
+  constructor( parentNode, voices ) {
+    const items = [];
+
+    if ( voices.length === 0 ) {
+      const textNode = new Text( noVoicesAvailableString, { font: PreferencesDialog.CONTENT_FONT } );
+      items.push( new ComboBoxItem( textNode, null, {
+        a11yLabel: noVoicesAvailableString
+      } ) );
+    }
+
+    voices.forEach( voice => {
+      const textNode = new Text( voice.name, { font: PreferencesDialog.CONTENT_FONT } );
+      items.push( new ComboBoxItem( textNode, voice, {
+        a11yLabel: voice.name
+      } ) );
+    } );
+
+    // since we are updating the list, set the VoiceProperty to the first available value, or null if there are
+    // voices
+    webSpeaker.voiceProperty.set( items[ 0 ].value );
+
+    super( items, webSpeaker.voiceProperty, parentNode, {
+      listPosition: 'above',
+      accessibleName: voiceLabelString
+    } );
+
+    // NOTE: This somehow needs to be built into ComboBox
+    const voicePropertyListener = voice => {
+      this.button.voicingObjectResponse = _.find(
+        items, item => item.value === webSpeaker.voiceProperty.value
+      ).value.name;
+    };
+    webSpeaker.voiceProperty.link( voicePropertyListener );
+
+    this.disposeVoiceComboBox = () => {
+      webSpeaker.voiceProperty.unlink( voicePropertyListener );
+    };
+  }
+
+  /**
+   * @public
+   */
+  dispose() {
+    this.disposeVoiceComboBox();
+    super.dispose();
   }
 }
 
