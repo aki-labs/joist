@@ -10,6 +10,7 @@
 
 import merge from '../../../phet-core/js/merge.js';
 import joist from '../joist.js';
+import packageJSON from '../packageJSON.js';
 
 class PreferencesConfiguration {
 
@@ -17,6 +18,11 @@ class PreferencesConfiguration {
    * @param {Object} [options]
    */
   constructor( options ) {
+
+    // initialize-globals uses package.json to determine defaults for features enabled by the sim and those defaults
+    // can be overwritten by query parameter.  So it contains an accurate representation of which features are in use.
+    const phetFeatures = phet.chipper.queryParameters;
+
     options = merge( {
 
       // configuration for controls in the "General" tab of the PreferencesDialog
@@ -31,26 +37,28 @@ class PreferencesConfiguration {
 
         // {boolean} whether or not the sim supports the "interactive highlights" feature, and checkbox to enable
         // in the PreferencesDialog
-        supportsInteractiveHighlights: false
+        supportsInteractiveHighlights: phetFeatures.supportsInteractiveHighlights
       },
 
       // configuration for controls in the "Audio" tab of the PreferencesDialog
       audioOptions: {
 
         // The entry point for voicing, if true the PreferencesDialog will include all voicing options
-        supportsVoicing: false,
+        supportsVoicing: phetFeatures.supportsVoicing,
 
         // {boolean} - Whether or not to include checkboxes related to sound and enhanced sound. supportsEnhancedSound
         // can only be included if supportsSound is also true.
-        supportsSound: true,
-        supportsEnhancedSound: false
+        // NOTE: When initialize-globals uses package.json to control sound features the packageJSON check
+        // here can be removed
+        supportsSound: phetFeatures.supportsSound || packageJSON.phet.supportsSound,
+        supportsEnhancedSound: phetFeatures.supportsEnhancedSound || packageJSON.phet.supportsSound
       },
 
       // configuration for controls in the "Input" tab of the PreferencesDialog
       inputOptions: {
 
         // {boolean} - Whether or not to include "gesture" controls
-        supportsGestureControls: false
+        supportsGestureControl: phetFeatures.supportsGestureControl
       }
     }, options );
 

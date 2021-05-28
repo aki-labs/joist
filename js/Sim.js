@@ -734,9 +734,12 @@ class Sim extends PhetioObject {
 
     if ( options.preferencesConfiguration ) {
       this.preferencesProperties = new PreferencesProperties();
-
       const audioOptions = options.preferencesConfiguration.audioOptions;
-      if ( audioOptions.supportsVoicing ) {
+
+      // The Voicing feature is only supported if SpeechSynthesis is available on this platform. We also only support
+      // Voicing in the english locale at this time.
+      const supportsVoicing = audioOptions.supportsVoicing && webSpeaker.isSpeechSynthesisSupported() && this.locale === 'en';
+      if ( supportsVoicing ) {
 
         webSpeaker.initialize( {
 
