@@ -30,7 +30,7 @@ import joist from '../joist.js';
 import VoicingToolbarItem from './VoicingToolbarItem.js';
 
 // constants
-const MAX_ANIMATION_SPEED = 5; // in view coordinates, maximum speed at which Toolbar will open/close
+const MAX_ANIMATION_SPEED = 250; // in view coordinates per second, assuming 60 fps
 const CONTENT_TOP_MARGIN = 15; // margin between top of Toolbar and contents
 
 // constants
@@ -174,7 +174,7 @@ class Toolbar extends Node {
     const distance = Math.abs( this.rightPositionProperty.value - this.rightDestinationPosition );
 
     if ( distance !== 0 ) {
-      const animationDistance = Math.min( distance, MAX_ANIMATION_SPEED );
+      const animationDistance = Math.min( distance, MAX_ANIMATION_SPEED * dt );
       const currentPosition = this.rightPositionProperty.value;
 
       this.rightPositionProperty.value = this.rightDestinationPosition > currentPosition ?
