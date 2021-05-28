@@ -50,18 +50,6 @@ class NavigationBarPreferencesButton extends JoistButton {
       // pdom
       innerContent: joistStrings.preferences.title
     } );
-
-
-    // open the dialog on sim startup, temporary addition for a survey for the dialog and Voicing feature,
-    // see https://github.com/phetsims/john-travoltage/issues/419
-    const constructionCompleteListener = complete => {
-      if ( complete ) {
-        preferencesDialogCapsule.getElement().show();
-
-        phet.joist.sim.isConstructionCompleteProperty.unlink( constructionCompleteListener );
-      }
-    };
-    phet.joist.sim.isConstructionCompleteProperty.link( constructionCompleteListener );
   }
 }
 
