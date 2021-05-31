@@ -133,7 +133,7 @@ class Toolbar extends Node {
       let timesToggled = 0;
       stepTimer.setInterval( () => {
         this.openProperty.toggle();
-        console.log( 'times toggled: ' + timesToggled++ )
+        console.log( 'times toggled: ' + timesToggled++ );
       }, 300 );
     };
 
