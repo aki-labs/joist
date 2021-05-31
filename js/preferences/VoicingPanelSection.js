@@ -45,6 +45,9 @@ const voiceVariablesPatternString = '{{value}}x';
 const voicingDescriptionString = 'Voice and highlight content as you interact.';
 const customizeVoiceString = 'Customize Voice';
 
+const toolbarRemovedString = 'Toolbar removed';
+const toolbarAddedString = 'Toolbar added to sim.';
+
 const simVoicingOptionsString = 'Sim Voicing Options';
 const simVoicingDescriptionString = 'Choose details you want voiced as you interact.';
 
@@ -233,6 +236,12 @@ class VoicingPanelSection extends PreferencesPanelSection {
 
     // eagerly create the first ComboBox, even if no voices are available
     voicesChangedListener();
+
+    toolbarEnabledProperty.lazyLink( enabled => {
+      const alertString = enabled ? toolbarAddedString : toolbarRemovedString;
+      voicingUtteranceQueue.addToBack( alertString );
+      phet.joist.sim.utteranceQueue.addToBack( alertString );
+    } );
 
     voicingManager.objectResponsesEnabledProperty.lazyLink( voicingObjectChanges => {
       const alertString = voicingObjectChanges ? voicingObjectChangesString : objectChangesMutedString;
