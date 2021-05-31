@@ -127,16 +127,6 @@ class Toolbar extends Node {
     // when shown or hidden update destination positions so it animates open or close
     this.isShowingProperty.link( showing => this.updateDestinationPosition() );
 
-    // a temporary bit of test code to see if we can get the browser to crash by voicing, see
-    // https://github.com/phetsims/john-travoltage/issues/422
-    window.startTest = () => {
-      let timesToggled = 0;
-      stepTimer.setInterval( () => {
-        this.openProperty.toggle();
-        console.log( 'times toggled: ' + timesToggled++ );
-      }, 300 );
-    };
-
     this.openProperty.lazyLink( open => {
       const alert = open ? 'Toolbar shown.' : 'Toolbar hidden';
       voicingUtteranceQueue.addToBack( alert );
