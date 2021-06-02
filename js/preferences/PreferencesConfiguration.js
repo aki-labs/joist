@@ -9,6 +9,7 @@
  */
 
 import merge from '../../../phet-core/js/merge.js';
+import webSpeaker from '../../../scenery/js/accessibility/voicing/webSpeaker.js';
 import joist from '../joist.js';
 import packageJSON from '../packageJSON.js';
 
@@ -20,8 +21,13 @@ class PreferencesConfiguration {
   constructor( options ) {
 
     // initialize-globals uses package.json to determine defaults for features enabled by the sim and those defaults
-    // can be overwritten by query parameter.  So it contains an accurate representation of which features are in use.
+    // can be overwritten by query parameter.  So it contains an accurate representation of which features
+    // are requested.
     const phetFeatures = phet.chipper.queryParameters;
+
+    // For now, the Voicing feature is only available when we are running in the english locale, accessibility
+    // strings are not made available for translation.
+    const simLocale = phet.chipper.locale || 'en';
 
     options = merge( {
 
@@ -43,8 +49,10 @@ class PreferencesConfiguration {
       // configuration for controls in the "Audio" tab of the PreferencesDialog
       audioOptions: {
 
-        // The entry point for voicing, if true the PreferencesDialog will include all voicing options
-        supportsVoicing: phetFeatures.supportsVoicing,
+        // The entry point for Voicing, and if true the sim will support Voicing and Voicing options in Preferences.
+        // The feature is only available on platforms where SpeechSynthesis is supported. For now, it is only available
+        // when running with english locales, accessibility strings are not made available for translation yet.
+        supportsVoicing: phetFeatures.supportsVoicing && webSpeaker.isSpeechSynthesisSupported() && simLocale === 'en',
 
         // {boolean} - Whether or not to include checkboxes related to sound and enhanced sound. supportsEnhancedSound
         // can only be included if supportsSound is also true.
