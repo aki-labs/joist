@@ -35,9 +35,7 @@ class PreferencesPanels extends Node {
     let visualPreferencesPanel = null;
     if ( supportedTabs.includes( PreferencesDialog.PreferencesTab.VISUAL ) ) {
       visualPreferencesPanel = new VisualPreferencesPanel( preferencesProperties.interactiveHighlightsEnabledProperty );
-      const visualBox = panelAlignGroup.createBox( visualPreferencesPanel, {
-        xAlign: 'left'
-      } );
+      const visualBox = panelAlignGroup.createBox( visualPreferencesPanel );
       this.addChild( visualBox );
     }
 
