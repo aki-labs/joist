@@ -103,7 +103,12 @@ class Toolbar extends Node {
     // Toolbar is closed only the button is shown and all other content is hidden.
     this.contentMargin = this.openButton.localBounds.width;
 
-    this.children = [ this.backgroundRectangle, this.menuContent, this.openButton ];
+    // a parent for all Nodes of the toolbar, so we can set visibility of this group internally when
+    // the isShowingProperty changes
+    const contentParent = new Node( {
+      children: [ this.backgroundRectangle, this.menuContent, this.openButton ]
+    } );
+    this.addChild( contentParent );
 
     // move to destination position in the animation frame
     stepTimer.addListener( dt => {
@@ -125,7 +130,13 @@ class Toolbar extends Node {
     } );
 
     // when shown or hidden update destination positions so it animates open or close
-    this.isShowingProperty.link( showing => this.updateDestinationPosition() );
+    this.isShowingProperty.link( showing => {
+      this.updateDestinationPosition();
+
+      // when now showing, this entire toolbar should be hidden for Interactive Description, but we don't use
+      // visibility directly because we want to see the Toolbar animate away
+      contentParent.pdomVisible = showing;
+    } );
 
     this.openProperty.lazyLink( open => {
       const alert = open ? 'Toolbar shown.' : 'Toolbar hidden';
