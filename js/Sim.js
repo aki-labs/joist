@@ -771,7 +771,7 @@ class Sim extends PhetioObject {
           voicingManager.voicingFullyEnabledProperty,
           this.allAudioEnabledProperty
         ], ( voicingFullyEnabled, allAudioEnabled ) => {
-          this.display.readingBlockHighlightsVisibleProperty.value = voicingFullyEnabled && allAudioEnabled;
+          this.display.focusManager.readingBlockHighlightsVisibleProperty.value = voicingFullyEnabled && allAudioEnabled;
         } );
 
         // the utteranceQueue for surrounding user controls is enabled as long as voicing is enabled
@@ -789,7 +789,7 @@ class Sim extends PhetioObject {
         this.preferencesProperties.interactiveHighlightsEnabledProperty,
         this.preferencesProperties.gestureControlsEnabledProperty
       ], ( highlightsEnabled, gesturesEnabled ) => {
-        this.display.interactiveHighlightsVisibleProperty.value = highlightsEnabled || gesturesEnabled;
+        this.display.focusManager.interactiveHighlightsVisibleProperty.value = highlightsEnabled || gesturesEnabled;
       } );
     }
 
