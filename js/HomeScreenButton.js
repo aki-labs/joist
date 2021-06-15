@@ -1,4 +1,4 @@
-// Copyright 2020, University of Colorado Boulder
+// Copyright 2020-2021, University of Colorado Boulder
 
 /**
  * A HomeScreenButton is displayed on the HomeScreen for choosing a screen. The button can be in a selected or
@@ -94,7 +94,12 @@ class HomeScreenButton extends VBox {
     const largeNode = new Node( { children: [ largeFrame, largeIcon ] } );
 
     // container for the icon and frame, children updated when isSelectedProperty changes
-    const nodeContainer = new Node();
+    const nodeContainer = new Node( {
+
+      // pdom - the icon may have focusable components in its graphic but they should be invisible for Interactive
+      // Description, the button is all we need for accessibility
+      pdomVisible: false
+    } );
 
     // text for the button
     const text = new Text( screen.nameProperty.value, {

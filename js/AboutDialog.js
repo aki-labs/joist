@@ -1,4 +1,4 @@
-// Copyright 2013-2020, University of Colorado Boulder
+// Copyright 2013-2021, University of Colorado Boulder
 
 /**
  * AboutDialog displays information about the simulation -- its title, version number, credits, etc.
@@ -236,7 +236,6 @@ class AboutDialog extends Dialog {
       rightMargin: 26,
       tandem: tandem,
       phetioReadOnly: true, // the AboutDialog should not be settable
-      phetioState: true,
       phetioDynamicElement: true
     } );
 

@@ -1,4 +1,4 @@
-// Copyright 2013-2020, University of Colorado Boulder
+// Copyright 2013-2021, University of Colorado Boulder
 
 /**
  * The button that pops up the PhET menu, which appears in the bottom right of the home screen and on the right side
@@ -130,7 +130,7 @@ class PhetButton extends JoistButton {
 }
 
 /**
- * IO Type for PhetButton, to interface with phet-io api.  The PhetButtonIO acts as the main phet-io branding/logo in
+ * IO Type for PhetButton, to interface with PhET-iO API.  The PhetButtonIO acts as the main phet-io branding/logo in
  * the sim. It doesn't inherit from NodeIO because we neither need all of NodeIO's API methods, nor do we want to
  * support maintaining overriding no-ops in this file see https://github.com/phetsims/scenery/issues/711 for more info.
  */

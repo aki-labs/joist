@@ -1,4 +1,4 @@
-// Copyright 2018-2020, University of Colorado Boulder
+// Copyright 2021, University of Colorado Boulder
 
 /**
  * Return an object of data about the simulation and the browser
@@ -11,7 +11,11 @@
 import Utils from '../../scenery/js/util/Utils.js';
 import PhetioObject from '../../tandem/js/PhetioObject.js';
 import Tandem from '../../tandem/js/Tandem.js';
+import ArrayIO from '../../tandem/js/types/ArrayIO.js';
 import IOType from '../../tandem/js/types/IOType.js';
+import NullableIO from '../../tandem/js/types/NullableIO.js';
+import ObjectLiteralIO from '../../tandem/js/types/ObjectLiteralIO.js';
+import StringIO from '../../tandem/js/types/StringIO.js';
 import joist from './joist.js';
 import packageJSON from './packageJSON.js';
 
@@ -32,8 +36,12 @@ class SimInfo extends PhetioObject {
     this.info = {};
 
     // globals
-
+    this.putInfo( 'url', window.location.href );
+    this.putInfo( 'randomSeed', window.phet.chipper.queryParameters.randomSeed );
+    this.putInfo( 'userAgent', window.navigator.userAgent );
     this.putInfo( 'language', window.navigator.language );
+    this.putInfo( 'window', `${window.innerWidth}x${window.innerHeight}` );
+    this.putInfo( 'referrer', document.referrer );
 
     // from Scenery Utils
     this.putInfo( 'checkIE11StencilSupport', Utils.checkIE11StencilSupport() );
@@ -52,11 +60,14 @@ class SimInfo extends PhetioObject {
     }
     catch( e ) {} // eslint-disable-line
 
+    this.putInfo( 'pixelRatio', `${window.devicePixelRatio || 1}/${backingStorePixelRatio}` );
+
     const flags = [];
     if ( window.navigator.pointerEnabled ) { flags.push( 'pointerEnabled' ); }
     if ( window.navigator.msPointerEnabled ) { flags.push( 'msPointerEnabled' ); }
     if ( !window.navigator.onLine ) { flags.push( 'offline' ); }
     if ( ( window.devicePixelRatio || 1 ) / backingStorePixelRatio !== 1 ) { flags.push( 'pixelRatioScaling' ); }
+    this.putInfo( 'flags', flags.join( ', ' ) );
 
     canvas = null; // dispose only reference
 
@@ -75,18 +86,6 @@ class SimInfo extends PhetioObject {
       }
       return screenObject;
     } ) );
-
-    // Some data values change from run to run and should not be recorded for purposes of PhET-iO API generation or
-    // comparison
-    if ( !Tandem.API_GENERATION ) {
-      this.putInfo( 'randomSeed', window.phet.chipper.queryParameters.randomSeed );
-      this.putInfo( 'url', window.location.href );
-      this.putInfo( 'userAgent', window.navigator.userAgent );
-      this.putInfo( 'window', `${window.innerWidth}x${window.innerHeight}` );
-      this.putInfo( 'referrer', document.referrer );
-      this.putInfo( 'flags', flags.join( ', ' ) );
-      this.putInfo( 'pixelRatio', `${window.devicePixelRatio || 1}/${backingStorePixelRatio}` );
-    }
 
     // From PhET-iO code
     if ( Tandem.PHET_IO_ENABLED ) {
@@ -114,7 +113,30 @@ class SimInfo extends PhetioObject {
 // @private
 SimInfo.SimInfoIO = new IOType( 'SimInfoIO', {
   valueType: SimInfo,
-  toStateObject: simInfo => simInfo.info
+  toStateObject: simInfo => {
+    return {
+      simName: simInfo.info.simName,
+      screens: simInfo.info.screens,
+      simVersion: simInfo.info.simVersion,
+      repoName: simInfo.info.repoName,
+
+      screenPropertyValue: simInfo.info.screenPropertyValue,
+      wrapperMetadata: simInfo.info.wrapperMetadata,
+      dataStreamVersion: simInfo.info.dataStreamVersion,
+      phetioCommandProcessorProtocol: simInfo.info.phetioCommandProcessorProtocol
+    };
+  },
+  stateSchema: {
+    simName: StringIO,
+    screens: ArrayIO( ObjectLiteralIO ),
+    simVersion: StringIO,
+    repoName: StringIO,
+
+    screenPropertyValue: StringIO,
+    wrapperMetadata: NullableIO( ObjectLiteralIO ),
+    dataStreamVersion: StringIO,
+    phetioCommandProcessorProtocol: StringIO
+  }
 } );
 
 joist.register( 'SimInfo', SimInfo );
