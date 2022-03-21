@@ -138,6 +138,32 @@ class PhetMenu extends Node {
         }
       },
       {
+        text: 'ஆக்கி வலைத்தளம்',
+        present: true,
+        callback: () => {
+          if ( !phet.chipper.isFuzzEnabled() ) {
+
+            openPopup( 'https://aki.coach/' );
+          }
+        },
+        options: {
+          handleFocusCallback: restoreFocusCallback
+        }
+      },
+      {
+        text: 'ஆக்கி Labs',
+        present: true,
+        callback: () => {
+          if ( !phet.chipper.isFuzzEnabled() ) {
+
+            openPopup( 'https://aki.coach/' );
+          }
+        },
+        options: {
+          handleFocusCallback: restoreFocusCallback
+        }
+      },
+      {
         text: menuItemPhetWebsiteString,
         present: isPhETBrand,
         callback: () => {
